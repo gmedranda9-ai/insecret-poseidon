@@ -8,6 +8,14 @@
   var DEMO = qs.get('demo') === '1';
   var CONFIGURED = !!(cfg.supabaseUrl && cfg.supabaseKey);
 
+  // Mismo criterio que el servidor: solo dígitos; 09XXXXXXXX -> 5939XXXXXXXX
+  function normPhone(p) {
+    var d = String(p || '').replace(/\D/g, '');
+    if (/^0\d{9}$/.test(d)) d = '593' + d.slice(1);
+    if (/^9\d{8}$/.test(d)) d = '593' + d;
+    return /^\d{10,15}$/.test(d) ? d : null;
+  }
+
   function token() {
     var a = new Uint8Array(24); crypto.getRandomValues(a);
     return btoa(String.fromCharCode.apply(null, a)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
@@ -84,7 +92,8 @@
         p_group: p.group_name, p_organizer: p.organizer, p_event_date: p.event_date,
         p_budget: p.budget, p_message: p.message,
         p_participants: p.participants, p_exclusions: p.exclusions,
-        p_contact: p.contact || null, p_marketing: !!p.marketing
+        p_contact: p.contact || null, p_marketing: !!p.marketing,
+        p_phone: p.phone, p_org_pin: p.org_pin
       });
     },
     organizerStatus: function (t) { return rpc('organizer_status', { p_token: t }); },
@@ -98,7 +107,13 @@
       });
     },
     reveal: function (t) { return rpc('reveal_assignment', { p_token: t }); },
-    saveWish: function (t, w) { return rpc('save_wish', { p_token: t, p_wish: w }); }
+    saveWish: function (t, w) { return rpc('save_wish', { p_token: t, p_wish: w }); },
+    orgRecover: function (phone, pin) {
+      return rpc('org_recover', { p_phone: phone, p_pin: pin }).then(function (r) {
+        if (r && r.error) { var e = new Error(r.error); e.code = r.error; e.minutes = r.minutes; throw e; }
+        return r;
+      });
+    }
   };
 
   /* ---------- Demo local (solo vista previa) ---------- */
@@ -120,7 +135,7 @@
           if (!r.ok) return reject(fail('NO_SOLUTION'));
           var d = load(), org = token(), grp = token();
           var people = p.participants.map(function (x, i) { return { name: x.name, wish: '', token: token(), opened: false, to: r.recv[i], pin: null, tries: 0 }; });
-          d[org] = { group_token: grp, group_name: p.group_name, organizer: p.organizer, event_date: p.event_date, budget: p.budget, message: p.message, people: people };
+          d[org] = { phone: normPhone(p.phone), orgpin: p.org_pin, group_token: grp, group_name: p.group_name, organizer: p.organizer, event_date: p.event_date, budget: p.budget, message: p.message, people: people };
           save(d);
           resolve({ organizer_token: org, group_token: grp });
         }, 700);
@@ -160,15 +175,26 @@
         if (x.tries >= 5) return reject(fail('LOCKED'));
         if (!x.pin) x.pin = pin;
         else if (x.pin !== pin) { x.tries++; save(f.d); return reject(fail(x.tries >= 5 ? 'LOCKED' : 'BAD_PIN')); }
-        x.tries = 0; save(f.d); resolve({ token: x.token });
+        x.tries = 0; save(f.d); resolve({ token: x.token, opened: !!x.opened });
       });
     },
     reveal: function (t) {
       return new Promise(function (resolve, reject) {
         var f = findPerson(t); if (!f) return reject(fail('NOT_FOUND'));
-        var to = f.g.people[f.me.to]; f.me.opened = true; save(f.d);
+        var to = f.g.people[f.me.to], was = !!f.me.opened; f.me.opened = true; save(f.d);
         resolve({ giver: f.me.name, receiver: to.name, wish: to.wish, my_wish: f.me.wish, group_name: f.g.group_name, organizer: f.g.organizer,
-          event_date: f.g.event_date, budget: f.g.budget, message: f.g.message });
+          event_date: f.g.event_date, budget: f.g.budget, message: f.g.message, was_opened: was });
+      });
+    },
+    orgRecover: function (phone, pin) {
+      return new Promise(function (resolve, reject) {
+        var d = load(), ph = normPhone(phone), out = [];
+        Object.keys(d).forEach(function (k) {
+          var g = d[k]; if (g.phone && g.phone === ph && g.orgpin === pin) out.push({ org_token: k, group_name: g.group_name, event_date: g.event_date,
+            total: g.people.length, opened: g.people.filter(function (x) { return x.opened; }).length });
+        });
+        if (!out.length) return reject(fail('BAD_PIN'));
+        resolve({ groups: out });
       });
     },
     saveWish: function (t, w) {
@@ -179,8 +205,8 @@
     }
   };
 
-  var api = { mode: DEMO ? 'demo' : (CONFIGURED ? 'live' : 'off'), ready: DEMO || CONFIGURED, feasible: feasible };
-  ['createDraw', 'organizerStatus', 'organizerLinks', 'resetParticipant', 'groupInfo', 'groupEnter', 'reveal', 'saveWish'].forEach(function (k) {
+  var api = { normPhone: normPhone, mode: DEMO ? 'demo' : (CONFIGURED ? 'live' : 'off'), ready: DEMO || CONFIGURED, feasible: feasible };
+  ['createDraw', 'organizerStatus', 'organizerLinks', 'resetParticipant', 'groupInfo', 'groupEnter', 'reveal', 'saveWish', 'orgRecover'].forEach(function (k) {
     api[k] = function () { var t = DEMO ? demo : remote; return t[k].apply(t, arguments); };
   });
   window.InSecretAPI = api;

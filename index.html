@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=3">
+<link rel="stylesheet" href="css/styles.css?v=4">
 </head>
 <body>
 <canvas id="snow" aria-hidden="true"></canvas>
@@ -72,8 +72,9 @@
 <header class="topbar">
   <a class="brand" href="./" aria-label="InSecret Poseidón, inicio">
     <img src="assets/logo.png" alt="" width="44" height="44">
-    <span class="brand-text"><strong>InSecret</strong><small>by Poseidón</small></span>
+    <span class="brand-text"><strong>InSecret</strong></span>
   </a>
+  <a class="by-pos" href="https://poseidonmk.com" target="_blank" rel="noopener" aria-label="Ir a la web de Poseidón">by Poseidón</a>
 </header>
 
 <main id="app">
@@ -86,6 +87,12 @@
       <p class="lead">Organiza tu amigo secreto en 2 minutos y comparte <b>un solo enlace</b> con tu grupo de WhatsApp. El sorteo es privado: ni tú sabrás quién le regala a quién.</p>
       <a class="how-link" href="#como">¿Cómo funciona? Míralo abajo ↓</a>
     </div>
+
+    <div class="panel mine" id="mine" hidden>
+      <strong class="gold">Tus sorteos en curso</strong>
+      <ul class="links" id="mine-list"></ul>
+    </div>
+    <p class="recover-cta"><button type="button" class="link" id="open-recover">¿Ya organizaste un sorteo? Recupéralo con tu WhatsApp y tu PIN</button></p>
 
     <ol class="stepper" id="stepper" aria-label="Progreso">
       <li data-step="1"><span>1</span><em>Participantes</em></li>
@@ -191,6 +198,18 @@
       <div class="summary" id="summary"></div>
       <p class="muted">Al crear el enlace se hace el sorteo en nuestro servidor. Después no se puede cambiar.</p>
 
+      <div class="orgacc">
+        <strong class="gold">🔐 Tu acceso de organizador</strong>
+        <p class="muted">Para que puedas volver a tu panel desde <b>cualquier teléfono o computador</b>, aunque pierdas el enlace.</p>
+        <label class="field"><span>Tu WhatsApp</span>
+          <input id="f-phone" type="tel" inputmode="tel" maxlength="20" autocomplete="tel" placeholder="Ej. 0991234567">
+        </label>
+        <label class="field"><span>Crea tu PIN de organizador <i>(6 números)</i></span>
+          <input id="f-orgpin" type="password" inputmode="numeric" maxlength="6" autocomplete="new-password" placeholder="••••••">
+        </label>
+        <p class="muted small">Tu número no se muestra a nadie y se borra con el grupo. Anota tu PIN: sin él no podemos recuperar tu panel.</p>
+      </div>
+
       <label class="check">
         <input type="checkbox" id="c-privacy">
         <span>He leído y acepto el <button type="button" class="link" id="open-privacy">aviso de privacidad</button>.</span>
@@ -198,7 +217,7 @@
 
       <label class="check">
         <input type="checkbox" id="c-marketing">
-        <span>Quiero que Poseidón me escriba con novedades y promociones de tecnología e IA. <i>Es opcional y no tiene nada que ver con el sorteo.</i></span>
+        <span>Quiero que <a href="https://poseidonmk.com" target="_blank" rel="noopener">Poseidón</a> me escriba con novedades y promociones de tecnología e IA. <i>Es opcional y no tiene nada que ver con el sorteo.</i></span>
       </label>
       <label class="field" id="contact-field" hidden><span>¿A dónde te escribimos? <i>(WhatsApp o correo)</i></span>
         <input id="f-contact" type="text" maxlength="80" autocomplete="email" placeholder="Ej. 0991234567 o tu@correo.com">
@@ -257,16 +276,39 @@
 
       <details class="indiv">
         <summary>¿Prefieres enviar un enlace privado a cada persona?</summary>
+        <p class="muted warn">⚠️ Si tú también juegas, no abras esto: verías a quién le toca a cada uno.</p>
         <p class="muted">Útil si no tienes un grupo. Cada enlace solo funciona para esa persona y no pide PIN.</p>
         <ul class="links" id="links-list"></ul>
       </details>
     </div>
 
     <div class="panel">
-      <strong class="gold">Guarda tu enlace de organizador</strong>
-      <p class="muted">Con él puedes volver a este panel cuando quieras.</p>
+      <strong class="gold">Cómo volver a este panel</strong>
+      <p class="muted">Desde este mismo navegador te aparecerá en la página de inicio. Desde <b>cualquier otro</b>: entra a insecret.poseidonmk.com, toca «¿Ya organizaste un sorteo?» y escribe tu WhatsApp y tu PIN de organizador. También puedes guardar este enlace:</p>
       <div class="row"><input id="org-link" type="text" readonly aria-label="Enlace del organizador"><button type="button" class="btn btn-blue" id="copy-org">Copiar</button></div>
-      <div class="nav"><button type="button" class="btn btn-ghost btn-sm" id="new-draw">Hacer un sorteo nuevo</button><span></span></div>
+      <div class="nav"><button type="button" class="btn btn-ghost btn-sm" id="new-draw">Crear otro sorteo</button><a class="btn btn-wa btn-sm" id="wa-self" target="_blank" rel="noopener noreferrer" href="#">Enviarme este acceso por WhatsApp</a></div>
+    </div>
+  </section>
+
+  <!-- ============ VISTA: RECUPERAR PANEL ============ -->
+  <section id="view-recover" class="view" hidden>
+    <div class="hero hero-sm">
+      <p class="eyebrow">✦ Organizador ✦</p>
+      <h1>Recupera tu sorteo</h1>
+      <p class="lead">Escribe el WhatsApp y el PIN de organizador que pusiste al crearlo.</p>
+    </div>
+    <div class="panel">
+      <div id="rc-form">
+        <label class="field"><span>Tu WhatsApp</span><input id="rc-phone" type="tel" inputmode="tel" maxlength="20" autocomplete="tel" placeholder="Ej. 0991234567"></label>
+        <label class="field"><span>PIN de organizador <i>(6 números)</i></span><input id="rc-pin" type="password" inputmode="numeric" maxlength="6" autocomplete="current-password" placeholder="••••••"></label>
+        <p class="error" id="err-rc" role="alert" hidden></p>
+        <div class="nav"><button type="button" class="btn btn-ghost" id="rc-back">Volver</button><button type="button" class="btn btn-gold" id="rc-go">Ver mis sorteos</button></div>
+      </div>
+      <div id="rc-result" hidden>
+        <strong class="gold">Tus sorteos en curso</strong>
+        <ul class="links" id="rc-list"></ul>
+        <div class="nav"><button type="button" class="btn btn-ghost btn-sm" id="rc-back2">Volver al inicio</button><span></span></div>
+      </div>
     </div>
   </section>
 
@@ -349,7 +391,7 @@
       <button type="button" class="btn btn-blue" id="show-card">Mostrar de nuevo</button>
     </div>
 
-    <p class="cta-bottom" id="rv-cta" hidden>¿Quieres organizar el tuyo? <a href="./">Crea tu amigo secreto</a></p>
+    <p class="cta-bottom" id="rv-cta" hidden>¿Quieres organizar el tuyo (familia, trabajo, amigos)? <a href="./">Crea tu amigo secreto</a>. Es independiente de este sorteo.</p>
   </section>
 
   <!-- ============ VISTA: ERROR / NO ENCONTRADO ============ -->
@@ -368,8 +410,8 @@
 
 <footer class="foot">
   <svg class="drift" viewBox="0 0 360 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40V22C40 6 80 6 120 18s80 14 120 2 80-12 120 4v14z" fill="rgba(216,239,255,.1)"/><path d="M0 40V30c50-12 100-10 150-2s140 8 210-6v18z" fill="rgba(216,239,255,.07)"/></svg>
-  <p class="tagline">El futuro no espera. Nosotros tampoco. <b>Activa el poder.</b></p>
-  <p class="small">© Poseidón · Ecuador · <button type="button" class="link" id="open-privacy-2">Aviso de privacidad</button></p>
+  <p class="tagline"><a href="https://poseidonmk.com" target="_blank" rel="noopener">El futuro no espera. Nosotros tampoco. <b>Activa el poder.</b></a></p>
+  <p class="small">© <a href="https://poseidonmk.com" target="_blank" rel="noopener">Poseidón</a> · Ecuador · <button type="button" class="link" id="open-privacy-2">Aviso de privacidad</button></p>
 </footer>
 
 <!-- MODAL PRIVACIDAD -->
@@ -377,8 +419,8 @@
   <div class="modal-card">
     <h2 id="pv-title">Aviso de privacidad</h2>
     <div class="modal-body">
-      <p><b>Responsable:</b> Poseidón (Ecuador). Contacto: <a href="mailto:soporte@poseidonmk.com">soporte@poseidonmk.com</a>.</p>
-      <p><b>Qué datos recogemos:</b> los nombres que escribes de los participantes, el nombre del organizador y del grupo, la fecha, el presupuesto, tu mensaje, el PIN que cada persona elige y la lista de deseos que cada participante decida escribir. Solo si lo marcas, tu WhatsApp o correo para enviarte información de Poseidón.</p>
+      <p><b>Responsable:</b> <a href="https://poseidonmk.com" target="_blank" rel="noopener">Poseidón</a> (Ecuador). Contacto: <a href="mailto:soporte@poseidonmk.com">soporte@poseidonmk.com</a>.</p>
+      <p><b>Qué datos recogemos:</b> los nombres que escribes de los participantes, el nombre del organizador y del grupo, la fecha, el presupuesto, tu mensaje, el PIN que cada persona elige, la lista de deseos que cada participante decida escribir y, del organizador, su WhatsApp y un PIN (guardado cifrado) solo para que pueda recuperar su panel. Solo si lo marcas, tu WhatsApp o correo para enviarte información de Poseidón.</p>
       <p><b>Para qué:</b> únicamente para hacer el sorteo y mostrar a cada persona su amigo secreto. No vendemos ni compartimos estos datos.</p>
       <p><b>Privacidad del sorteo:</b> el sorteo lo realiza nuestro servidor. Los emparejamientos solo se entregan a cada participante tras elegir su nombre y su PIN, o con su enlace único. El organizador únicamente ve quién ya entró.</p>
       <p><b>Cuánto tiempo:</b> borramos automáticamente los datos del grupo después de la fecha del intercambio.</p>
@@ -393,9 +435,9 @@
 
 <noscript><p style="padding:2rem;text-align:center;color:#fff">InSecret necesita JavaScript para funcionar.</p></noscript>
 
-<script src="config.js?v=3"></script>
-<script src="js/api.js?v=3"></script>
-<script src="js/fx.js?v=3"></script>
-<script src="js/app.js?v=3"></script>
+<script src="config.js?v=4"></script>
+<script src="js/api.js?v=4"></script>
+<script src="js/fx.js?v=4"></script>
+<script src="js/app.js?v=4"></script>
 </body>
 </html>

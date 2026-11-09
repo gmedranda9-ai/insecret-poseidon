@@ -23,3 +23,9 @@ Sorteador de amigo secreto navideño de **Poseidón**. Sitio estático (HTML/CSS
 - `group_enter(p_group_token, p_ref, p_pin)` → `{token}`; la primera vez fija el PIN, luego lo verifica (bloqueo a los 5 intentos)
 - `reveal_assignment(p_token)` → amigo secreto de esa persona + lista de deseos de él/ella; marca el enlace como abierto
 - `save_wish(p_token, p_wish)` → cada participante guarda su propia lista de deseos
+
+## Acceso del organizador (v4)
+- `create_draw` recibe además `p_phone` y `p_org_pin` (6 dígitos, se guarda cifrado con bcrypt).
+- `org_recover(p_phone, p_pin)` devuelve los sorteos vigentes de ese WhatsApp+PIN. 5 fallos = bloqueo de 15 min por número.
+- `group_enter` devuelve `opened` y `reveal_assignment` devuelve `was_opened`, para entrar directo a la tarjeta si ya abrió el regalo.
+- El navegador solo recuerda los sorteos como comodidad (`insecret_org`); la página de inicio siempre abre el asistente.

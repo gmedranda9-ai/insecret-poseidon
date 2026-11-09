@@ -82,7 +82,7 @@ h3 i,.field i{font-style:normal;color:var(--muted);font-weight:400;font-size:.85
 /* campos */
 .field{display:block;margin-bottom:1rem}
 .field>span{display:block;font-size:.9rem;font-weight:500;margin-bottom:.35rem}
-input[type=text],input[type=number],input[type=date],input[type=password],textarea,select{
+input[type=text],input[type=number],input[type=date],input[type=password],input[type=tel],textarea,select{
   width:100%;background:rgba(2,8,18,.75);border:1px solid rgba(157,179,204,.25);border-radius:12px;padding:.8rem .9rem;outline:none;transition:border-color .2s,box-shadow .2s;min-height:48px}
 input::placeholder,textarea::placeholder{color:#62788f}
 input:focus,textarea:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(2,212,252,.18)}
@@ -322,3 +322,18 @@ textarea{resize:vertical}
 .ex-box .chips{margin:0}
 .mini{margin:.3rem 0 0;padding-left:1.2rem;display:grid;gap:.4rem;font-size:.93rem;color:#e8d9a8}
 .mini li::marker{color:var(--gold);font-weight:700}
+
+/* ---- v4: acceso de organizador, recuperar, enlaces a Poseidón ---- */
+.topbar{gap:.8rem;flex-wrap:wrap}
+.by-pos{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);text-decoration:none;align-self:flex-end;padding-bottom:.15rem;border-bottom:1px dashed rgba(254,212,5,.45)}
+.by-pos:hover{color:#fff}
+.foot a{color:inherit;text-decoration:none}
+.foot a:hover{text-decoration:underline}
+.mine{margin-top:1rem}
+.mine .links{margin:.7rem 0 0}
+.links .who{flex-wrap:wrap}
+.links .who small{display:block;color:var(--muted,#9fb4d0);font-size:.82rem;width:100%}
+.recover-cta{text-align:center;margin:1rem 0 .2rem}
+.orgacc{border:1px solid rgba(254,212,5,.35);background:rgba(254,212,5,.06);border-radius:16px;padding:1rem;margin:1rem 0;display:grid;gap:.7rem}
+.orgacc .field{margin:0}
+.warn{color:#ffd98a!important}
