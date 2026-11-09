@@ -425,6 +425,7 @@
         fail('Enlace de organizador no válido', 'No encontramos ese grupo. Puede que ya se haya borrado después del intercambio.');
       });
     }
+    if (qs.get('r')) { renderMine(); return showRecover(); }
     renderMine();
     show('wizard'); go(1, true); window.scrollTo({ top: 0 });
   }

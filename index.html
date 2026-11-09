@@ -3,486 +3,89 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>InSecret Poseidón · Sorteo de amigo secreto</title>
-<meta name="description" content="Organiza tu amigo secreto navideño en minutos. Un solo enlace para tu grupo de WhatsApp, sorteo privado y revelación con sorpresa. Un producto de Poseidón.">
+<title>InSecret · Amigo secreto e invitaciones interactivas · Poseidón</title>
+<meta name="description" content="Organiza tu amigo secreto gratis en 2 minutos, o crea una invitación interactiva con sonido y animación para tu cena, boda o cumpleaños. Un producto de Poseidón.">
 <meta name="theme-color" content="#040a14">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://*.supabase.co; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; base-uri 'none'; form-action 'none'">
 <link rel="canonical" href="https://insecret.poseidonmk.com/">
 <meta property="og:site_name" content="Poseidón">
 <meta property="og:locale" content="es_EC">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://insecret.poseidonmk.com/">
-<meta property="og:title" content="🎄 InSecret Poseidón · Amigo secreto">
-<meta property="og:description" content="Sorteo privado en 2 minutos. Entra, toca tu nombre y descubre a quién le regalas 🤫">
+<meta property="og:title" content="InSecret · Amigo secreto e invitaciones interactivas">
+<meta property="og:description" content="Sorteo de amigo secreto gratis y invitaciones animadas con sonido para tu cena, boda o cumpleaños.">
 <meta property="og:image" content="https://insecret.poseidonmk.com/assets/og-image.jpg?v=3">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="InSecret Poseidón, sorteo de amigo secreto">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="🎄 InSecret Poseidón · Amigo secreto">
-<meta name="twitter:description" content="Sorteo privado en 2 minutos. Entra, toca tu nombre y descubre a quién le regalas 🤫">
-<meta name="twitter:image" content="https://insecret.poseidonmk.com/assets/og-image.jpg?v=3">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=10">
+<link rel="stylesheet" href="css/landing.css?v=2">
 </head>
 <body>
-<canvas id="snow" aria-hidden="true"></canvas>
-<div class="stars" aria-hidden="true"></div>
-<div class="lights" aria-hidden="true"></div>
-<div class="ornaments" aria-hidden="true">
-  <span class="bauble b1"></span><span class="bauble b2"></span><span class="bauble b3"></span><span class="bauble b4"></span>
-</div>
-<div class="glow glow-a" aria-hidden="true"></div>
-<div class="glow glow-b" aria-hidden="true"></div>
-<svg class="deco deco-l" viewBox="46 38 120 162" aria-hidden="true">
-  <defs><radialGradient id="sn" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#b9defa"/></radialGradient></defs>
-  <ellipse cx="104" cy="196" rx="62" ry="9" fill="#d8efff" opacity=".9"/>
-  <g class="snowman">
-    <circle cx="104" cy="160" r="34" fill="url(#sn)"/><circle cx="104" cy="113" r="26" fill="url(#sn)"/><circle cx="104" cy="73" r="20" fill="url(#sn)"/>
-    <path d="M96 122 L58 94 M70 100 L60 108 M70 100 L66 90" stroke="#7a4d22" stroke-width="3.2" stroke-linecap="round" fill="none"/>
-    <path d="M112 122 L150 94 M138 100 L146 110 M138 100 L148 92" stroke="#7a4d22" stroke-width="3.2" stroke-linecap="round" fill="none"/>
-    <rect x="86" y="45" width="36" height="22" rx="3" fill="#00369f"/><rect x="86" y="56" width="36" height="5" fill="#fed405"/><rect x="78" y="64" width="52" height="6" rx="3" fill="#00369f"/>
-    <circle cx="97" cy="75" r="2.3" fill="#040a14"/><circle cx="111" cy="75" r="2.3" fill="#040a14"/><polygon points="104,79 127,83 104,86" fill="#e6682b"/>
-    <circle cx="94" cy="84" r="1.4" fill="#040a14"/><circle cx="98" cy="87.5" r="1.4" fill="#040a14"/><circle cx="104" cy="89" r="1.4" fill="#040a14"/><circle cx="110" cy="87.5" r="1.4" fill="#040a14"/>
-    <rect x="82" y="90" width="44" height="10" rx="5" fill="#fed405"/><rect x="112" y="94" width="10" height="30" rx="4" fill="#e6682b"/>
-    <circle cx="104" cy="108" r="2.6" fill="#00369f"/><circle cx="104" cy="120" r="2.6" fill="#00369f"/><circle cx="104" cy="148" r="2.8" fill="#00369f"/><circle cx="104" cy="162" r="2.8" fill="#00369f"/>
-  </g>
-</svg>
-<svg class="deco deco-r" viewBox="144 16 176 184" aria-hidden="true">
-  <defs><linearGradient id="tr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fd0ff"/><stop offset="1" stop-color="#00369f"/></linearGradient></defs>
-  <ellipse cx="232" cy="196" rx="88" ry="9" fill="#d8efff" opacity=".9"/>
-  <rect x="264" y="168" width="12" height="20" rx="2" fill="#8a5a2b"/>
-  <polygon points="270,36 248,86 292,86" fill="url(#tr)"/><polygon points="270,62 240,122 300,122" fill="url(#tr)"/><polygon points="270,92 230,168 310,168" fill="url(#tr)"/>
-  <polygon points="270,22 273.5,31 283,31.5 275.5,37.5 278,47 270,41.5 262,47 264.5,37.5 257,31.5 266.5,31" fill="#fed405" class="twk"/>
-  <circle cx="262" cy="72" r="3.2" fill="#fed405" class="twk"/><circle cx="279" cy="82" r="3.2" fill="#e6682b" class="twk d2"/><circle cx="256" cy="104" r="3.2" fill="#fff" class="twk d3"/><circle cx="283" cy="108" r="3.2" fill="#fed405" class="twk"/>
-  <circle cx="248" cy="140" r="3.4" fill="#e6682b" class="twk d2"/><circle cx="272" cy="130" r="3.4" fill="#fff" class="twk d3"/><circle cx="294" cy="148" r="3.4" fill="#fed405" class="twk"/><circle cx="262" cy="156" r="3.4" fill="#02d4fc" class="twk d2"/>
-  <rect x="150" y="164" width="32" height="26" rx="3" fill="#fed405"/><rect x="163" y="164" width="6" height="26" fill="#00369f"/><path d="M166 164c-8-12-18-4-8 0M166 164c8-12 18-4 8 0" fill="none" stroke="#00369f" stroke-width="3" stroke-linecap="round"/>
-  <rect x="188" y="152" width="30" height="38" rx="3" fill="#e6682b"/><rect x="200" y="152" width="6" height="38" fill="#fed405"/><path d="M203 152c-8-12-18-4-8 0M203 152c8-12 18-4 8 0" fill="none" stroke="#fed405" stroke-width="3" stroke-linecap="round"/>
-  <rect x="222" y="176" width="16" height="14" rx="2" fill="#02d4fc"/><rect x="228" y="176" width="4" height="14" fill="#fff"/>
-</svg>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="aurora" aria-hidden="true"><i></i><i></i></div>
 
-<div id="demo-banner" class="demo-banner" hidden>Modo demo · vista previa, los datos viven solo en este navegador</div>
-
-<header class="topbar">
-  <a class="brand" href="./" aria-label="InSecret Poseidón, inicio">
-    <img src="assets/logo.png" alt="" width="44" height="44">
-    <span class="brand-text"><strong>InSecret</strong></span>
-  </a>
-  <a class="by-pos" href="https://poseidonmk.com" target="_blank" rel="noopener" aria-label="Ir a la web de Poseidón">by Poseidón</a>
-  <nav class="top-nav" aria-label="Accesos rápidos">
-    <button type="button" class="pill pill-org" id="top-recover"><span aria-hidden="true">🔑</span> Ya soy organizador de amigo secreto <b class="badge-n" id="mine-badge" hidden>0</b></button>
-    <a class="pill pill-inv" href="invitacion/"><i class="mini-env" aria-hidden="true"></i> Invitaciones personalizadas</a>
-  </nav>
+<header class="top">
+  <a class="brand" href="./" aria-label="InSecret Poseidón"><img src="assets/logo.png" alt="" width="40" height="40"><span>InSecret</span></a>
+  <a class="by" href="https://poseidonmk.com" target="_blank" rel="noopener">por Poseidón</a>
+  <a class="pill" id="org" href="amigo-secreto/?r=1"><span aria-hidden="true">🔑</span> Ya soy organizador de amigo secreto <b class="badge" id="org-n" hidden>0</b></a>
 </header>
 
-<main id="app">
-
-  <!-- ============ VISTA: ASISTENTE DEL ORGANIZADOR ============ -->
-  <section id="view-wizard" class="view" hidden>
-
-    <div class="hero">
-      <p class="eyebrow">✦ Amigo secreto ✦</p>
-      <h1>Que la magia<br>sea <em>de verdad</em> secreta</h1>
-      <p class="lead">Organiza tu amigo secreto en 2 minutos y comparte <b>un solo enlace</b> con tu grupo de WhatsApp. El sorteo es privado: ni tú sabrás quién le regala a quién.</p>
-      <a class="how-link" href="#como">¿Cómo funciona? Míralo abajo ↓</a>
-    </div>
-
-    
-    
-
-    <ol class="stepper" id="stepper" aria-label="Progreso">
-      <li data-step="1"><span>1</span><em>Participantes</em></li>
-      <li data-step="2"><span>2</span><em>Grupo</em></li>
-      <li data-step="3"><span>3</span><em>Opciones</em></li>
-      <li data-step="4"><span>4</span><em>Sorteo</em></li>
-    </ol>
-
-    <!-- PASO 1 -->
-    <div class="panel" data-panel="1">
-      <h2>¿Quiénes juegan?</h2>
-
-      <label class="field" for="name-input">
-        <span>Escribe un nombre y pulsa «Agregar»</span>
-        <div class="row">
-          <input id="name-input" type="text" maxlength="40" autocomplete="off" enterkeyhint="done" placeholder="Ej. Camila">
-          <button type="button" class="btn btn-blue" id="add-name">Agregar</button>
-        </div>
-        <small class="hint">Truco: puedes pegar varios nombres de una vez, separados por comas.</small>
-      </label>
-
-      <div class="count" id="count-line"></div>
-      <ul class="chips" id="people-list" aria-live="polite"></ul>
-      <p class="error" id="err-1" role="alert" hidden></p>
-
-      <div class="nav">
-        <span></span>
-        <button type="button" class="btn btn-gold" id="next-1">Continuar</button>
-      </div>
-    </div>
-
-    <!-- PASO 2 -->
-    <div class="panel" data-panel="2" hidden>
-      <h2>Datos del grupo</h2>
-
-      <label class="field"><span>Organizador <i>(tu nombre)</i></span>
-        <input id="f-organizer" type="text" maxlength="40" autocomplete="given-name" placeholder="Ej. Alejandro">
-      </label>
-      <label class="field"><span>Nombre del grupo</span>
-        <input id="f-group" type="text" maxlength="50" autocomplete="off" placeholder="Ej. Navidad en familia 2026">
-      </label>
-      <div class="grid-2">
-        <label class="field"><span>Fecha del intercambio</span>
-          <input id="f-date" type="date">
-        </label>
-        <label class="field"><span>Presupuesto <i>(USD)</i></span>
-          <input id="f-budget" type="number" inputmode="decimal" min="0" max="10000" step="0.5" placeholder="Ej. 20">
-        </label>
-      </div>
-      <label class="field"><span>Mensaje adicional <i>(opcional)</i></span>
-        <textarea id="f-message" rows="3" maxlength="280" placeholder="Ej. Lo entregamos en la cena del 24. ¡Nada de espiar!"></textarea>
-        <small class="hint"><span id="msg-count">0</span>/280</small>
-      </label>
-      <p class="error" id="err-2" role="alert" hidden></p>
-
-      <div class="nav">
-        <button type="button" class="btn btn-ghost" data-back="1">Atrás</button>
-        <button type="button" class="btn btn-gold" id="next-2">Continuar</button>
-      </div>
-    </div>
-
-    <!-- PASO 3 -->
-    <div class="panel" data-panel="3" hidden>
-      <h2>Opciones</h2>
-
-      <h3>🚫 Exclusiones <i>(opcional)</i></h3>
-      <div class="explain">
-        <p><b>¿Para qué sirve?</b> Para evitar que dos personas se toquen entre sí.</p>
-        <p><b>Ejemplo:</b> Ana y Luis son pareja y ya se regalan por su cuenta. Eliges «Ana» y «Luis» y pulsas <i>Añadir</i>: a Ana nunca le saldrá Luis, y a Luis nunca le saldrá Ana.</p>
-        <p class="muted">¿Todos pueden tocarse con todos? Déjalo vacío y pulsa Continuar.</p>
-      </div>
-      <div class="pair">
-        <select id="ex-a" aria-label="Primera persona"></select>
-        <span class="pair-x" aria-hidden="true">✕</span>
-        <select id="ex-b" aria-label="Segunda persona"></select>
-        <button type="button" class="btn btn-blue" id="add-ex">Añadir esta exclusión</button>
-      </div>
-      <div class="ex-box" id="ex-box">
-        <p class="ex-count" id="ex-count"></p>
-        <ul class="chips" id="ex-list"></ul>
-      </div>
-
-      <h3>🎁 Lista de deseos</h3>
-      <div class="explain explain-gold">
-        <p><b>¿Cómo funciona?</b></p>
-        <ol class="mini">
-          <li>Cada persona abre su enlace y descubre a su amigo secreto.</li>
-          <li>Ahí mismo ve una casilla «Tu lista de deseos» y escribe qué le gustaría recibir: gustos, colores, talla…</li>
-          <li>Quien le regale a esa persona lo verá en su pantalla.</li>
-        </ol>
-      </div>
-
-      <p class="error" id="err-3" role="alert" hidden></p>
-      <div class="nav">
-        <button type="button" class="btn btn-ghost" data-back="2">Atrás</button>
-        <button type="button" class="btn btn-gold" id="next-3">Continuar</button>
-      </div>
-    </div>
-
-    <!-- PASO 4 -->
-    <div class="panel" data-panel="4" hidden>
-      <h2>Todo listo</h2>
-      <div class="summary" id="summary"></div>
-      <p class="muted">Al crear el enlace se hace el sorteo en nuestro servidor. Después no se puede cambiar.</p>
-
-      <div class="orgacc">
-        <strong class="gold">🔐 Tu acceso de organizador</strong>
-        <p class="muted">Para que puedas volver a tu panel desde <b>cualquier teléfono o computador</b>, aunque pierdas el enlace.</p>
-        <label class="field"><span>Tu WhatsApp</span>
-          <input id="f-phone" type="tel" inputmode="tel" maxlength="20" autocomplete="tel" placeholder="Ej. 0991234567">
-        </label>
-        <label class="field"><span>Crea tu PIN de organizador <i>(6 números)</i></span>
-          <input id="f-orgpin" type="password" inputmode="numeric" maxlength="6" autocomplete="new-password" placeholder="••••••">
-        </label>
-        <p class="muted small">Tu número no se muestra a nadie y se borra con el grupo. Anota tu PIN: sin él no podemos recuperar tu panel.</p>
-      </div>
-
-      <label class="check">
-        <input type="checkbox" id="c-privacy">
-        <span>He leído y acepto el <button type="button" class="link" id="open-privacy">aviso de privacidad</button>.</span>
-      </label>
-
-      <label class="check">
-        <input type="checkbox" id="c-marketing">
-        <span>Quiero que <a href="https://poseidonmk.com" target="_blank" rel="noopener">Poseidón</a> me escriba con novedades y promociones de tecnología e IA. <i>Es opcional y no tiene nada que ver con el sorteo.</i></span>
-      </label>
-      <label class="field" id="contact-field" hidden><span>¿A dónde te escribimos? <i>(WhatsApp o correo)</i></span>
-        <input id="f-contact" type="text" maxlength="80" autocomplete="email" placeholder="Ej. 0991234567 o tu@correo.com">
-      </label>
-
-      <p class="error" id="err-4" role="alert" hidden></p>
-      <div class="nav">
-        <button type="button" class="btn btn-ghost" data-back="3">Atrás</button>
-        <button type="button" class="btn btn-gold btn-big" id="do-draw">🔗 Crear el enlace del sorteo</button>
-      </div>
-    </div>
-
-    <section class="how-wrap" id="como" aria-label="Cómo funciona">
-      <h2 class="how-title">¿Cómo funciona?</h2>
-      <p class="muted how-sub">Tú haces los primeros cuatro pasos. Lo demás lo hace cada participante.</p>
-      <div class="how-grid">
-        <article class="hcard"><span class="hnum">1</span><i class="hico">👥</i><h3>Participantes</h3><p>Escribes los nombres de todos los que juegan.</p></article>
-        <article class="hcard"><span class="hnum">2</span><i class="hico">📅</i><h3>Datos del grupo</h3><p>Pones la fecha del intercambio, el presupuesto y un mensaje.</p></article>
-        <article class="hcard"><span class="hnum">3</span><i class="hico">🚫</i><h3>Exclusiones</h3><p>Opcional. Evita que dos personas se toquen entre sí, como una pareja.</p></article>
-        <article class="hcard"><span class="hnum">4</span><i class="hico">🔗</i><h3>Un solo enlace</h3><p>Lo pegas en tu grupo de WhatsApp. O lo envías uno por uno.</p></article>
-        <article class="hcard hcard-alt"><span class="hnum">5</span><i class="hico">🎄</i><h3>Cada quien descubre</h3><p>Entra, toca su nombre, crea un PIN de 4 números y abre su regalo.</p></article>
-        <article class="hcard hcard-alt"><span class="hnum">6</span><i class="hico">🎁</i><h3>Lista de deseos</h3><p>Ya adentro, cada uno escribe qué le gustaría recibir. Su amigo secreto lo verá.</p></article>
-        <article class="hcard hcard-alt"><span class="hnum">7</span><i class="hico">🔑</i><h3>Si eres organizador</h3><p>Vuelves a tu panel desde cualquier teléfono con tu WhatsApp y tu PIN de organizador. Ahí ves quién ya abrió su regalo.</p></article>
-        <article class="hcard hcard-alt"><span class="hnum">8</span><i class="hico">🤫</i><h3>Secreto de verdad</h3><p>El sorteo lo hace nuestro servidor. Nadie ve quién le toca a quién, ni siquiera quien organiza. Si tú juegas, también te sorprendes.</p></article>
-        <a class="hcard hcard-wide hcard-inv" href="invitacion/"><span class="hnum">✉</span><i class="hico">💌</i><h3>Invitaciones personalizadas</h3><p>¿Una cena, una boda, un cumpleaños o una cita? Te hacemos una invitación animada con sello, música y confirmación por WhatsApp. <b>Míralas aquí →</b></p></a>
-      </div>
-    </section>
-    <section class="inv-band" id="invitaciones" aria-label="Invitaciones interactivas">
-      <div class="inv-env" aria-hidden="true"><div class="ie-back"></div><div class="ie-flap"></div><div class="ie-seal">P</div></div>
-      <div class="inv-copy">
-        <h2>Invitaciones interactivas</h2>
-        <p>Un sobre con sello que se rompe, cuenta regresiva, confirmación de asistencia y calendario. Para cenas, bodas, aniversarios y cumpleaños.</p>
-        <div class="inv-acts">
-          <a class="btn btn-gold" href="invitacion/">Ver el ejemplo</a>
-          <a class="btn btn-wa" target="_blank" rel="noopener noreferrer" href="https://wa.me/593982354338?text=Hola%20Poseid%C3%B3n%20%F0%9F%91%8B%20quiero%20una%20invitaci%C3%B3n%20interactiva%20para%20mi%20evento.">Quiero la mía</a>
-        </div>
-      </div>
-    </section>
+<main>
+  <section class="hero">
+    <p class="eyebrow">✦ Por Poseidón ✦</p>
+    <h1>¿Qué quieres <em>hacer hoy?</em></h1>
+    <p class="lead">Elige una opción. Las dos son rápidas.</p>
   </section>
 
-  <!-- ============ VISTA: PANEL DEL ORGANIZADOR ============ -->
-  <section id="view-results" class="view" hidden>
-    <div class="hero hero-sm">
-      <p class="eyebrow">✦ ¡Sorteo hecho! ✦</p>
-      <h1 id="res-title">Tu grupo</h1>
-      <p class="lead" id="res-sub"></p>
-    </div>
-
-    <div class="panel panel-hl">
-      <h2>1. Copia el enlace y pégalo en tu grupo de WhatsApp</h2>
-      <ol class="next">
-        <li><b>Tú:</b> pega este enlace en el grupo del intercambio.</li>
-        <li><b>Cada persona:</b> entra, toca su nombre, crea un PIN de 4 números y abre su regalo para ver a su amigo secreto.</li>
-        <li><b>Después:</b> cada una escribe su lista de deseos, y su amigo secreto la verá.</li>
-      </ol>
-      <p class="muted">Nadie, ni tú, ve quién le regala a quién.</p>
-      <div class="row linkbox">
-        <input id="grp-link" type="text" readonly aria-label="Enlace del grupo">
+  <section class="doors">
+    <a class="door door-blue" href="amigo-secreto/" id="d1">
+      <span class="tag tag-gold">Gratis</span>
+      <div class="art" aria-hidden="true">
+        <svg viewBox="0 0 160 130" class="gift">
+          <g class="names"><text x="14" y="30" class="n n1">Ana</text><text x="118" y="22" class="n n2">Luis</text><text x="132" y="62" class="n n3">Sofi</text><text x="4" y="66" class="n n4">Pedro</text></g>
+          <g class="lid"><rect x="32" y="44" width="96" height="22" rx="4" fill="#fed405"/><rect x="74" y="44" width="12" height="22" fill="#e6682b"/><path d="M80 44C62 18 40 30 58 44M80 44C98 18 120 30 102 44" fill="none" stroke="#e6682b" stroke-width="6" stroke-linecap="round"/></g>
+          <rect x="38" y="66" width="84" height="54" rx="4" fill="#02d4fc"/><rect x="74" y="66" width="12" height="54" fill="#e6682b"/>
+          <text x="80" y="104" text-anchor="middle" class="q">?</text>
+        </svg>
       </div>
-      <div class="nav nav-center">
-        <button type="button" class="btn btn-gold btn-big" id="copy-grp">📋 Copiar enlace del grupo</button>
-        <a class="btn btn-wa btn-big" id="wa-grp" target="_blank" rel="noopener noreferrer" href="#">Compartir por WhatsApp</a>
-      </div>
-    </div>
-
-    <div class="panel">
-      <h2>2. Mira quién ya entró</h2>
-      <ul class="status" id="status-list"></ul>
-      <div class="nav nav-center"><button type="button" class="btn btn-blue btn-sm" id="refresh">Actualizar</button></div>
-
-      <div class="indiv">
-        <p class="muted"><b>🔒 Tú no ves quién le toca a quién.</b> Nadie lo ve: ni tú, que organizas. Si tú también juegas, tu amigo secreto te sorprenderá igual que a los demás.</p>
-        <p class="muted">¿No tienes grupo de WhatsApp? Envía <b>el mismo enlace</b> a cada persona, uno por uno: cada quien toca su propio nombre y crea su PIN.</p>
-        <p class="muted small">«Reiniciar» solo sirve si alguien eligió un nombre que no era suyo o olvidó su PIN. A esa persona le aparece un aviso de que se reinició su acceso.</p>
-      </div>
-    </div>
-
-    <a class="panel cross" id="cross-inv" target="_blank" rel="noopener noreferrer" href="#">
-      <span class="cross-ico" aria-hidden="true">💌</span>
-      <span><b>¿Quieres una invitación bonita para tu intercambio?</b><small>Te la hacemos animada, con sello, música y confirmación por WhatsApp.</small></span>
+      <h2>Amigo secreto</h2>
+      <p>Haz el sorteo en 2 minutos. Nadie ve quién le toca a quién, ni tú.</p>
+      <span class="go">Organizar mi sorteo <i aria-hidden="true">→</i></span>
     </a>
 
-    <div class="panel">
-      <strong class="gold">Cómo volver a este panel</strong>
-      <p class="muted">Desde este mismo navegador te aparecerá en la página de inicio. Desde <b>cualquier otro</b>: entra a insecret.poseidonmk.com, toca «¿Ya organizaste un sorteo?» y escribe tu WhatsApp y tu PIN de organizador. También puedes guardar este enlace:</p>
-      <div class="row"><input id="org-link" type="text" readonly aria-label="Enlace del organizador"><button type="button" class="btn btn-blue" id="copy-org">Copiar</button></div>
-      <div class="nav"><button type="button" class="btn btn-ghost btn-sm" id="new-draw">Crear otro sorteo</button><a class="btn btn-wa btn-sm" id="wa-self" target="_blank" rel="noopener noreferrer" href="#">Enviarme este acceso por WhatsApp</a></div>
-    </div>
+    <a class="door door-gold" href="invitacion/" id="d2">
+      <span class="tag tag-line">Con sonido y animación</span>
+      <div class="art" aria-hidden="true">
+        <svg viewBox="0 0 160 130" class="env">
+          <g class="letter"><rect x="34" y="26" width="92" height="66" rx="4" fill="#fffaf1"/><rect x="46" y="38" width="44" height="5" rx="2" fill="#e6682b"/><rect x="46" y="50" width="68" height="4" rx="2" fill="#cdbf9d"/><rect x="46" y="60" width="58" height="4" rx="2" fill="#cdbf9d"/><path d="M80 82l-5-5c-3-3 0-7 3-6l2 2 2-2c3-1 6 3 3 6z" fill="#e6682b" transform="translate(0 -2)"/></g>
+          <path d="M26 60h108v58a6 6 0 01-6 6H32a6 6 0 01-6-6z" fill="#e6682b"/>
+          <path d="M26 118l54-34 54 34" fill="none" stroke="#c9460f" stroke-width="3"/>
+          <g class="flap"><path d="M26 60L80 98l54-38z" fill="#ff8a54"/></g>
+          <circle cx="80" cy="82" r="9" class="seal" fill="#fed405"/><path d="M80 77l1.6 3.6 3.9.4-2.9 2.6.8 3.8-3.4-2-3.4 2 .8-3.8-2.9-2.6 3.9-.4z" fill="#a8761a"/>
+        </svg>
+      </div>
+      <h2>Invitaciones interactivas</h2>
+      <p>Una invitación personalizada para tu cena, boda o cumpleaños. Se abre con un toque.</p>
+      <span class="go">Ver ejemplos <i aria-hidden="true">→</i></span>
+    </a>
   </section>
 
-  <!-- ============ VISTA: RECUPERAR PANEL ============ -->
-  <section id="view-recover" class="view" hidden>
-    <div class="hero hero-sm">
-      <p class="eyebrow">✦ Organizador ✦</p>
-      <h1>Tu panel de amigo secreto</h1>
-      <p class="lead">Aquí vuelves a los sorteos que organizaste: copiar el enlace del grupo, ver quién ya abrió su regalo y más.</p>
-    </div>
-
-    <div class="panel panel-hl mine" id="mine" hidden>
-      <strong class="gold">Tus sorteos en este dispositivo</strong>
-      <ul class="links" id="mine-list"></ul>
-    </div>
-
-    <div class="panel panel-hl">
-      <div id="rc-form">
-        <strong class="gold rc-or">¿Organizaste desde otro dispositivo?</strong>
-        <ol class="rc-steps">
-          <li><i>1</i><div><b>Escribe tu WhatsApp</b><span>El mismo que pusiste al crear el sorteo.</span></div></li>
-          <li><i>2</i><div><b>Escribe tu PIN de 6 números</b><span>El PIN de organizador, no el de participante.</span></div></li>
-          <li><i>3</i><div><b>Entra a tu panel</b><span>Ahí copias el enlace del grupo y ves quién ya abrió.</span></div></li>
-        </ol>
-        <label class="field"><span>Tu WhatsApp</span><input id="rc-phone" type="tel" inputmode="tel" maxlength="20" autocomplete="tel" placeholder="Ej. 0991234567"></label>
-        <label class="field"><span>PIN de organizador <i>(6 números)</i></span><input id="rc-pin" type="password" inputmode="numeric" maxlength="6" autocomplete="current-password" placeholder="••••••"></label>
-        <p class="error" id="err-rc" role="alert" hidden></p>
-        <div class="nav"><button type="button" class="btn btn-ghost" id="rc-back">Volver</button><button type="button" class="btn btn-gold btn-big" id="rc-go">Entrar a mi panel</button></div>
-      </div>
-      <div id="rc-result" hidden>
-        <strong class="gold">¡Te encontramos! Elige tu sorteo</strong>
-        <ul class="links" id="rc-list"></ul>
-        <div class="nav"><button type="button" class="btn btn-ghost btn-sm" id="rc-back2">Volver al inicio</button><span></span></div>
-      </div>
-    </div>
-
-    <div class="panel rc-help">
-      <strong class="gold">¿Qué hay en tu panel?</strong>
-      <ul class="mini">
-        <li>El <b>enlace del grupo</b> para pegar en WhatsApp.</li>
-        <li>Quién ya <b>abrió su regalo</b> y quién todavía no.</li>
-        <li>«Reiniciar» si alguien eligió un nombre que no era suyo.</li>
-      </ul>
-      <strong class="gold" style="margin-top:1rem;display:block">¿No recuerdas tu PIN?</strong>
-      <p class="muted">Si usas el mismo teléfono con el que lo creaste, tu sorteo aparece en «Tus sorteos en curso» al entrar a la página de inicio, sin PIN. Si no, puedes crear uno nuevo: los sorteos se borran solos después de la fecha del intercambio.</p>
-      <div class="nav"><button type="button" class="btn btn-blue btn-sm" id="rc-new">Crear un sorteo nuevo</button><span></span></div>
-    </div>
-  </section>
-
-  <!-- ============ VISTA: ENTRADA POR ENLACE DE GRUPO ============ -->
-  <section id="view-group" class="view" hidden>
-    <div class="hero hero-sm">
-      <p class="eyebrow">✦ Amigo secreto ✦</p>
-      <h1 id="gp-title">Tu grupo</h1>
-      <p class="lead" id="gp-sub"></p>
-    </div>
-    <div class="panel" id="gp-pick">
-      <h2>¿Quién eres tú?</h2>
-      <p class="muted">Toca tu nombre. Elige solo el tuyo: el resultado es secreto y solo se muestra con tu PIN.</p>
-      <ul class="pick" id="gp-list"></ul>
-    </div>
-    <div class="panel" id="gp-pin" hidden>
-      <h2 id="gp-pin-title"></h2>
-      <p class="muted" id="gp-pin-help"></p>
-      <label class="field"><span>PIN de 4 números</span>
-        <input id="gp-pin-input" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" placeholder="••••">
-      </label>
-      <p class="error" id="err-g" role="alert" hidden></p>
-      <div class="nav">
-        <button type="button" class="btn btn-ghost" id="gp-back">Atrás</button>
-        <button type="button" class="btn btn-gold btn-big" id="gp-go">🎁 Descubrir</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ VISTA: REVELACIÓN ============ -->
-  <section id="view-reveal" class="view" hidden>
-    <div class="stage" id="stage">
-      <p class="eyebrow" id="rv-hello"></p>
-      <div class="gift" id="gift" role="button" tabindex="0" aria-label="Toca para abrir tu regalo">
-        <div class="gift-glow"></div>
-        <div class="gift-lid"><i class="bow"></i></div>
-        <div class="gift-box"><i class="ribbon"></i></div>
-      </div>
-      <p class="tap" id="rv-tap">Toca el regalo para descubrir a tu amigo secreto</p>
-    </div>
-
-    <div class="reveal-card" id="reveal-card" hidden>
-      <p class="eyebrow">Tu amigo secreto es</p>
-      <h2 class="friend" id="rv-friend"></h2>
-      <p class="shh">🤫 Es un secreto: no se lo cuentes a nadie</p>
-
-      <dl class="facts">
-        <div><dt>Grupo</dt><dd id="rv-group"></dd></div>
-        <div><dt>Fecha del intercambio</dt><dd id="rv-date"></dd></div>
-        <div><dt>Presupuesto</dt><dd id="rv-budget"></dd></div>
-      </dl>
-
-      <p class="notice" id="rv-reset" hidden>⚠️ El organizador reinició tu acceso. Si no lo pediste tú, avísale: alguien pudo entrar con tu nombre.</p>
-      <div class="fact-block">
-        <h3>Lo que le haría ilusión</h3>
-        <p id="rv-wish"></p>
-        <p class="muted" id="rv-wish-empty" hidden>Todavía no escribió su lista de deseos. Vuelve a mirar en unos días.</p>
-        <button type="button" class="btn btn-ghost btn-sm" id="rv-refresh">Revisar de nuevo</button>
-      </div>
-      <div class="fact-block" id="rv-msg-wrap" hidden>
-        <h3>Mensaje de <span id="rv-org"></span></h3>
-        <p id="rv-msg"></p>
-      </div>
-
-      <div class="nav nav-center">
-        <button type="button" class="btn btn-gold" id="dl-card">⬇ Descargar mi tarjeta</button>
-        <button type="button" class="btn btn-ghost" id="hide-card">Ocultar</button>
-      </div>
-      <p class="error" id="err-r" role="alert" hidden></p>
-    </div>
-
-    <div class="panel" id="my-wish-card" hidden>
-      <h2>🎁 Tu lista de deseos</h2>
-      <p class="muted">Cuéntale a quien te regale qué te gustaría recibir (gustos, talla, colores…). Solo esa persona la verá, sin saber que eres tú.</p>
-      <textarea id="my-wish" rows="3" maxlength="300" placeholder="Ej. Me encanta el café, los libros de misterio y el color azul"></textarea>
-      <div class="nav"><span class="hint"><span id="wish-count">0</span>/300</span><button type="button" class="btn btn-blue" id="save-wish">Guardar mi lista</button></div>
-    </div>
-
-    <div class="reveal-card" id="reveal-hidden" hidden>
-      <p class="muted">Ocultaste tu amigo secreto por seguridad.</p>
-      <button type="button" class="btn btn-blue" id="show-card">Mostrar de nuevo</button>
-    </div>
-
-    <p class="cta-bottom" id="rv-cta" hidden>¿Quieres organizar el tuyo (familia, trabajo, amigos)? <a href="./">Crea tu amigo secreto</a>. Es independiente de este sorteo.</p>
-  </section>
-
-  <!-- ============ VISTA: ERROR / NO ENCONTRADO ============ -->
-  <section id="view-error" class="view" hidden>
-    <div class="panel center">
-      <h2 id="er-title">Ups</h2>
-      <p class="muted" id="er-text"></p>
-      <a class="btn btn-gold" href="./">Ir al inicio</a>
-    </div>
-  </section>
-
-  <section id="view-loading" class="view">
-    <div class="panel center"><div class="spinner" aria-hidden="true"></div><p class="muted">Cargando…</p></div>
-  </section>
+  <ul class="trust">
+    <li>Sin descargar nada</li><li>Datos privados</li><li>Hecho en Ecuador</li>
+  </ul>
 </main>
 
-<footer class="foot">
-  <svg class="drift" viewBox="0 0 360 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40V22C40 6 80 6 120 18s80 14 120 2 80-12 120 4v14z" fill="rgba(216,239,255,.1)"/><path d="M0 40V30c50-12 100-10 150-2s140 8 210-6v18z" fill="rgba(216,239,255,.07)"/></svg>
-  <p class="tagline"><a href="https://poseidonmk.com" target="_blank" rel="noopener">El futuro no espera. Nosotros tampoco. <b>Activa el poder.</b></a></p>
-  <p class="small">© <a href="https://poseidonmk.com" target="_blank" rel="noopener">Poseidón</a> · Ecuador · <button type="button" class="link" id="open-privacy-2">Aviso de privacidad</button></p>
+<footer>
+  <a href="https://poseidonmk.com" target="_blank" rel="noopener">poseidonmk.com</a> · <a href="mailto:soporte@poseidonmk.com">soporte@poseidonmk.com</a>
+  <p class="slogan">El futuro no espera. Nosotros tampoco. Activa el poder.</p>
 </footer>
-
-<!-- MODAL PRIVACIDAD -->
-<div class="modal" id="privacy-modal" hidden role="dialog" aria-modal="true" aria-labelledby="pv-title">
-  <div class="modal-card">
-    <h2 id="pv-title">Aviso de privacidad</h2>
-    <div class="modal-body">
-      <p><b>Responsable:</b> <a href="https://poseidonmk.com" target="_blank" rel="noopener">Poseidón</a> (Ecuador). Contacto: <a href="mailto:soporte@poseidonmk.com">soporte@poseidonmk.com</a>.</p>
-      <p><b>Qué datos recogemos:</b> los nombres que escribes de los participantes, el nombre del organizador y del grupo, la fecha, el presupuesto, tu mensaje, el PIN que cada persona elige, la lista de deseos que cada participante decida escribir y, del organizador, su WhatsApp y un PIN (guardado cifrado) solo para que pueda recuperar su panel. Solo si lo marcas, tu WhatsApp o correo para enviarte información de Poseidón.</p>
-      <p><b>Para qué:</b> únicamente para hacer el sorteo y mostrar a cada persona su amigo secreto. No vendemos ni compartimos estos datos.</p>
-      <p><b>Privacidad del sorteo:</b> el sorteo lo realiza nuestro servidor. Los emparejamientos solo se entregan a cada participante tras elegir su nombre y su PIN, o con su enlace único. El organizador únicamente ve quién ya entró.</p>
-      <p><b>Cuánto tiempo:</b> borramos automáticamente los datos del grupo después de la fecha del intercambio.</p>
-      <p><b>Tus derechos:</b> acceso, rectificación, eliminación y oposición, conforme a la Ley Orgánica de Protección de Datos Personales de Ecuador. Escríbenos al correo de contacto.</p>
-      <p><b>Importante:</b> al escribir nombres de otras personas, confirmas que están de acuerdo en participar.</p>
-    </div>
-    <button type="button" class="btn btn-gold" id="close-privacy">Entendido</button>
-  </div>
-</div>
-
-<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-
-<noscript><p style="padding:2rem;text-align:center;color:#fff">InSecret necesita JavaScript para funcionar.</p></noscript>
-
-<script src="config.js?v=10"></script>
-<script src="js/api.js?v=10"></script>
-<script src="js/fx.js?v=10"></script>
-<script src="js/app.js?v=10"></script>
+<script src="js/landing.js?v=1"></script>
 </body>
 </html>

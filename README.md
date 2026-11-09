@@ -34,3 +34,9 @@ Sorteador de amigo secreto navideño de **Poseidón**. Sitio estático (HTML/CSS
 - Se eliminó `organizer_links`: ya no hay enlaces individuales; todos usan el mismo enlace de grupo + su PIN.
 - `reset_participant` incrementa `reset_count` y la tarjeta del participante muestra un aviso si su acceso fue reiniciado.
 - `purge_expired` también borra grupos abandonados (creados hace más de 30 días y sin ninguna apertura).
+
+## v9 · Portada con dos puertas
+
+- `/` es la portada: dos tarjetas animadas, **Amigo secreto** (`/amigo-secreto/`) e **Invitaciones interactivas** (`/invitacion/`).
+- El sorteo vive ahora en `/amigo-secreto/`. Los enlaces viejos del sorteo en la raíz (`?g=`, `?o=`, `?t=`, `?demo=`) redirigen solos (`js/landing.js`).
+- `/amigo-secreto/?r=1` abre directo la pantalla "Ya soy organizador" (la portada muestra el contador de sorteos guardados en el dispositivo).
