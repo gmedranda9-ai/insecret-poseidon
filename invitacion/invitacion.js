@@ -293,12 +293,37 @@
     return '<div class="tile" data-id="' + id + '"><button type="button" aria-expanded="false" aria-controls="tb-' + id + '"><span class="ti"><svg viewBox="0 0 24 24">' + ICON[icon] + '</svg></span><span class="tl">' + esc(label) + '</span><span class="tc">' + CHEV + '</span></button>' +
       '<div class="tb" id="tb-' + id + '" role="region"><div class="tbi"><div class="tbc">' + body + '</div></div></div></div>';
   }
+  var CLK = { tm: 0, t: null }, DIET = [], GARM = '#e0b04b';
+  function setClock(i, first) {
+    var li = document.querySelector('.timeline li[data-i="' + i + '"]'); if (!li) return;
+    var p = li.dataset.h.split(':'), tm = (+p[0]) * 60 + (+p[1]);
+    if (!first) while (tm < CLK.tm) tm += 1440;
+    CLK.tm = tm; var hh = $('hand-h'), mm = $('hand-m'); if (!hh) return;
+    if (first) { hh.style.transition = mm.style.transition = 'none'; }
+    hh.style.transform = 'rotate(' + (tm * .5) + 'deg)'; mm.style.transform = 'rotate(' + (tm * 6) + 'deg)';
+    if (first) { void hh.offsetWidth; hh.style.transition = mm.style.transition = ''; }
+    $('clk-t').textContent = li.dataset.h + ' h'; $('clk-d').textContent = li.dataset.d;
+    document.querySelectorAll('.timeline li').forEach(function (x) { x.classList.toggle('now', x === li); x.classList.toggle('past', +x.dataset.i < i); });
+    $('prog').style.height = (i / Math.max(1, T[cur].it.length - 1) * 100) + '%';
+    if (!first) chime([660 + i * 90]);
+  }
+  function playClock() {
+    clearInterval(CLK.t); var n = T[cur].it.length, i = 0; setClock(0, true);
+    CLK.t = setInterval(function () { i++; if (i >= n) { clearInterval(CLK.t); var c = centerOf($('clock')); burstAt(c[0], c[1], T[cur].fx, 50); return; } setClock(i); }, 1200);
+  }
   function buildTiles(t) {
-    var it = '<ol class="timeline">' + t.it.map(function (x, i) { return '<li style="--i:' + i + '"><b>' + esc(x[0]) + ' h</b>' + esc(x[1]) + '</li>'; }).join('') + '</ol>';
-    var dr = '<p>' + esc(t.dress[0]) + '</p><div class="swatches">' + t.dress[1].map(function (c, i) { return '<i style="background:' + c + ';--i:' + i + '"></i>'; }).join('') + '</div><small>Estos son los colores del evento.</small>';
-    var me = '<ul class="menu-list">' + t.menu.map(function (m) { return '<li><span>' + esc(m[0]) + '</span><span>' + esc(m[1]) + '</span></li>'; }).join('') + '</ul><small>Avísanos si tienes alguna alergia al confirmar.</small>';
-    var pl = '<p><b>' + esc(t.place) + '</b></p><p><a target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(t.place + ', ' + t.mapq) + '">Abrir en Google Maps</a></p><small>Hay parqueadero cerca. Si vienes en taxi, llega 10 minutos antes para ubicarte con calma.</small>';
-    var ex = '<p>' + esc(t.extra[2]) + '</p>';
+    DIET = []; GARM = t.dress[1][0]; clearInterval(CLK.t);
+    var ticks = ''; for (var q = 0; q < 12; q++) ticks += '<line x1="60" y1="9" x2="60" y2="' + (q % 3 ? 14 : 18) + '" transform="rotate(' + q * 30 + ' 60 60)"/>';
+    var clock = '<div class="clockwrap"><svg id="clock" class="clock" viewBox="0 0 120 120" role="img" aria-label="Reloj del evento"><circle cx="60" cy="60" r="55" class="cf"/><g class="ct">' + ticks + '</g><line id="hand-h" class="hh" x1="60" y1="60" x2="60" y2="30"/><line id="hand-m" class="hm" x1="60" y1="60" x2="60" y2="17"/><circle cx="60" cy="60" r="4" class="cd"/></svg><div><div class="clk-t" id="clk-t">--</div><div class="clk-d" id="clk-d">Toca un momento</div></div></div>';
+    var it = clock + '<ol class="timeline"><i class="prog" id="prog"></i>' + t.it.map(function (x, i) { return '<li style="--i:' + i + '" data-i="' + i + '" data-h="' + esc(x[0]) + '" data-d="' + esc(x[1]) + '" tabindex="0"><b>' + esc(x[0]) + ' h</b>' + esc(x[1]) + '</li>'; }).join('') + '</ol>';
+    var dr = '<p>' + esc(t.dress[0]) + '</p><div class="garm"><svg viewBox="0 0 120 130" width="130" aria-hidden="true"><path d="M60 4c-4 0-7 3-7 6 0 2 2 3 4 3" fill="none" stroke="var(--ink-soft)" stroke-width="2"/><path d="M60 13L14 38h92z" fill="none" stroke="var(--ink-soft)" stroke-width="2" stroke-linejoin="round"/><path id="garm" d="M44 40l-6 4-5 30 12 3-6 46h54l-6-46 12-3-5-30-6-4c-3 8-8 12-16 12s-13-4-16-12z" style="fill:' + GARM + '" stroke="rgba(0,0,0,.25)" stroke-width="1.5"/></svg></div>' +
+      '<div class="swatches">' + t.dress[1].map(function (c, i) { return '<button type="button" class="sw' + (i ? '' : ' on') + '" data-c="' + c + '" style="background:' + c + ';--i:' + i + '" aria-label="Color ' + (i + 1) + '"></button>'; }).join('') + '</div><small>Toca un color y mira cómo luce.</small>';
+    var dishIc = '<svg viewBox="0 0 24 24"><path d="M3 15h18M5 15a7 7 0 0114 0M12 8V6M10 6h4M4 19h16"/></svg>';
+    var me = '<div class="dishes">' + t.menu.map(function (m, i) { return '<button type="button" class="dish" data-d="' + i + '" style="--i:' + i + '"><span class="di">' + dishIc + '</span><span><small>' + esc(m[0]) + '</small><b>' + esc(m[1]) + '</b></span><span class="hrt" aria-label="Me encanta">♡</span></button>'; }).join('') + '</div>' +
+      '<p class="diet-t">¿Alguna dieta o alergia?</p><div class="chips">' + ['Vegetariano', 'Sin gluten', 'Sin lácteos', 'Sin mariscos'].map(function (c) { return '<button type="button" class="chip" aria-pressed="false">' + c + '</button>'; }).join('') + '</div><small>Lo que marques se agrega a tu confirmación.</small>';
+    var q2 = encodeURIComponent(t.place + ', ' + t.mapq);
+    var pl = '<div class="mapv"><svg viewBox="0 0 300 150" role="img" aria-label="Mapa ilustrado"><rect width="300" height="150" class="mb"/><g class="mr"><path d="M0 40h300M0 100h300M60 0v150M170 0v150M250 0v150"/></g><path class="mp" d="M30 128H60V100H170V40H250" /><circle cx="30" cy="128" r="5" class="ms"/><g class="pin" transform="translate(250 40)"><circle r="16" class="ring"/><path d="M0 0c-9-12-12-17-12-23a12 12 0 0124 0c0 6-3 11-12 23z" transform="translate(0 -2)" class="pb"/><circle cy="-25" r="4.5" fill="#fff"/></g></svg></div><p><b>' + esc(t.place) + '</b></p><p><a class="btn-map" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&query=' + q2 + '">Cómo llegar · Google Maps</a></p><small>Hay parqueadero cerca. Si vienes en taxi, llega 10 minutos antes.</small>';
+    var ex = '<button type="button" class="gift" aria-label="Abrir sorpresa"><svg viewBox="0 0 100 90" width="110"><g class="lid"><rect x="8" y="24" width="84" height="18" rx="3" fill="var(--accent)"/><rect x="45" y="24" width="10" height="18" fill="rgba(255,255,255,.55)"/><path d="M50 24c-14-18-30-6-18 0M50 24c14-18 30-6 18 0" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="4" stroke-linecap="round"/></g><rect x="14" y="42" width="72" height="42" rx="3" fill="var(--accent)" opacity=".85"/><rect x="45" y="42" width="10" height="42" fill="rgba(255,255,255,.55)"/></svg><span>Toca para abrir</span></button><p class="gtx">' + esc(t.extra[2]) + '</p>';
     $('tiles').innerHTML = tile('it', 'it', 'Itinerario', it) + tile('dr', 'dr', 'Vestimenta', dr) + tile('me', 'me', 'Menú', me) + tile('pl', 'pl', 'Lugar', pl) + tile('ex', t.extra[0], t.extra[1], ex);
   }
   function setTheme(k) {
@@ -344,13 +369,30 @@
   });
   $('stage').addEventListener('pointerleave', function () { $('env').style.setProperty('--ry', '0deg'); $('env').style.setProperty('--rx', '0deg'); });
 
-  /* acordeón */
+  /* acordeón + interacciones de cada botón */
   $('tiles').addEventListener('click', function (e) {
-    var b = e.target.closest('.tile > button'); if (!b) return;
-    var tl = b.parentNode, open = !tl.classList.contains('open');
-    tl.classList.toggle('open', open); b.setAttribute('aria-expanded', String(open));
-    if (open) setTimeout(function () { tl.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' }); }, 300);
+    var b = e.target.closest('.tile > button');
+    if (b) {
+      var tl = b.parentNode, open = !tl.classList.contains('open');
+      tl.classList.toggle('open', open); b.setAttribute('aria-expanded', String(open));
+      if (open) {
+        burst(tl.querySelector('.ti')); chime([784, 1046.5]);
+        setTimeout(function () { tl.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' }); }, 300);
+        if (tl.dataset.id === 'it') setTimeout(playClock, 450); else clearInterval(CLK.t);
+        if (tl.dataset.id === 'pl') { var pn = tl.querySelector('.pin'); pn.classList.remove('drop'); void pn.getBoundingClientRect(); pn.classList.add('drop'); }
+      }
+      return;
+    }
+    var li = e.target.closest('.timeline li'); if (li) { clearInterval(CLK.t); setClock(+li.dataset.i); return; }
+    var sw = e.target.closest('.sw'); if (sw) { document.querySelectorAll('.sw').forEach(function (x) { x.classList.toggle('on', x === sw); }); $('garm').style.fill = sw.dataset.c; var c = centerOf($('garm')); burstAt(c[0], c[1], T[cur].fx, 24, [sw.dataset.c, '#ffffff']); chime([523.25 + (+sw.style.getPropertyValue('--i')) * 120]); return; }
+    var ds = e.target.closest('.dish'); if (ds) { var on = !ds.classList.contains('liked'); ds.classList.toggle('liked', on); ds.querySelector('.hrt').textContent = on ? '♥' : '♡'; if (on) { var h = centerOf(ds.querySelector('.hrt')); burstAt(h[0], h[1], 'corazones', 14); chime([880, 1318.5]); } return; }
+    var ch = e.target.closest('.chip'); if (ch) {
+      var pr = ch.getAttribute('aria-pressed') !== 'true'; ch.setAttribute('aria-pressed', String(pr)); var v = ch.textContent, k = DIET.indexOf(v); if (pr && k < 0) DIET.push(v); if (!pr && k >= 0) DIET.splice(k, 1);
+      var nt = $('note'); if (!nt.value || /^Dieta:/.test(nt.value)) nt.value = DIET.length ? 'Dieta: ' + DIET.join(', ') : ''; return;
+    }
+    var gf = e.target.closest('.gift'); if (gf && !gf.classList.contains('open')) { gf.classList.add('open'); gf.querySelector('span').textContent = '¡Sorpresa!'; var g = centerOf(gf); burstAt(g[0], g[1], T[cur].fx, 70); chime([523.25, 659.25, 783.99, 1046.5]); }
   });
+  $('tiles').addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.timeline li')) { e.preventDefault(); e.target.click(); } });
 
   /* ---------- cuenta regresiva ---------- */
   function startCount() {
