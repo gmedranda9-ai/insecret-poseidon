@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Invitaciones interactivas · Poseidón</title>
+<meta name="description" content="Un sobre con sello que se rompe, cuenta regresiva, confirmación de asistencia y calendario. Ejemplo de invitación interactiva hecha por Poseidón.">
+<meta name="theme-color" content="#08190f">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<link rel="canonical" href="https://insecret.poseidonmk.com/invitacion/">
+<meta property="og:site_name" content="Poseidón">
+<meta property="og:locale" content="es_EC">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://insecret.poseidonmk.com/invitacion/">
+<meta property="og:title" content="✉️ Toca el sello y abre tu invitación">
+<meta property="og:description" content="Invitaciones interactivas para cenas, bodas y cumpleaños. Hechas por Poseidón.">
+<meta property="og:image" content="https://insecret.poseidonmk.com/assets/og-invitacion.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;1,500;1,700&family=Bricolage+Grotesque:wght@800&family=Fraunces:ital,opsz,wght@1,9..144,600&family=Italiana&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="invitacion.css?v=1">
+</head>
+<body data-theme="navidad">
+
+<header class="bar">
+  <a class="back" href="../">‹ InSecret</a>
+  <nav class="themes" aria-label="Elige la ocasión" id="themes">
+    <button type="button" data-t="navidad" aria-pressed="true">Navidad</button>
+    <button type="button" data-t="fin" aria-pressed="false">Fin de año</button>
+    <button type="button" data-t="aniversario" aria-pressed="false">Aniversario</button>
+    <button type="button" data-t="cumple" aria-pressed="false">Cumpleaños</button>
+  </nav>
+</header>
+
+<main>
+  <!-- ESCENA 1: el sobre -->
+  <section class="scene" id="scene-env" aria-label="Sobre cerrado">
+    <p class="lead-in" id="to-line">Para ti</p>
+    <div class="env" id="env">
+      <div class="env-back"></div>
+      <div class="env-letter" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="env-side l"></div><div class="env-side r"></div><div class="env-bottom"></div>
+      <div class="flap"></div>
+      <button type="button" class="seal" id="seal" aria-label="Romper el sello y abrir la invitación">
+        <span class="half a"><b id="glyph-a">P</b></span><span class="half b"><b id="glyph-b">P</b></span>
+      </button>
+    </div>
+    <p class="hint" id="hint">Toca el sello para abrir</p>
+  </section>
+
+  <!-- ESCENA 2: la invitación -->
+  <article class="card" id="card" hidden aria-live="polite">
+    <svg class="orn" id="orn" viewBox="0 0 320 90" aria-hidden="true"></svg>
+    <p class="host" id="c-host"></p>
+    <h1 class="title" id="c-title"></h1>
+    <p class="msg" id="c-msg"></p>
+
+    <div class="when">
+      <div class="when-day"><span id="c-dow"></span><strong id="c-num"></strong><span id="c-mon"></span></div>
+      <div class="when-time"><strong id="c-time"></strong><span id="c-year"></span></div>
+    </div>
+
+    <div class="count" id="count" role="timer" aria-label="Cuenta regresiva">
+      <div><b id="k-d">00</b><small>días</small></div>
+      <div><b id="k-h">00</b><small>horas</small></div>
+      <div><b id="k-m">00</b><small>min</small></div>
+      <div><b id="k-s">00</b><small>seg</small></div>
+    </div>
+
+    <dl class="facts">
+      <div><dt>Lugar</dt><dd id="c-place"></dd></div>
+      <div><dt>Vestimenta</dt><dd id="c-dress"></dd></div>
+      <div><dt>Ojo</dt><dd id="c-note"></dd></div>
+    </dl>
+
+    <div class="rsvp" id="rsvp">
+      <h2>¿Nos acompañas?</h2>
+      <div class="seg" role="group" aria-label="Tu respuesta">
+        <button type="button" id="yes" aria-pressed="false">Sí, voy</button>
+        <button type="button" id="no" aria-pressed="false">No puedo</button>
+      </div>
+      <div class="guests" id="guests" hidden>
+        <span>Personas</span>
+        <button type="button" id="g-minus" aria-label="Una persona menos">−</button>
+        <output id="g-n">1</output>
+        <button type="button" id="g-plus" aria-label="Una persona más">+</button>
+      </div>
+      <button type="button" class="send" id="send" disabled>Confirmar</button>
+      <p class="done" id="done" hidden></p>
+    </div>
+
+    <div class="tools">
+      <button type="button" id="ics">Agregar al calendario</button>
+      <a id="map" target="_blank" rel="noopener noreferrer" href="#">Cómo llegar</a>
+    </div>
+  </article>
+
+  <!-- Venta -->
+  <section class="sell" id="sell">
+    <h2>¿Te gustó? Hacemos la tuya.</h2>
+    <p>Cada invitación se diseña con tu evento: tus nombres, tus colores, tu fecha y confirmación de asistencia directo a tu WhatsApp.</p>
+    <a class="cta" id="wa" target="_blank" rel="noopener noreferrer" href="#">Quiero mi invitación</a>
+    <button type="button" class="again" id="again" hidden>Volver a cerrar el sobre</button>
+    <p class="by">Hecho por <a href="https://poseidonmk.com" target="_blank" rel="noopener">Poseidón</a></p>
+  </section>
+</main>
+
+<script src="invitacion.js?v=1"></script>
+</body>
+</html>
