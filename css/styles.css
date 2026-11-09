@@ -386,3 +386,5 @@ textarea{resize:vertical}
 .cross-ico{font-size:2rem}
 .cross small{display:block;color:#cfe0f5;margin-top:.15rem}
 .rc-or{display:block;margin-bottom:.7rem}
+/* v12 */
+.pill-home{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.25)!important;color:#fff!important}

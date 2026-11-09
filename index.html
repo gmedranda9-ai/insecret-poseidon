@@ -25,61 +25,70 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/landing.css?v=2">
+<link rel="stylesheet" href="css/landing.css?v=3">
 </head>
 <body>
 <canvas id="fx" aria-hidden="true"></canvas>
 <div class="aurora" aria-hidden="true"><i></i><i></i></div>
 
 <header class="top">
-  <a class="brand" href="./" aria-label="InSecret Poseidón"><img src="assets/logo.png" alt="" width="40" height="40"><span>InSecret</span></a>
-  <a class="by" href="https://poseidonmk.com" target="_blank" rel="noopener">por Poseidón</a>
   <a class="pill" id="org" href="amigo-secreto/?r=1"><span aria-hidden="true">🔑</span> Ya soy organizador de amigo secreto <b class="badge" id="org-n" hidden>0</b></a>
 </header>
 
 <main>
   <section class="hero">
-    <p class="eyebrow">✦ Por Poseidón ✦</p>
-    <h1>¿Qué quieres <em>hacer hoy?</em></h1>
-    <p class="lead">Elige una opción. Las dos son rápidas.</p>
+    <a class="logo-big" href="https://poseidonmk.com" target="_blank" rel="noopener" aria-label="Ir a poseidonmk.com">
+      <i class="halo" aria-hidden="true"></i><img src="assets/logo.png" alt="Poseidón" width="360" height="360">
+    </a>
+    <p class="wordmark">POSEIDÓN</p>
+    <h1>Arquitectos de <em>ecosistemas digitales</em></h1>
+    <p class="lead">Inteligencia artificial, automatización, branding y marketing para tu negocio. Agentes de IA que atienden por WhatsApp mientras tú creces.</p>
+    <div class="cta-row">
+      <a class="btn btn-gold" href="https://wa.me/593968520688?text=Hola%20Poseid%C3%B3n%20%F0%9F%91%8B%20quiero%20conocer%20sus%20servicios." target="_blank" rel="noopener">Hablar con Afrodita</a>
+      <a class="btn btn-line" href="https://poseidonmk.com" target="_blank" rel="noopener">Conocer Poseidón</a>
+    </div>
+    <ul class="areas"><li>IA</li><li>Automatización</li><li>Branding</li><li>Marketing</li></ul>
+  </section>
+
+  <section class="mini-head">
+    <p class="eyebrow">✦ Creado por Poseidón ✦</p>
+    <h2>Dos regalos para tus <em>celebraciones</em></h2>
   </section>
 
   <section class="doors">
     <a class="door door-blue" href="amigo-secreto/" id="d1">
-      <span class="tag tag-gold">Gratis</span>
+      <span class="tag tag-blue">Gratis</span>
       <div class="art" aria-hidden="true">
         <svg viewBox="0 0 160 130" class="gift">
           <g class="names"><text x="14" y="30" class="n n1">Ana</text><text x="118" y="22" class="n n2">Luis</text><text x="132" y="62" class="n n3">Sofi</text><text x="4" y="66" class="n n4">Pedro</text></g>
           <g class="lid"><rect x="32" y="44" width="96" height="22" rx="4" fill="#fed405"/><rect x="74" y="44" width="12" height="22" fill="#e6682b"/><path d="M80 44C62 18 40 30 58 44M80 44C98 18 120 30 102 44" fill="none" stroke="#e6682b" stroke-width="6" stroke-linecap="round"/></g>
-          <rect x="38" y="66" width="84" height="54" rx="4" fill="#02d4fc"/><rect x="74" y="66" width="12" height="54" fill="#e6682b"/>
+          <rect x="38" y="66" width="84" height="54" rx="4" fill="#009ee7"/><rect x="74" y="66" width="12" height="54" fill="#e6682b"/>
           <text x="80" y="104" text-anchor="middle" class="q">?</text>
         </svg>
       </div>
-      <h2>Amigo secreto</h2>
+      <h3>Amigo secreto</h3>
       <p>Haz el sorteo en 2 minutos. Nadie ve quién le toca a quién, ni tú.</p>
       <span class="go">Organizar mi sorteo <i aria-hidden="true">→</i></span>
     </a>
 
-    <a class="door door-gold" href="invitacion/" id="d2">
+    <a class="door door-gold" href="invitaciones/" id="d2">
       <span class="tag tag-line">Con sonido y animación</span>
       <div class="art" aria-hidden="true">
         <svg viewBox="0 0 160 130" class="env">
-          <g class="letter"><rect x="34" y="26" width="92" height="66" rx="4" fill="#fffaf1"/><rect x="46" y="38" width="44" height="5" rx="2" fill="#e6682b"/><rect x="46" y="50" width="68" height="4" rx="2" fill="#cdbf9d"/><rect x="46" y="60" width="58" height="4" rx="2" fill="#cdbf9d"/><path d="M80 82l-5-5c-3-3 0-7 3-6l2 2 2-2c3-1 6 3 3 6z" fill="#e6682b" transform="translate(0 -2)"/></g>
+          <g class="letter"><rect x="34" y="26" width="92" height="66" rx="4" fill="#fffaf1"/><rect x="46" y="38" width="44" height="5" rx="2" fill="#e6682b"/><rect x="46" y="50" width="68" height="4" rx="2" fill="#cdbf9d"/><rect x="46" y="60" width="58" height="4" rx="2" fill="#cdbf9d"/></g>
           <path d="M26 60h108v58a6 6 0 01-6 6H32a6 6 0 01-6-6z" fill="#e6682b"/>
           <path d="M26 118l54-34 54 34" fill="none" stroke="#c9460f" stroke-width="3"/>
           <g class="flap"><path d="M26 60L80 98l54-38z" fill="#ff8a54"/></g>
           <circle cx="80" cy="82" r="9" class="seal" fill="#fed405"/><path d="M80 77l1.6 3.6 3.9.4-2.9 2.6.8 3.8-3.4-2-3.4 2 .8-3.8-2.9-2.6 3.9-.4z" fill="#a8761a"/>
         </svg>
       </div>
-      <h2>Invitaciones interactivas</h2>
+      <h3>Invitaciones interactivas</h3>
       <p>Una invitación personalizada para tu cena, boda o cumpleaños. Se abre con un toque.</p>
-      <span class="go">Ver ejemplos <i aria-hidden="true">→</i></span>
+      <span class="go">Ver todas las ocasiones <i aria-hidden="true">→</i></span>
     </a>
   </section>
 
-  <ul class="trust">
-    <li>Sin descargar nada</li><li>Datos privados</li><li>Hecho en Ecuador</li>
-  </ul>
+  <ul class="trust"><li>Sin descargar nada</li><li>Datos privados</li><li>Hecho en Ecuador</li></ul>
 </main>
 
 <footer>

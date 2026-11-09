@@ -2,13 +2,13 @@
   'use strict';
   var q = location.search;
   /* enlaces viejos del sorteo que quedaron en la raíz: llevarlos a su página */
-  if (/[?&](g|o|t|demo)=/.test(q)) { location.replace('amigo-secreto/' + q + location.hash); return; }
+  if (document.getElementById('d1') && /[?&](g|o|t|demo)=/.test(q)) { location.replace('amigo-secreto/' + q + location.hash); return; }
 
   /* contador de sorteos guardados en este dispositivo */
   try {
     var raw = localStorage.getItem('insecret_org'), n = 0;
     if (raw) { try { var a = JSON.parse(raw); n = Array.isArray(a) ? a.length : 1; } catch (e) { n = 1; } }
-    if (n) { var b = document.getElementById('org-n'); b.textContent = n; b.hidden = false; }
+    var b = document.getElementById('org-n'); if (n && b) { b.textContent = n; b.hidden = false; }
   } catch (e) {}
 
   /* inclinación 3D de las tarjetas */
