@@ -282,3 +282,34 @@ textarea{resize:vertical}
 #my-wish-card{margin-top:1rem}
 #my-wish-card textarea{margin-top:.4rem}
 .fact-block .btn{margin-top:.6rem}
+
+/* ===== rediseño: decoración a los costados + tarjetas al final ===== */
+.deco{position:fixed;bottom:0;z-index:1;pointer-events:none;height:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.35))}
+.deco-l{left:-4px;width:clamp(78px,15vw,190px)}
+.deco-r{right:-6px;width:clamp(104px,21vw,270px)}
+.hero{padding:18px 0 14px}
+.how-link{display:inline-block;margin-top:.9rem;font-size:.88rem;color:var(--gold);text-decoration:none;border-bottom:1px dashed rgba(254,212,5,.5);padding-bottom:1px}
+.stepper{margin:10px 0 14px}
+.how-wrap{margin:34px 0 10px;padding-bottom:60px}
+.how-title{text-align:center;font-size:1.7rem;margin-bottom:.2rem}
+.how-sub{text-align:center;margin-bottom:1.2rem}
+.how-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem}
+.hcard{position:relative;padding:1.15rem .95rem 1rem;border-radius:18px;text-align:center;
+  background:linear-gradient(165deg,rgba(0,54,159,.42),rgba(9,20,42,.85));border:1px solid rgba(2,212,252,.25);
+  box-shadow:0 12px 30px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.06);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.hcard-alt{background:linear-gradient(165deg,rgba(230,104,43,.22),rgba(9,20,42,.85));border-color:rgba(254,212,5,.3)}
+.hnum{position:absolute;top:-10px;left:-6px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:.78rem;font-weight:700;
+  background:linear-gradient(135deg,var(--gold),var(--orange));color:#1c1300;box-shadow:0 4px 12px rgba(230,104,43,.4)}
+.hico{display:grid;place-items:center;width:54px;height:54px;margin:0 auto .55rem;border-radius:50%;font-style:normal;font-size:1.6rem;
+  background:radial-gradient(circle at 30% 25%,rgba(254,212,5,.28),rgba(2,212,252,.08));border:1px solid rgba(254,212,5,.3)}
+.hcard h3{margin:0 0 .3rem;font-size:1rem;color:#fff}
+.hcard p{font-size:.85rem;color:#bcd0e6;line-height:1.4}
+@media (min-width:700px){.how-grid{grid-template-columns:repeat(3,1fr)}}
+.next{margin:.8rem 0;padding-left:1.2rem;display:grid;gap:.5rem;color:#cfe0f3;font-size:.95rem}
+.next li::marker{color:var(--gold);font-weight:700}
+.next b{color:#fff}
+.foot{padding-bottom:calc(34px + 40px)}
+
+/* bolas: a la derecha en celular para no tapar el logo */
+.b1{left:62%}.b3{left:73%}.b4{left:83%}.b2{left:92%}
+@media (min-width:900px){.b1{left:5%}.b3{left:14%}.b4{left:84%}.b2{left:93%}}

@@ -66,7 +66,7 @@
     err('err-1', msg); renderPeople(); return added;
   }
   function renderPeople() {
-    var ol = $('people-list'); ol.innerHTML = '';
+    var ul = $('people-list'); ul.innerHTML = '';
     S.people.forEach(function (p) {
       var li = document.createElement('li');
       li.innerHTML = '<span>' + esc(p.name) + '</span><button type="button" aria-label="Quitar a ' + esc(p.name) + '">✕</button>';
@@ -75,10 +75,10 @@
         S.ex = S.ex.filter(function (e) { return e[0] !== p.id && e[1] !== p.id; });
         renderPeople();
       });
-      ol.appendChild(li);
+      ul.appendChild(li);
     });
     var n = S.people.length;
-    $('count-line').textContent = n ? n + (n === 1 ? ' participante' : ' participantes') + (n < MIN_PEOPLE ? ' · faltan ' + (MIN_PEOPLE - n) + ' para poder sortear' : ' ✓') : 'Aún no hay participantes. Los nombres que agregues aparecerán aquí, uno por fila.';
+    $('count-line').textContent = n ? n + (n === 1 ? ' participante' : ' participantes') + (n < MIN_PEOPLE ? ' · faltan ' + (MIN_PEOPLE - n) + ' para poder sortear' : '') : 'Aún no hay participantes';
   }
   $('add-name').addEventListener('click', function () { var i = $('name-input'); if (addNames(i.value)) i.value = ''; i.focus(); });
   $('name-input').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); $('add-name').click(); } });
@@ -181,7 +181,7 @@
       var gl = link(st.group_token, 'g');
       $('grp-link').value = gl;
       $('org-link').value = link(orgToken, 'o');
-      $('wa-grp').href = 'https://wa.me/?text=' + encodeURIComponent('🎄 ¡Amigo secreto «' + st.group_name + '»!\n' + st.organizer + ' organizó el sorteo. Entra aquí, elige tu nombre y descubre a quién le regalas (es un secreto 🤫):\n' + gl);
+      $('wa-grp').href = 'https://wa.me/?text=' + encodeURIComponent('🎄 ¡Amigo secreto «' + st.group_name + '»!\n' + st.organizer + ' organizó el sorteo. Entra aquí, toca tu nombre, crea tu PIN y descubre a quién le regalas (es un secreto 🤫). Después escribe tu lista de deseos para que tu amigo secreto sepa qué regalarte:\n' + gl);
       renderStatus(st); noindex(); show('results');
       clearInterval(S.poll); S.poll = setInterval(function () { refresh(true); }, 30000);
     });
