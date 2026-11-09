@@ -313,3 +313,12 @@ textarea{resize:vertical}
 /* bolas: a la derecha en celular para no tapar el logo */
 .b1{left:62%}.b3{left:73%}.b4{left:83%}.b2{left:92%}
 @media (min-width:900px){.b1{left:5%}.b3{left:14%}.b4{left:84%}.b2{left:93%}}
+
+/* caja de exclusiones (apagadita hasta que haya) */
+.ex-box{margin:.8rem 0 .2rem;padding:.8rem .9rem;border-radius:14px;border:1px dashed rgba(157,179,204,.35);background:rgba(2,8,18,.35);transition:.25s}
+.ex-box.has{border:1px solid rgba(2,212,252,.4);background:rgba(0,54,159,.18)}
+.ex-count{font-size:.9rem;color:#7f93aa}
+.ex-box.has .ex-count{color:var(--cyan);font-weight:600;margin-bottom:.5rem}
+.ex-box .chips{margin:0}
+.mini{margin:.3rem 0 0;padding-left:1.2rem;display:grid;gap:.4rem;font-size:.93rem;color:#e8d9a8}
+.mini li::marker{color:var(--gold);font-weight:700}

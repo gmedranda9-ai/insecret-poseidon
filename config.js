@@ -1,6 +1,8 @@
-// Configuración pública de InSecret (NUNCA pongas aquí claves secretas / service_role).
-// La clave "publishable" (anon) de Supabase sí es pública por diseño; la seguridad la da RLS.
+// Configuración pública de InSecret.
+// La clave "publishable" de Supabase es pública por diseño (va en el navegador).
+// La seguridad real la dan las tablas cerradas (RLS) y las funciones del servidor.
+// NUNCA pongas aquí la clave service_role ni ningún secreto.
 window.INSECRET_CONFIG = {
-  supabaseUrl: '',   // ej. https://xxxx.supabase.co
-  supabaseKey: ''    // clave publishable (sb_publishable_...) del proyecto insecret-poseidon
+  supabaseUrl: 'https://qhzswvfdnjnftjuyxcnn.supabase.co',
+  supabaseKey: 'sb_publishable_h2cqNavKQYNBQW11MULL7A_VfanUNgo'
 };

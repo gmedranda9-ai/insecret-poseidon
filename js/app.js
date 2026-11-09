@@ -109,14 +109,19 @@
 
   /* ---------- Paso 3: exclusiones ---------- */
   function renderStep3() {
-    var a = $('ex-a'), b = $('ex-b'), opts = S.people.map(function (p) { return '<option value="' + p.id + '">' + esc(p.name) + '</option>'; }).join('');
-    var av = a.value, bv = b.value; a.innerHTML = opts; b.innerHTML = opts;
-    if (av) a.value = av; if (bv) b.value = bv; else if (S.people[1]) b.value = S.people[1].id;
+    var a = $('ex-a'), b = $('ex-b');
+    var opts = S.people.map(function (p) { return '<option value="' + p.id + '">' + esc(p.name) + '</option>'; }).join('');
+    a.innerHTML = '<option value="">Persona 1</option>' + opts;
+    b.innerHTML = '<option value="">Persona 2</option>' + opts;
     renderEx();
   }
   function nameOf(id) { var p = S.people.filter(function (x) { return x.id === id; })[0]; return p ? p.name : '?'; }
   function renderEx() {
-    var ul = $('ex-list'); ul.innerHTML = '';
+    var ul = $('ex-list'), n = S.ex.length; ul.innerHTML = '';
+    $('ex-box').classList.toggle('has', n > 0);
+    $('ex-count').textContent = n === 0
+      ? 'Aquí irán apareciendo tus exclusiones. Tienes 0 exclusiones.'
+      : 'Tienes ' + n + (n === 1 ? ' exclusión:' : ' exclusiones:');
     S.ex.forEach(function (e, i) {
       var li = document.createElement('li');
       li.innerHTML = '<span>' + esc(nameOf(e[0])) + ' ✕ ' + esc(nameOf(e[1])) + '</span><button type="button" aria-label="Quitar exclusión">✕</button>';
@@ -125,10 +130,14 @@
     });
   }
   $('add-ex').addEventListener('click', function () {
-    var a = Number($('ex-a').value), b = Number($('ex-b').value);
+    var av = $('ex-a').value, bv = $('ex-b').value;
+    if (!av || !bv) return err('err-3', 'Elige a las dos personas para añadir la exclusión.');
+    var a = Number(av), b = Number(bv);
     if (a === b) return err('err-3', 'Elige dos personas distintas.');
     if (S.ex.some(function (e) { return (e[0] === a && e[1] === b) || (e[0] === b && e[1] === a); })) return err('err-3', 'Esa exclusión ya está.');
     S.ex.push([a, b]); err('err-3'); renderEx();
+    $('ex-a').value = ''; $('ex-b').value = '';
+    toast('Exclusión añadida: ' + nameOf(a) + ' y ' + nameOf(b) + ' no se tocarán');
   });
   function idxPairs() {
     var idx = {}; S.people.forEach(function (p, i) { idx[p.id] = i; });
@@ -168,7 +177,9 @@
     }).catch(function (e) {
       btn.disabled = false; btn.textContent = '🔗 Crear el enlace del sorteo';
       err('err-4', e.code === 'NO_SOLUTION' ? 'No se pudo armar el sorteo con esas exclusiones. Quita alguna e inténtalo otra vez.'
-        : e.code === 'NETWORK' ? 'Sin conexión. Revisa tu internet e inténtalo de nuevo.' : 'No pudimos hacer el sorteo. Inténtalo de nuevo en un momento.');
+        : e.code === 'NETWORK' ? 'Sin conexión. Revisa tu internet e inténtalo de nuevo.'
+        : e.code === 'BUSY' ? 'Hay mucha gente usando InSecret ahora mismo. Inténtalo en unos minutos.'
+        : e.code === 'BAD_INPUT' ? 'Revisa los datos: nombres sin repetir, fecha de hoy o futura y entre 3 y 50 personas.' : 'No pudimos hacer el sorteo. Inténtalo de nuevo en un momento.');
     });
   });
 
@@ -199,8 +210,10 @@
       });
       ul.appendChild(li);
     });
+  }
+  function renderLinks(st, people) {
     var ll = $('links-list'); ll.innerHTML = '';
-    st.participants.forEach(function (p) {
+    people.forEach(function (p) {
       var url = link(p.token, 't'), li = document.createElement('li');
       var msg = 'Hola ' + p.name + '! 🎄 ' + st.organizer + ' te invita al amigo secreto «' + st.group_name + '». Descubre a quién le regalas aquí (es solo para ti): ' + url;
       li.innerHTML = '<div class="who"><strong>' + esc(p.name) + '</strong></div>' +
@@ -215,6 +228,10 @@
     API.organizerStatus(S.orgToken).then(function (st) { renderStatus(st); if (!silent) toast('Estado actualizado'); }, function () { if (!silent) toast('No se pudo actualizar'); });
   }
   $('refresh').addEventListener('click', function () { refresh(false); });
+  document.querySelector('.indiv').addEventListener('toggle', function () {
+    if (!this.open || !S.orgToken) return;
+    API.organizerLinks(S.orgToken).then(function (r) { renderLinks(S.st, r.participants); }, function () { toast('No se pudieron cargar los enlaces'); });
+  });
   $('copy-grp').addEventListener('click', function () { copy($('grp-link').value, 'Enlace del grupo copiado. ¡Pégalo en tu WhatsApp!'); });
   $('copy-org').addEventListener('click', function () { copy($('org-link').value, 'Enlace de organizador copiado'); });
   $('grp-link').addEventListener('focus', function () { this.select(); });

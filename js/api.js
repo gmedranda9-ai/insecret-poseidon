@@ -56,11 +56,13 @@
   }
 
   /* ---------- Producción: Supabase RPC ---------- */
-  var CODES = ['NO_SOLUTION', 'NOT_FOUND', 'BAD_PIN', 'LOCKED', 'BAD_INPUT'];
+  var CODES = ['NO_SOLUTION', 'NOT_FOUND', 'BAD_PIN', 'LOCKED', 'BAD_INPUT', 'BUSY'];
   function rpc(fn, body) {
+    var headers = { 'Content-Type': 'application/json', apikey: cfg.supabaseKey };
+    if (/^eyJ/.test(cfg.supabaseKey)) headers.Authorization = 'Bearer ' + cfg.supabaseKey; // solo si es una clave JWT (anon antigua)
     return fetch(cfg.supabaseUrl.replace(/\/$/, '') + '/rest/v1/rpc/' + fn, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', apikey: cfg.supabaseKey, Authorization: 'Bearer ' + cfg.supabaseKey },
+      headers: headers,
       body: JSON.stringify(body)
     }).then(function (res) {
       return res.json().catch(function () { return {}; }).then(function (data) {
@@ -86,9 +88,15 @@
       });
     },
     organizerStatus: function (t) { return rpc('organizer_status', { p_token: t }); },
+    organizerLinks: function (t) { return rpc('organizer_links', { p_token: t }); },
     resetParticipant: function (t, ref) { return rpc('reset_participant', { p_org_token: t, p_ref: ref }); },
     groupInfo: function (g) { return rpc('group_info', { p_group_token: g }); },
-    groupEnter: function (g, ref, pin) { return rpc('group_enter', { p_group_token: g, p_ref: ref, p_pin: pin }); },
+    groupEnter: function (g, ref, pin) {
+      return rpc('group_enter', { p_group_token: g, p_ref: ref, p_pin: pin }).then(function (r) {
+        if (r && r.error) { var e = new Error(r.error); e.code = r.error; throw e; }
+        return r;
+      });
+    },
     reveal: function (t) { return rpc('reveal_assignment', { p_token: t }); },
     saveWish: function (t, w) { return rpc('save_wish', { p_token: t, p_wish: w }); }
   };
@@ -122,7 +130,13 @@
       return new Promise(function (resolve, reject) {
         var g = load()[t]; if (!g) return reject(fail('NOT_FOUND'));
         resolve({ group_token: g.group_token, group_name: g.group_name, organizer: g.organizer, event_date: g.event_date, budget: g.budget,
-          participants: g.people.map(function (x, i) { return { ref: i, name: x.name, token: x.token, opened: x.opened, claimed: !!x.pin }; }) });
+          participants: g.people.map(function (x, i) { return { ref: i, name: x.name, opened: x.opened, claimed: !!x.pin }; }) });
+      });
+    },
+    organizerLinks: function (t) {
+      return new Promise(function (resolve, reject) {
+        var g = load()[t]; if (!g) return reject(fail('NOT_FOUND'));
+        resolve({ participants: g.people.map(function (x, i) { return { ref: i, name: x.name, token: x.token }; }) });
       });
     },
     resetParticipant: function (t, ref) {
@@ -166,7 +180,7 @@
   };
 
   var api = { mode: DEMO ? 'demo' : (CONFIGURED ? 'live' : 'off'), ready: DEMO || CONFIGURED, feasible: feasible };
-  ['createDraw', 'organizerStatus', 'resetParticipant', 'groupInfo', 'groupEnter', 'reveal', 'saveWish'].forEach(function (k) {
+  ['createDraw', 'organizerStatus', 'organizerLinks', 'resetParticipant', 'groupInfo', 'groupEnter', 'reveal', 'saveWish'].forEach(function (k) {
     api[k] = function () { var t = DEMO ? demo : remote; return t[k].apply(t, arguments); };
   });
   window.InSecretAPI = api;
