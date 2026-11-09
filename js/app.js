@@ -212,6 +212,7 @@
       $('org-link').value = link(orgToken, 'o');
       $('wa-grp').href = 'https://wa.me/?text=' + encodeURIComponent('🎄 ¡Amigo secreto «' + st.group_name + '»!\n' + st.organizer + ' organizó el sorteo. Entra aquí, toca tu nombre, crea tu PIN y descubre a quién le regalas (es un secreto 🤫). Después escribe tu lista de deseos para que tu amigo secreto sepa qué regalarte:\n' + gl + '\n\nHecho con InSecret Poseidón ✨');
       var selfMsg = '🔐 Mi acceso de organizador de «' + st.group_name + '» (InSecret Poseidón). Para volver desde cualquier teléfono: entra a ' + BASE + ' → «¿Ya organizaste un sorteo?» → mi WhatsApp + mi PIN de organizador. Enlace directo: ' + link(orgToken, 'o');
+      $('cross-inv').href = 'https://wa.me/593982354338?text=' + encodeURIComponent('Hola Poseidón 👋 Organicé el amigo secreto «' + st.group_name + '» y quiero una invitación personalizada para el intercambio.');
       $('wa-self').href = 'https://wa.me/' + (S.phone || '') + '?text=' + encodeURIComponent(selfMsg);
       renderStatus(st); noindex(); show('results');
       clearInterval(S.poll); S.poll = setInterval(function () { refresh(true); }, 30000);
@@ -363,7 +364,7 @@
   /* ---------- Recuperar panel (WhatsApp + PIN) ---------- */
   function renderMine() {
     var l = getSaved(), box = $('mine'), ul = $('mine-list'); ul.innerHTML = '';
-    box.hidden = !l.length;
+    box.hidden = !l.length; $('mine-badge').hidden = !l.length; $('mine-badge').textContent = l.length;
     l.forEach(function (x) {
       var li = document.createElement('li');
       li.innerHTML = '<div class="who"><strong>' + esc(x.n) + '</strong></div><div class="acts"><button type="button" class="btn btn-blue btn-sm">Abrir mi panel</button></div>';
@@ -378,7 +379,7 @@
       toast('Ese sorteo ya no existe (se borra después del intercambio).');
     });
   }
-  function showRecover() { err('err-rc'); $('rc-form').hidden = false; $('rc-result').hidden = true; $('rc-pin').value = ''; show('recover'); $('rc-phone').focus(); }
+  function showRecover() { renderMine(); err('err-rc'); $('rc-form').hidden = false; $('rc-result').hidden = true; $('rc-pin').value = ''; show('recover'); $('rc-phone').focus(); }
   $('top-recover').addEventListener('click', showRecover);
   $('rc-new').addEventListener('click', function () { show('wizard'); go(1, true); window.scrollTo({ top: 0 }); });
   $('rc-back').addEventListener('click', function () { show('wizard'); });

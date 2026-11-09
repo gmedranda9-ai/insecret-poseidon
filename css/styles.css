@@ -375,3 +375,14 @@ textarea{resize:vertical}
 .rc-steps span{color:#b9cce6;font-size:.92rem}
 .rc-help{margin-top:1rem}
 @media (prefers-reduced-motion:reduce){.mini-env::after{animation:none}}
+
+/* ---- v8 ---- */
+.badge-n{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:#fed405;color:#04101f;font:700 .75rem 'Outfit',sans-serif}
+.hcard-wide{grid-column:1/-1;text-decoration:none;color:inherit;background:linear-gradient(135deg,rgba(254,212,5,.16),rgba(230,104,43,.28),rgba(9,20,42,.9));border-color:rgba(254,212,5,.6)}
+.hcard-wide p b{color:#ffe27a}
+.hcard-wide:hover{transform:translateY(-2px)}
+@media (min-width:700px){.hcard-wide{grid-column:auto}}
+.cross{display:flex;gap:.9rem;align-items:center;text-decoration:none;color:inherit;border-color:rgba(254,212,5,.5);background:linear-gradient(135deg,rgba(254,212,5,.12),rgba(230,104,43,.2),rgba(9,20,42,.85))}
+.cross-ico{font-size:2rem}
+.cross small{display:block;color:#cfe0f5;margin-top:.15rem}
+.rc-or{display:block;margin-bottom:.7rem}

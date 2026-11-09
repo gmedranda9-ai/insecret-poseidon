@@ -58,7 +58,7 @@
   };
   var DOW = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
   var MON = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-  var cur = 'navidad', tick = null, rsvp = { ans: null, n: 1 }, soundOn = true, dodges = 0;
+  var cur = 'navidad', tick = null, rsvp = { ans: null, n: 1 }, soundOn = true, dodges = 0, TOYSTATE = {};
 
   /* ---------- adornos SVG ---------- */
   function seeded(seed) { var s = seed; return function () { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; }
@@ -148,6 +148,10 @@
     }
     raf = requestAnimationFrame(frame);
   }
+  function burstAt(x, y, kind, n, pal) {
+    if (reduce) return;
+    for (var i = 0; i < n; i++) { var p = mk(kind, true, x, y); if (pal) p.c = pal[i % pal.length]; P.push(p); }
+  }
   function burst(el) {
     if (reduce) return; var r = el.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
     var kind = T[cur].fx; var pk = kind === 'nieve' ? 'confeti' : kind;
@@ -156,20 +160,127 @@
   if (!reduce) raf = requestAnimationFrame(frame);
   document.addEventListener('visibilitychange', function () { if (document.hidden) { cancelAnimationFrame(raf); } else if (!reduce) { last = performance.now(); raf = requestAnimationFrame(frame); } });
 
-  /* ---------- sonido (campanita) ---------- */
-  var AC = null;
-  function chime() {
-    if (!soundOn) return;
-    try {
-      AC = AC || new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume();
-      T[cur].chime.forEach(function (f, i) {
-        var o = AC.createOscillator(), g = AC.createGain(), t0 = AC.currentTime + i * .13;
-        o.type = 'sine'; o.frequency.value = f; g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(.16, t0 + .02); g.gain.exponentialRampToValueAtTime(.0001, t0 + 1.3);
-        o.connect(g); g.connect(AC.destination); o.start(t0); o.stop(t0 + 1.4);
-      });
-    } catch (e) {}
+
+  /* ---------- música ambiente por ocasión (piano sintetizado) ---------- */
+  var AC = null, MASTER = null, FX_IN = null, mt = null, mStep = 0, mNext = 0, mTheme = null;
+  var MUS = {
+    navidad: { bpm: 86, kind: 'bell', chords: [[48, 55, 60, 64, 67], [45, 52, 57, 60, 64], [41, 48, 53, 57, 60], [43, 50, 55, 59, 62]], pat: [0, 2, 3, 4, 3, 2, 3, 1] },
+    fin: { bpm: 100, kind: 'piano', chords: [[50, 57, 60, 64, 67], [43, 50, 59, 62, 66], [48, 55, 59, 64, 67], [45, 52, 55, 60, 64]], pat: [0, 2, 4, 3, 2, 4, 3, 2] },
+    boda: { bpm: 68, kind: 'piano', chords: [[50, 57, 62, 66, 69], [45, 52, 57, 61, 64], [47, 54, 59, 62, 66], [42, 49, 54, 57, 61], [43, 50, 55, 59, 62], [50, 57, 62, 66, 69], [43, 50, 55, 59, 62], [45, 52, 57, 61, 64]], pat: [0, 2, 3, 4, 3, 2, 4, 3] },
+    cumple: { bpm: 124, kind: 'pluck', chords: [[48, 55, 60, 64, 67], [53, 57, 60, 65, 69], [43, 50, 55, 59, 62], [48, 55, 60, 64, 67]], pat: [0, 3, 2, 4, 0, 3, 2, 4] },
+    cita: { bpm: 60, kind: 'piano', chords: [[45, 52, 57, 60, 64], [41, 48, 53, 57, 60], [48, 55, 60, 64, 67], [43, 50, 55, 59, 62]], pat: [0, 2, 3, 4, 3, 2, 1, 2], pad: true }
+  };
+  function ctx() {
+    if (!AC) {
+      AC = new (window.AudioContext || window.webkitAudioContext)();
+      MASTER = AC.createGain(); MASTER.gain.value = .5; MASTER.connect(AC.destination);
+      var dl = AC.createDelay(1); dl.delayTime.value = .27; var fb = AC.createGain(); fb.gain.value = .34; var lp = AC.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2400;
+      FX_IN = AC.createGain(); FX_IN.gain.value = .35; FX_IN.connect(dl); dl.connect(lp); lp.connect(fb); fb.connect(dl); lp.connect(MASTER);
+    }
+    if (AC.state === 'suspended') AC.resume();
+    return AC;
   }
-  $('snd').addEventListener('click', function () { soundOn = !soundOn; this.setAttribute('aria-pressed', String(soundOn)); this.textContent = soundOn ? '🔔' : '🔕'; this.setAttribute('aria-label', soundOn ? 'Sonido activado' : 'Sonido apagado'); if (soundOn) chime(); });
+  function note(m, t, dur, vel, kind) {
+    var f = 440 * Math.pow(2, (m - 69) / 12), o1 = AC.createOscillator(), o2 = AC.createOscillator(), g = AC.createGain(), g2 = AC.createGain();
+    o1.type = kind === 'pluck' ? 'triangle' : (kind === 'bell' ? 'sine' : 'triangle'); o1.frequency.value = f;
+    o2.type = 'sine'; o2.frequency.value = f * (kind === 'bell' ? 3.01 : 2); g2.gain.value = kind === 'bell' ? .35 : .22;
+    var d = kind === 'pluck' ? dur * .45 : dur;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vel, t + .006); g.gain.exponentialRampToValueAtTime(.0001, t + d);
+    o1.connect(g); o2.connect(g2); g2.connect(g); g.connect(MASTER); g.connect(FX_IN);
+    o1.start(t); o2.start(t); o1.stop(t + d + .05); o2.stop(t + d + .05);
+  }
+  function padNote(m, t, dur) {
+    var o = AC.createOscillator(), g = AC.createGain(); o.type = 'sine'; o.frequency.value = 440 * Math.pow(2, (m - 69) / 12);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.05, t + dur * .4); g.gain.linearRampToValueAtTime(0, t + dur);
+    o.connect(g); g.connect(MASTER); o.start(t); o.stop(t + dur + .05);
+  }
+  function stopMusic() { clearInterval(mt); mt = null; mTheme = null; }
+  function startMusic(k) {
+    stopMusic(); if (!soundOn || reduce) return; ctx(); var M = MUS[k]; mTheme = k; mStep = 0; mNext = AC.currentTime + .1;
+    var eighth = 60 / M.bpm / 2;
+    mt = setInterval(function () {
+      if (mTheme !== k) return;
+      while (mNext < AC.currentTime + .25) {
+        var bar = Math.floor(mStep / 8) % M.chords.length, ch = M.chords[bar], i = mStep % 8, idx = M.pat[i];
+        if (i === 0) { note(ch[0] - 12, mNext, eighth * 7, .14, M.kind === 'pluck' ? 'piano' : M.kind); if (M.pad) ch.slice(1, 4).forEach(function (m) { padNote(m, mNext, eighth * 8.5); }); }
+        note(ch[idx], mNext, eighth * (i % 2 ? 3 : 4.5), i === 0 ? .17 : .11 + (i % 4 === 0 ? .03 : 0), M.kind);
+        mNext += eighth; mStep++;
+      }
+    }, 60);
+  }
+  var gestured = false;
+  document.addEventListener('pointerdown', function () { if (gestured) return; gestured = true; if (soundOn) startMusic(cur); }, { once: false });
+  function chime(notes) {
+    if (!soundOn) return;
+    try { ctx(); (notes || T[cur].chime).forEach(function (f, i) { var m = 69 + 12 * Math.log2(f / 440); note(m, AC.currentTime + i * .12, 1.6, .18, 'bell'); }); } catch (e) {}
+  }
+  $('snd').addEventListener('click', function () {
+    soundOn = !soundOn; this.setAttribute('aria-pressed', String(soundOn)); this.textContent = soundOn ? '🔔' : '🔕'; this.setAttribute('aria-label', soundOn ? 'Sonido activado' : 'Sonido apagado');
+    gestured = true; if (soundOn) startMusic(cur); else stopMusic();
+  });
+
+
+  /* ---------- el momento "wow" de cada ocasión ---------- */
+  function centerOf(el) { var r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }
+  function buildToy(k) {
+    var el = $('toy'); el.onclick = null; TOYSTATE = { lit: 0, n: 0, held: 0 };
+    if (k === 'navidad') {
+      var pos = [[110, 70], [150, 92], [76, 98], [118, 118], [166, 128], [62, 150], [104, 152], [150, 168]], col = ['#ff5a5a', '#ffd23f', '#5ad1ff', '#ff8fd0', '#9cff6a', '#ffb347', '#c39bff', '#fff'];
+      el.innerHTML = '<h3>Enciende el árbol</h3><p>Toca las luces. Si las enciendes todas, pasa algo.</p><svg viewBox="0 0 220 230" width="220" role="img" aria-label="Árbol de Navidad">' +
+        '<polygon points="110,18 168,92 140,92 190,150 150,150 205,205 15,205 70,150 30,150 80,92 52,92" fill="#1d5a3f" stroke="#0e3a28" stroke-width="2" data-tree="1"/>' +
+        '<rect x="98" y="205" width="24" height="18" fill="#6b4423"/><polygon class="tstar" id="tstar" points="110,2 114,13 126,13 116,20 120,32 110,25 100,32 104,20 94,13 106,13"/>' +
+        pos.map(function (p, i) { return '<circle class="bulb" data-b="' + i + '" cx="' + p[0] + '" cy="' + p[1] + '" r="9" style="color:' + col[i] + '"/>'; }).join('') + '</svg>' +
+        '<p class="count-tx" id="tcount">0 de 8 luces</p><p class="win" id="twin"></p>';
+      var cols = col;
+      el.onclick = function (e) {
+        var b = e.target.closest('[data-b]'), tr = e.target.closest('[data-tree]'); if (!b && !tr) return;
+        var bs = el.querySelectorAll('.bulb'), target = b || Array.prototype.filter.call(bs, function (x) { return !x.classList.contains('on'); })[0]; if (!target) return;
+        var on = !target.classList.contains('on'); target.classList.toggle('on', on); target.style.fill = on ? cols[+target.dataset.b] : ''; 
+        var n = el.querySelectorAll('.bulb.on').length; $('tcount').textContent = n + ' de 8 luces'; if (on) chime([880 + n * 70, 1174.7 + n * 70]);
+        var all = n === 8; $('tstar').classList.toggle('on', all); $('twin').classList.toggle('on', all); $('twin').textContent = all ? '¡Feliz Navidad!' : '';
+        if (all) { var c = centerOf($('tstar')); burstAt(c[0], c[1], 'confeti', 120, ['#ffffff', '#ffe27a', '#ff5a5a', '#5ad1ff']); chime([523.25, 659.25, 783.99, 1046.5, 1318.5]); }
+      };
+    } else if (k === 'fin') {
+      el.innerHTML = '<h3>Brinda con nosotros</h3><p>Toca las copas.</p><svg viewBox="0 0 220 150" width="220" role="img" aria-label="Dos copas"><g class="glass l"><path d="M58 20h42l-6 50c-1 10-9 16-15 16s-14-6-15-16z" fill="rgba(246,231,193,.28)" stroke="#d8bd82" stroke-width="3"/><path d="M62 38h34l-3 30c-1 8-7 14-14 14s-13-6-14-14z" fill="#e8c97a" opacity=".85"/><path d="M79 86v38M62 126h34" stroke="#d8bd82" stroke-width="3" stroke-linecap="round"/></g><g class="glass r"><path d="M120 20h42l-6 50c-1 10-9 16-15 16s-14-6-15-16z" fill="rgba(246,231,193,.28)" stroke="#d8bd82" stroke-width="3"/><path d="M124 38h34l-3 30c-1 8-7 14-14 14s-13-6-14-14z" fill="#e8c97a" opacity=".85"/><path d="M141 86v38M124 126h34" stroke="#d8bd82" stroke-width="3" stroke-linecap="round"/></g></svg><p class="count-tx" id="bcount">Brindis: 0</p><p class="win" id="bwin"></p>';
+      el.onclick = function () {
+        TOYSTATE.n++; el.classList.add('clink'); setTimeout(function () { el.classList.remove('clink'); }, 320); $('bcount').textContent = 'Brindis: ' + TOYSTATE.n;
+        chime([1318.5, 1760]); var pal = ['#f6e7c1', '#d8bd82', '#ffffff', '#ffb347', '#7cf0ff'], w = innerWidth, h = innerHeight;
+        for (var i = 0; i < 3; i++) setTimeout(function () { burstAt(w * (.15 + Math.random() * .7), h * (.15 + Math.random() * .4), 'chispas', 70, pal); }, i * 220);
+        $('bwin').classList.add('on'); $('bwin').textContent = ['¡Salud!', '¡Por el 2027!', '¡Otra vez!', '¡Feliz año!'][TOYSTATE.n % 4];
+      };
+    } else if (k === 'boda') {
+      el.innerHTML = '<div class="petal-zone" id="pz"><h3>Lanza los pétalos</h3><p>Toca en cualquier parte de este cuadro.</p><svg viewBox="0 0 200 90" width="200" role="img" aria-label="Anillos"><g fill="none" stroke="url(#fg2)" stroke-width="4"><circle cx="86" cy="46" r="26"/><circle cx="114" cy="46" r="26"/></g><defs><linearGradient id="fg2"><stop offset="0" stop-color="#9c7a2c"/><stop offset=".5" stop-color="#fff2c4"/><stop offset="1" stop-color="#b8913a"/></linearGradient></defs><path d="M100 8l5 8-5 8-5-8z" fill="#c9a24b"/></svg><p class="count-tx" id="pcount">Pétalos lanzados: 0</p></div>' +
+        '<div class="guest"><input id="gmsg" type="text" maxlength="70" placeholder="Déjales un deseo (Ej. ¡Sean muy felices!)"><button class="big" id="gsend" type="button">Dejar mi deseo</button><ul id="glist"></ul></div>';
+      $('pz').onclick = function (e) { TOYSTATE.n += 40; $('pcount').textContent = 'Pétalos lanzados: ' + TOYSTATE.n; burstAt(e.clientX, e.clientY, 'petalos', 40, ['#f2c8cf', '#f8e1dc', '#e9b3bd', '#dfe8d2', '#ffffff']); chime([659.25, 987.77]); };
+      $('gsend').onclick = function () {
+        var v = $('gmsg').value.trim(); if (!v) return; var li = document.createElement('li'); li.textContent = '💌 ' + v; $('glist').prepend(li); $('gmsg').value = '';
+        var c = centerOf($('gsend')); burstAt(c[0], c[1], 'petalos', 30, ['#f2c8cf', '#e9b3bd', '#ffffff']); chime([523.25, 783.99, 1046.5]);
+      };
+    } else if (k === 'cumple') {
+      var xs = [70, 110, 150];
+      el.innerHTML = '<h3>¡Sopla las velas!</h3><p>Toca el pastel para soplar.</p><svg viewBox="0 0 220 170" width="230" role="img" aria-label="Pastel con velas" id="cake" style="cursor:pointer">' +
+        '<ellipse cx="110" cy="152" rx="96" ry="10" fill="rgba(20,24,92,.18)"/><rect x="30" y="100" width="160" height="46" rx="8" fill="#ff4f9a"/><rect x="30" y="100" width="160" height="14" rx="7" fill="#fff" opacity=".9"/><rect x="48" y="66" width="124" height="36" rx="8" fill="#ff6b35"/><rect x="48" y="66" width="124" height="12" rx="6" fill="#fff" opacity=".9"/>' +
+        xs.map(function (x, i) { return '<rect x="' + (x - 4) + '" y="36" width="8" height="30" rx="2" fill="#1620b8"/><path class="flame" data-f="' + i + '" d="M' + x + ' 14c6 8 8 14 0 22-8-8-6-14 0-22z" fill="#ffd23f" stroke="#ff6b35" stroke-width="1.5"/><circle class="smoke" data-s="' + i + '" cx="' + x + '" cy="22" r="4" fill="#777"/>'; }).join('') + '</svg>' +
+        '<p class="win" id="cwin"></p><button class="big" id="creset" type="button" hidden>Encender otra vez</button>';
+      $('cake').onclick = function () {
+        var fl = el.querySelectorAll('.flame:not(.off)'); if (!fl.length) return; var f = fl[0]; f.classList.add('off'); var s = el.querySelector('[data-s="' + f.dataset.f + '"]'); s.classList.add('on'); chime([880 + fl.length * 100]);
+        if (fl.length === 1) { var c = centerOf($('cake')); burstAt(c[0], c[1], 'confeti', 160); $('cwin').classList.add('on'); $('cwin').textContent = '¡Feliz cumpleaños!'; chime([523.25, 659.25, 783.99, 1046.5, 1318.5]); $('creset').hidden = false; }
+      };
+      $('creset').onclick = function () { el.querySelectorAll('.flame').forEach(function (f) { f.classList.remove('off'); }); el.querySelectorAll('.smoke').forEach(function (s) { s.classList.remove('on'); }); $('cwin').classList.remove('on'); this.hidden = true; };
+    } else {
+      el.innerHTML = '<h3>Mantén presionado el corazón</h3><p>Si quieres aceptar, no lo sueltes.</p><svg class="holdheart beat" id="hh" viewBox="0 0 160 150" width="170" role="img" aria-label="Corazón"><defs><clipPath id="hc"><path d="M80 138C20 98 14 54 44 36c16-9 31-2 36 14 5-16 20-23 36-14 30 18 24 62-36 102z"/></clipPath></defs>' +
+        '<path d="M80 138C20 98 14 54 44 36c16-9 31-2 36 14 5-16 20-23 36-14 30 18 24 62-36 102z" fill="rgba(255,143,168,.15)" stroke="#ff8fa8" stroke-width="4"/><g clip-path="url(#hc)"><rect class="fillrect" id="hfill" x="0" y="150" width="160" height="150" fill="#ff4d77"/></g></svg><p class="count-tx" id="hpct">0%</p><p class="win" id="hwin"></p>';
+      var hh = $('hh'), lvl = 0, hold = false, raf2 = null, done = false;
+      function loop() {
+        lvl = done ? 100 : Math.max(0, Math.min(100, lvl + (hold ? 1.7 : -2.4))); $('hfill').setAttribute('y', 150 - lvl * 1.4); $('hpct').textContent = Math.round(lvl) + '%';
+        if (lvl >= 100 && !done) { done = true; hold = false; var c = centerOf(hh); burstAt(c[0], c[1], 'corazones', 130); chime([392, 493.88, 587.33, 783.99, 987.77]); $('hwin').classList.add('on'); $('hwin').textContent = 'Sabía que dirías que sí 💗'; pick('si'); if (navigator.vibrate) navigator.vibrate(60); }
+        if (lvl > 0 || hold) raf2 = requestAnimationFrame(loop); else raf2 = null;
+      }
+      function down(e) { e.preventDefault(); if (done) return; hold = true; if (!raf2) raf2 = requestAnimationFrame(loop); }
+      function up() { hold = false; }
+      hh.addEventListener('pointerdown', down); window.addEventListener('pointerup', up); hh.addEventListener('pointerleave', up); hh.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    }
+  }
 
   /* ---------- tema ---------- */
   function parse(s) { var p = s.match(/(\d+)-(\d+)-(\d+)T(\d+):(\d+)/); return new Date(+p[1], p[2] - 1, +p[3], +p[4], +p[5]); }
@@ -203,7 +314,7 @@
     $('map').href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(t.place + ', ' + t.mapq);
     $('wa').href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent('Hola Poseidón 👋 Vi la invitación interactiva de «' + t.title + '» y quiero una para mi evento.');
     $('r-title').textContent = t.rsvp[0]; $('yes').textContent = t.rsvp[1]; $('no').textContent = t.rsvp[2];
-    drawOrn(k); buildTiles(t); resetRsvp(); closeEnvelope(); startCount();
+    drawOrn(k); buildTiles(t); buildToy(k); resetRsvp(); closeEnvelope(); startCount(); if (gestured) startMusic(k);
     P = P.filter(function (p) { return p.burst; });
   }
 

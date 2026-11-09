@@ -215,3 +215,38 @@ main{max-width:560px;margin:0 auto;padding:0 16px 56px}
 .send:not(:disabled){animation:ready 1.6s ease-in-out infinite}
 @keyframes ready{50%{box-shadow:0 0 0 6px rgba(255,255,255,.12)}}
 .title{background:none!important;-webkit-background-clip:border-box;color:inherit}
+
+/* ===== v3: el momento "wow" de cada ocasión ===== */
+.toy{margin:26px auto 0;max-width:360px;padding:18px 14px 16px;border-radius:20px;border:1px solid var(--rule);background:radial-gradient(120% 100% at 50% 0%,rgba(127,127,127,.2),rgba(127,127,127,.06));text-align:center;position:relative;overflow:hidden;touch-action:manipulation}
+.toy h3{font:var(--ds) var(--dw) 1.35rem/1.15 var(--display);margin-bottom:2px}
+.toy p{color:var(--ink-soft);font-size:.93rem;margin:0}
+.toy svg{display:block;margin:6px auto 0;max-width:100%;height:auto;overflow:visible}
+.toy .count-tx{margin-top:6px;font-weight:600}
+.toy button.big{margin-top:12px;font:600 1rem var(--body);padding:.75rem 1.4rem;border-radius:999px;border:0;background:var(--btn);color:var(--btn-ink);cursor:pointer}
+.toy .win{margin-top:8px;font:var(--ds) var(--dw) 1.3rem/1.2 var(--display);opacity:0;transform:scale(.8);transition:opacity .5s,transform .6s cubic-bezier(.3,1.6,.5,1);min-height:1.4em}
+.toy .win.on{opacity:1;transform:none}
+/* árbol */
+.bulb{fill:#4a6a5a;stroke:rgba(255,255,255,.25);stroke-width:1;cursor:pointer;transition:fill .3s,filter .3s}
+.bulb.on{filter:drop-shadow(0 0 6px currentColor)}
+.tstar{fill:#5e5a3a;transition:fill .4s,filter .4s}.tstar.on{fill:#ffe27a;filter:drop-shadow(0 0 10px #ffe27a)}
+/* brindis */
+.glass{transform-box:fill-box;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.glass.l{transform-origin:100% 100%}.glass.r{transform-origin:0 100%}
+.toy.clink .glass.l{transform:rotate(14deg) translateX(12px)}.toy.clink .glass.r{transform:rotate(-14deg) translateX(-12px)}
+/* pastel */
+.flame{transform-box:fill-box;transform-origin:50% 100%;animation:flick .18s infinite alternate;transition:transform .5s,opacity .5s}
+@keyframes flick{from{transform:scale(1,1) rotate(-3deg)}to{transform:scale(.88,1.1) rotate(3deg)}}
+.flame.off{animation:none;transform:scale(0);opacity:0}
+.smoke{opacity:0;transition:opacity .4s}.smoke.on{animation:smk 1.6s forwards}
+@keyframes smk{0%{opacity:.7;transform:translateY(0)}100%{opacity:0;transform:translateY(-26px)}}
+/* corazón: mantener presionado */
+.holdheart{cursor:pointer;-webkit-user-select:none;user-select:none;touch-action:none}
+.holdheart .fillrect{transition:y .1s linear}
+.holdheart.beat{animation:beat .9s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes beat{50%{transform:scale(1.06)}}
+/* libro de visitas */
+.guest{display:grid;gap:8px;margin-top:10px;text-align:left}
+.guest input{width:100%;padding:.7rem .9rem;border-radius:12px;border:1.5px solid var(--rule);background:rgba(127,127,127,.1);color:var(--ink);font:400 1rem var(--body)}
+.guest ul{list-style:none;padding:0;display:grid;gap:6px}
+.guest li{background:rgba(127,127,127,.14);border-radius:12px;padding:.55rem .8rem;animation:rise .5s both;font-size:.95rem}
+.petal-zone{touch-action:manipulation;cursor:pointer}
