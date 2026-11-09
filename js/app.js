@@ -231,27 +231,11 @@
       ul.appendChild(li);
     });
   }
-  function renderLinks(st, people) {
-    var ll = $('links-list'); ll.innerHTML = '';
-    people.forEach(function (p) {
-      var url = link(p.token, 't'), li = document.createElement('li');
-      var msg = 'Hola ' + p.name + '! 🎄 ' + st.organizer + ' te invita al amigo secreto «' + st.group_name + '». Descubre a quién le regalas aquí (es solo para ti): ' + url;
-      li.innerHTML = '<div class="who"><strong>' + esc(p.name) + '</strong></div>' +
-        '<div class="acts"><button type="button" class="btn btn-blue btn-sm" data-c>Copiar enlace</button>' +
-        '<a class="btn btn-wa btn-sm" target="_blank" rel="noopener noreferrer" href="https://wa.me/?text=' + encodeURIComponent(msg) + '">WhatsApp</a></div>';
-      li.querySelector('[data-c]').addEventListener('click', function () { copy(url, 'Enlace de ' + p.name + ' copiado'); });
-      ll.appendChild(li);
-    });
-  }
   function refresh(silent) {
     if (!S.orgToken) return;
     API.organizerStatus(S.orgToken).then(function (st) { renderStatus(st); if (!silent) toast('Estado actualizado'); }, function () { if (!silent) toast('No se pudo actualizar'); });
   }
   $('refresh').addEventListener('click', function () { refresh(false); });
-  document.querySelector('.indiv').addEventListener('toggle', function () {
-    if (!this.open || !S.orgToken) return;
-    API.organizerLinks(S.orgToken).then(function (r) { renderLinks(S.st, r.participants); }, function () { toast('No se pudieron cargar los enlaces'); });
-  });
   $('copy-grp').addEventListener('click', function () { copy($('grp-link').value, 'Enlace del grupo copiado. ¡Pégalo en tu WhatsApp!'); });
   $('copy-org').addEventListener('click', function () { copy($('org-link').value, 'Enlace de organizador copiado'); });
   $('grp-link').addEventListener('focus', function () { this.select(); });
@@ -320,6 +304,7 @@
     S.tok = tok;
     API.reveal(tok).then(function (r) {
       if (r.was_opened) opened = true;
+      $('rv-reset').hidden = !(r.resets > 0);
       $('rv-hello').textContent = 'Hola, ' + r.giver;
       paintReveal(r);
       $('my-wish').value = r.my_wish || ''; $('wish-count').textContent = ($('my-wish').value || '').length;

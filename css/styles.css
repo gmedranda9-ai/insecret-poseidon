@@ -337,3 +337,6 @@ textarea{resize:vertical}
 .orgacc{border:1px solid rgba(254,212,5,.35);background:rgba(254,212,5,.06);border-radius:16px;padding:1rem;margin:1rem 0;display:grid;gap:.7rem}
 .orgacc .field{margin:0}
 .warn{color:#ffd98a!important}
+.indiv .muted{margin-top:.5rem}
+.notice{background:rgba(230,104,43,.15);border:1px solid rgba(230,104,43,.5);border-radius:12px;padding:.7rem .9rem;margin:.8rem 0;color:#ffd9b8}
+.how-grid .hcard:nth-child(n+7){grid-column:auto}

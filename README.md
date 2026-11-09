@@ -29,3 +29,8 @@ Sorteador de amigo secreto navideño de **Poseidón**. Sitio estático (HTML/CSS
 - `org_recover(p_phone, p_pin)` devuelve los sorteos vigentes de ese WhatsApp+PIN. 5 fallos = bloqueo de 15 min por número.
 - `group_enter` devuelve `opened` y `reveal_assignment` devuelve `was_opened`, para entrar directo a la tarjeta si ya abrió el regalo.
 - El navegador solo recuerda los sorteos como comodidad (`insecret_org`); la página de inicio siempre abre el asistente.
+
+## Privacidad del organizador (v5)
+- Se eliminó `organizer_links`: ya no hay enlaces individuales; todos usan el mismo enlace de grupo + su PIN.
+- `reset_participant` incrementa `reset_count` y la tarjeta del participante muestra un aviso si su acceso fue reiniciado.
+- `purge_expired` también borra grupos abandonados (creados hace más de 30 días y sin ninguna apertura).

@@ -97,7 +97,6 @@
       });
     },
     organizerStatus: function (t) { return rpc('organizer_status', { p_token: t }); },
-    organizerLinks: function (t) { return rpc('organizer_links', { p_token: t }); },
     resetParticipant: function (t, ref) { return rpc('reset_participant', { p_org_token: t, p_ref: ref }); },
     groupInfo: function (g) { return rpc('group_info', { p_group_token: g }); },
     groupEnter: function (g, ref, pin) {
@@ -148,16 +147,10 @@
           participants: g.people.map(function (x, i) { return { ref: i, name: x.name, opened: x.opened, claimed: !!x.pin }; }) });
       });
     },
-    organizerLinks: function (t) {
-      return new Promise(function (resolve, reject) {
-        var g = load()[t]; if (!g) return reject(fail('NOT_FOUND'));
-        resolve({ participants: g.people.map(function (x, i) { return { ref: i, name: x.name, token: x.token }; }) });
-      });
-    },
     resetParticipant: function (t, ref) {
       return new Promise(function (resolve, reject) {
         var d = load(), g = d[t]; if (!g || !g.people[ref]) return reject(fail('NOT_FOUND'));
-        var x = g.people[ref]; x.token = token(); x.pin = null; x.tries = 0; x.opened = false; save(d); resolve({ ok: true });
+        var x = g.people[ref]; x.token = token(); x.pin = null; x.tries = 0; x.opened = false; x.resets = (x.resets || 0) + 1; save(d); resolve({ ok: true });
       });
     },
     groupInfo: function (gt) {
@@ -183,7 +176,7 @@
         var f = findPerson(t); if (!f) return reject(fail('NOT_FOUND'));
         var to = f.g.people[f.me.to], was = !!f.me.opened; f.me.opened = true; save(f.d);
         resolve({ giver: f.me.name, receiver: to.name, wish: to.wish, my_wish: f.me.wish, group_name: f.g.group_name, organizer: f.g.organizer,
-          event_date: f.g.event_date, budget: f.g.budget, message: f.g.message, was_opened: was });
+          event_date: f.g.event_date, budget: f.g.budget, message: f.g.message, was_opened: was, resets: f.me.resets || 0 });
       });
     },
     orgRecover: function (phone, pin) {
@@ -206,7 +199,7 @@
   };
 
   var api = { normPhone: normPhone, mode: DEMO ? 'demo' : (CONFIGURED ? 'live' : 'off'), ready: DEMO || CONFIGURED, feasible: feasible };
-  ['createDraw', 'organizerStatus', 'organizerLinks', 'resetParticipant', 'groupInfo', 'groupEnter', 'reveal', 'saveWish', 'orgRecover'].forEach(function (k) {
+  ['createDraw', 'organizerStatus', 'resetParticipant', 'groupInfo', 'groupEnter', 'reveal', 'saveWish', 'orgRecover'].forEach(function (k) {
     api[k] = function () { var t = DEMO ? demo : remote; return t[k].apply(t, arguments); };
   });
   window.InSecretAPI = api;
