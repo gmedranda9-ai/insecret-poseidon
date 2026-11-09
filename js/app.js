@@ -379,7 +379,8 @@
     });
   }
   function showRecover() { err('err-rc'); $('rc-form').hidden = false; $('rc-result').hidden = true; $('rc-pin').value = ''; show('recover'); $('rc-phone').focus(); }
-  $('open-recover').addEventListener('click', showRecover);
+  $('top-recover').addEventListener('click', showRecover);
+  $('rc-new').addEventListener('click', function () { show('wizard'); go(1, true); window.scrollTo({ top: 0 }); });
   $('rc-back').addEventListener('click', function () { show('wizard'); });
   $('rc-back2').addEventListener('click', function () { show('wizard'); renderMine(); });
   $('rc-pin').addEventListener('input', function () { this.value = this.value.replace(/\D/g, '').slice(0, 6); });

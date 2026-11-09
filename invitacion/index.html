@@ -21,79 +21,90 @@
 <link rel="icon" href="../assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;1,500;1,700&family=Bricolage+Grotesque:wght@800&family=Fraunces:ital,opsz,wght@1,9..144,600&family=Italiana&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="invitacion.css?v=1">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;1,500;1,700&family=Playfair+Display:ital,wght@1,600&family=Bricolage+Grotesque:wght@800&family=Fraunces:ital,opsz,wght@1,9..144,600&family=Italiana&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="invitacion.css?v=2">
 </head>
 <body data-theme="navidad">
 
+<canvas id="fx" aria-hidden="true"></canvas>
+
 <header class="bar">
-  <a class="back" href="../">‹ InSecret</a>
+  <div class="bar-top">
+    <a class="back" href="../">‹ InSecret</a>
+    <button type="button" class="snd" id="snd" aria-pressed="true" aria-label="Sonido activado">🔔</button>
+  </div>
   <nav class="themes" aria-label="Elige la ocasión" id="themes">
     <button type="button" data-t="navidad" aria-pressed="true">Navidad</button>
     <button type="button" data-t="fin" aria-pressed="false">Fin de año</button>
-    <button type="button" data-t="aniversario" aria-pressed="false">Aniversario</button>
+    <button type="button" data-t="boda" aria-pressed="false">Boda</button>
     <button type="button" data-t="cumple" aria-pressed="false">Cumpleaños</button>
+    <button type="button" data-t="cita" aria-pressed="false">Cita romántica</button>
   </nav>
 </header>
 
 <main>
   <!-- ESCENA 1: el sobre -->
   <section class="scene" id="scene-env" aria-label="Sobre cerrado">
+    <h2 class="lead-big" id="lead-big">Tienes una invitación</h2>
     <p class="lead-in" id="to-line">Para ti</p>
-    <div class="env" id="env">
-      <div class="env-back"></div>
-      <div class="env-letter" aria-hidden="true"><i></i><i></i><i></i></div>
-      <div class="env-side l"></div><div class="env-side r"></div><div class="env-bottom"></div>
-      <div class="flap"></div>
-      <button type="button" class="seal" id="seal" aria-label="Romper el sello y abrir la invitación">
-        <span class="half a"><b id="glyph-a">P</b></span><span class="half b"><b id="glyph-b">P</b></span>
-      </button>
+    <div class="stage" id="stage">
+      <div class="env-wrap">
+        <div class="env" id="env">
+          <div class="env-back"></div>
+          <div class="env-letter" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="env-side l"></div><div class="env-side r"></div><div class="env-bottom"></div>
+          <div class="flap"></div>
+          <button type="button" class="seal" id="seal" aria-label="Romper el sello y abrir la invitación">
+            <span class="half a"><b id="glyph-a">P</b></span><span class="half b"><b id="glyph-b">P</b></span>
+          </button>
+          <i class="sp s1"></i><i class="sp s2"></i><i class="sp s3"></i><i class="sp s4"></i>
+        </div>
+      </div>
     </div>
     <p class="hint" id="hint">Toca el sello para abrir</p>
   </section>
 
   <!-- ESCENA 2: la invitación -->
-  <article class="card" id="card" hidden aria-live="polite">
+  <article class="card" id="card" hidden>
     <svg class="orn" id="orn" viewBox="0 0 320 90" aria-hidden="true"></svg>
-    <p class="host" id="c-host"></p>
+    <p class="host rv" id="c-host"></p>
     <h1 class="title" id="c-title"></h1>
-    <p class="msg" id="c-msg"></p>
+    <p class="msg rv" id="c-msg"></p>
 
-    <div class="when">
+    <div class="when rv">
       <div class="when-day"><span id="c-dow"></span><strong id="c-num"></strong><span id="c-mon"></span></div>
       <div class="when-time"><strong id="c-time"></strong><span id="c-year"></span></div>
     </div>
 
-    <div class="count" id="count" role="timer" aria-label="Cuenta regresiva">
+    <div class="count rv" id="count" role="timer" aria-label="Cuenta regresiva">
       <div><b id="k-d">00</b><small>días</small></div>
       <div><b id="k-h">00</b><small>horas</small></div>
       <div><b id="k-m">00</b><small>min</small></div>
       <div><b id="k-s">00</b><small>seg</small></div>
     </div>
 
-    <dl class="facts">
-      <div><dt>Lugar</dt><dd id="c-place"></dd></div>
-      <div><dt>Vestimenta</dt><dd id="c-dress"></dd></div>
-      <div><dt>Ojo</dt><dd id="c-note"></dd></div>
-    </dl>
+    <p class="tap-hint rv">Toca cada opción para ver más</p>
+    <div class="tiles" id="tiles"></div>
 
-    <div class="rsvp" id="rsvp">
-      <h2>¿Nos acompañas?</h2>
-      <div class="seg" role="group" aria-label="Tu respuesta">
+    <div class="rsvp rv" id="rsvp">
+      <h2 id="r-title">¿Nos acompañas?</h2>
+      <div class="seg" role="group" aria-label="Tu respuesta" id="seg">
         <button type="button" id="yes" aria-pressed="false">Sí, voy</button>
         <button type="button" id="no" aria-pressed="false">No puedo</button>
       </div>
+      <p class="dodge" id="dodge" hidden></p>
       <div class="guests" id="guests" hidden>
         <span>Personas</span>
         <button type="button" id="g-minus" aria-label="Una persona menos">−</button>
         <output id="g-n">1</output>
         <button type="button" id="g-plus" aria-label="Una persona más">+</button>
       </div>
+      <label class="note-in" id="note-in" hidden><span>¿Alguna alergia o comentario?</span><input id="note" type="text" maxlength="80" placeholder="Opcional"></label>
       <button type="button" class="send" id="send" disabled>Confirmar</button>
       <p class="done" id="done" hidden></p>
     </div>
 
-    <div class="tools">
+    <div class="tools rv">
       <button type="button" id="ics">Agregar al calendario</button>
       <a id="map" target="_blank" rel="noopener noreferrer" href="#">Cómo llegar</a>
     </div>
@@ -102,13 +113,13 @@
   <!-- Venta -->
   <section class="sell" id="sell">
     <h2>¿Te gustó? Hacemos la tuya.</h2>
-    <p>Cada invitación se diseña con tu evento: tus nombres, tus colores, tu fecha y confirmación de asistencia directo a tu WhatsApp.</p>
+    <p>Cada invitación se diseña con tu evento: tus nombres, tus colores, tu fecha y la confirmación de asistencia directo a tu WhatsApp.</p>
     <a class="cta" id="wa" target="_blank" rel="noopener noreferrer" href="#">Quiero mi invitación</a>
     <button type="button" class="again" id="again" hidden>Volver a cerrar el sobre</button>
     <p class="by">Hecho por <a href="https://poseidonmk.com" target="_blank" rel="noopener">Poseidón</a></p>
   </section>
 </main>
 
-<script src="invitacion.js?v=1"></script>
+<script src="invitacion.js?v=2"></script>
 </body>
 </html>
