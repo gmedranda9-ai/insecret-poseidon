@@ -78,14 +78,11 @@ h3 i,.field i{font-style:normal;color:var(--muted);font-weight:400;font-size:.85
 .panel.center{text-align:center;padding:36px 20px}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
-.how{list-style:none;display:grid;gap:.55rem;margin-bottom:1.3rem}
-.how li{display:flex;gap:.75rem;align-items:flex-start;font-size:.95rem;color:#cfe0f3}
-.how b{flex:0 0 26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;background:rgba(254,212,5,.14);color:var(--gold);border:1px solid rgba(254,212,5,.35)}
 
 /* campos */
 .field{display:block;margin-bottom:1rem}
 .field>span{display:block;font-size:.9rem;font-weight:500;margin-bottom:.35rem}
-input[type=text],input[type=number],input[type=date],textarea,select{
+input[type=text],input[type=number],input[type=date],input[type=password],textarea,select{
   width:100%;background:rgba(2,8,18,.75);border:1px solid rgba(157,179,204,.25);border-radius:12px;padding:.8rem .9rem;outline:none;transition:border-color .2s,box-shadow .2s;min-height:48px}
 input::placeholder,textarea::placeholder{color:#62788f}
 input:focus,textarea:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(2,212,252,.18)}
@@ -214,3 +211,74 @@ textarea{resize:vertical}
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
 }
+
+/* ===== decoración navideña ===== */
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.7;
+  background:
+   radial-gradient(1.5px 1.5px at 12% 18%,#fff,transparent),radial-gradient(1.5px 1.5px at 78% 12%,#fed405,transparent),
+   radial-gradient(1px 1px at 33% 40%,#fff,transparent),radial-gradient(1.5px 1.5px at 90% 46%,#02d4fc,transparent),
+   radial-gradient(1px 1px at 8% 72%,#fff,transparent),radial-gradient(1.5px 1.5px at 62% 80%,#fed405,transparent),
+   radial-gradient(1px 1px at 45% 8%,#fff,transparent),radial-gradient(1px 1px at 95% 88%,#fff,transparent);
+  animation:twinkle 3.4s ease-in-out infinite alternate}
+.ornaments{position:fixed;top:20px;left:0;right:0;height:0;z-index:4;pointer-events:none}
+.bauble{position:absolute;top:0;width:20px;height:20px;border-radius:50%;transform-origin:50% -34px;animation:swing 3.6s ease-in-out infinite;
+  background:radial-gradient(circle at 32% 30%,rgba(255,255,255,.85),var(--c) 45%,rgba(0,0,0,.35));margin-top:34px;box-shadow:0 0 12px var(--c)}
+.bauble::before{content:"";position:absolute;left:50%;top:-34px;width:1px;height:34px;background:rgba(254,212,5,.6)}
+.bauble::after{content:"";position:absolute;left:50%;top:-4px;width:8px;height:5px;border-radius:2px;background:var(--gold);transform:translateX(-50%)}
+.b1{left:5%;--c:#e6682b}.b2{left:93%;--c:#fed405;animation-delay:-1.2s}.b3{left:14%;--c:#009ee7;width:15px;height:15px;animation-delay:-2.2s}.b4{left:84%;--c:#02d4fc;width:15px;height:15px;animation-delay:-.6s}
+@keyframes swing{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+.scene{display:block;width:min(100%,380px);height:auto;margin:8px auto 4px;filter:drop-shadow(0 12px 26px rgba(0,158,231,.25))}
+.twk{animation:twinkle 1.6s ease-in-out infinite alternate}.twk.d2{animation-delay:-.5s}.twk.d3{animation-delay:-1s}
+.snowman{transform-origin:104px 190px;animation:sway 5s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
+.drift{display:block;width:100%;height:40px;margin-bottom:6px}
+.eyebrow{display:inline-block;padding:.3rem .9rem;border:1px solid rgba(254,212,5,.35);border-radius:999px;background:rgba(254,212,5,.07)}
+
+/* ===== explicación (portada) ===== */
+.how-card{margin:6px 0 4px;padding:20px 18px;background:linear-gradient(160deg,rgba(0,54,159,.35),rgba(9,20,42,.8));border:1px solid var(--line);border-radius:var(--r);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.how-card h2{text-align:center;margin-bottom:1rem}
+.how{list-style:none;display:grid;gap:.75rem}
+.how li{display:flex;gap:.8rem;align-items:flex-start}
+.how li>i{flex:0 0 40px;height:40px;border-radius:12px;display:grid;place-items:center;font-style:normal;font-size:1.3rem;background:rgba(254,212,5,.12);border:1px solid rgba(254,212,5,.3)}
+.how li>div{display:grid;gap:.1rem;font-size:.93rem;color:#cfe0f3}
+.how li b{color:#fff;font-size:1rem}
+.how li b em{font-style:normal;font-weight:400;color:var(--muted);font-size:.8rem}
+.how li u{text-decoration-color:var(--gold);text-underline-offset:3px}
+.small-note{text-align:center;margin-top:.9rem;font-size:.85rem}
+.gold{color:var(--gold)}
+
+/* lista de nombres (filas numeradas) */
+.names{list-style:none;counter-reset:n;display:grid;gap:.45rem;margin:.4rem 0}
+.names li{counter-increment:n;display:flex;align-items:center;gap:.7rem;padding:.55rem .6rem .55rem .7rem;background:rgba(0,54,159,.28);border:1px solid rgba(2,212,252,.25);border-radius:12px;animation:pop .25s ease both}
+.names li::before{content:counter(n);flex:0 0 28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;font-weight:600;background:linear-gradient(135deg,var(--gold),var(--orange));color:#1c1300}
+.names li span{flex:1;font-weight:500;word-break:break-word}
+.names button{width:30px;height:30px;border-radius:50%;border:none;background:rgba(255,255,255,.1);color:#fff;cursor:pointer}
+.names button:hover{background:var(--orange)}
+
+/* cajas explicativas */
+.explain{margin:.5rem 0 .9rem;padding:.9rem 1rem;border-radius:14px;background:rgba(2,212,252,.07);border:1px solid rgba(2,212,252,.28);font-size:.93rem;display:grid;gap:.5rem}
+.explain-gold{background:rgba(254,212,5,.07);border-color:rgba(254,212,5,.35)}
+.explain i{font-style:normal;color:var(--gold)}
+
+/* panel organizador */
+.view .panel+.panel{margin-top:1rem}
+.panel-hl{border-color:rgba(254,212,5,.45);box-shadow:0 0 50px rgba(254,212,5,.1),0 18px 50px rgba(0,0,0,.35)}
+.linkbox{margin:1rem 0 .4rem}
+.linkbox input{font-size:.85rem;text-align:center;color:var(--cyan)}
+.status{list-style:none;display:grid;gap:.5rem;margin:.8rem 0}
+.status li{display:flex;align-items:center;gap:.6rem;padding:.6rem .8rem;background:rgba(2,8,18,.6);border:1px solid var(--line);border-radius:12px}
+.status li strong{flex:1;word-break:break-word}
+.status .reset{background:none;border:1px solid rgba(157,179,204,.35);color:var(--muted);border-radius:999px;padding:.25rem .7rem;font-size:.75rem;cursor:pointer}
+.indiv{margin-top:1.2rem;border-top:1px solid var(--line);padding-top:1rem}
+.indiv summary{cursor:pointer;color:var(--cyan);font-weight:500}
+.indiv .muted{margin-top:.6rem}
+
+/* entrada por enlace de grupo */
+.pick{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:1rem}
+.pick button{width:100%;min-height:54px;border-radius:14px;border:1px solid rgba(2,212,252,.35);background:rgba(0,54,159,.3);font-weight:600;cursor:pointer;padding:.5rem;word-break:break-word;transition:.2s}
+.pick button:hover,.pick button:focus-visible{background:rgba(0,158,231,.4);border-color:var(--cyan)}
+.pick small{display:block;font-weight:400;color:var(--gold);font-size:.7rem}
+#gp-pin-input{font-size:1.6rem;letter-spacing:.6em;text-align:center}
+#my-wish-card{margin-top:1rem}
+#my-wish-card textarea{margin-top:.4rem}
+.fact-block .btn{margin-top:.6rem}

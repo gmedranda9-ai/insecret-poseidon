@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>InSecret Poseidón · Sorteo de amigo secreto</title>
-<meta name="description" content="Organiza tu amigo secreto navideño en minutos. Sorteo privado, enlaces únicos y revelación con sorpresa. Un producto de Poseidón.">
+<meta name="description" content="Organiza tu amigo secreto navideño en minutos. Un solo enlace para tu grupo de WhatsApp, sorteo privado y revelación con sorpresa. Un producto de Poseidón.">
 <meta name="theme-color" content="#040a14">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://*.supabase.co; base-uri 'none'; form-action 'none'">
@@ -21,7 +21,11 @@
 </head>
 <body>
 <canvas id="snow" aria-hidden="true"></canvas>
+<div class="stars" aria-hidden="true"></div>
 <div class="lights" aria-hidden="true"></div>
+<div class="ornaments" aria-hidden="true">
+  <span class="bauble b1"></span><span class="bauble b2"></span><span class="bauble b3"></span><span class="bauble b4"></span>
+</div>
 <div class="glow glow-a" aria-hidden="true"></div>
 <div class="glow glow-b" aria-hidden="true"></div>
 
@@ -40,10 +44,70 @@
   <section id="view-wizard" class="view" hidden>
 
     <div class="hero">
-      <p class="eyebrow">Amigo secreto · Navidad</p>
+      <p class="eyebrow">✦ Navidad 2026 · Edición Poseidón ✦</p>
+
+      <svg class="scene" viewBox="0 0 360 215" role="img" aria-label="Muñeco de nieve, árbol de Navidad y regalos">
+        <defs>
+          <radialGradient id="sn" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#b9defa"/></radialGradient>
+          <linearGradient id="tr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fd0ff"/><stop offset="1" stop-color="#00369f"/></linearGradient>
+          <radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fed405" stop-opacity=".35"/><stop offset="1" stop-color="#fed405" stop-opacity="0"/></radialGradient>
+        </defs>
+        <circle cx="180" cy="95" r="95" fill="url(#halo)"/>
+        <ellipse cx="180" cy="196" rx="172" ry="13" fill="#d8efff" opacity=".92"/>
+        <ellipse cx="60" cy="193" rx="70" ry="9" fill="#ffffff" opacity=".55"/>
+        <!-- árbol -->
+        <g class="tree">
+          <rect x="264" y="168" width="12" height="20" rx="2" fill="#8a5a2b"/>
+          <polygon points="270,36 248,86 292,86" fill="url(#tr)"/>
+          <polygon points="270,62 240,122 300,122" fill="url(#tr)"/>
+          <polygon points="270,92 230,168 310,168" fill="url(#tr)"/>
+          <polygon points="270,22 273.5,31 283,31.5 275.5,37.5 278,47 270,41.5 262,47 264.5,37.5 257,31.5 266.5,31" fill="#fed405" class="twk"/>
+          <circle cx="262" cy="72" r="3.2" fill="#fed405" class="twk"/><circle cx="279" cy="82" r="3.2" fill="#e6682b" class="twk d2"/>
+          <circle cx="256" cy="104" r="3.2" fill="#fff" class="twk d3"/><circle cx="283" cy="108" r="3.2" fill="#fed405" class="twk"/>
+          <circle cx="248" cy="140" r="3.4" fill="#e6682b" class="twk d2"/><circle cx="272" cy="130" r="3.4" fill="#fff" class="twk d3"/>
+          <circle cx="294" cy="148" r="3.4" fill="#fed405" class="twk"/><circle cx="262" cy="156" r="3.4" fill="#02d4fc" class="twk d2"/>
+        </g>
+        <!-- regalos -->
+        <g>
+          <rect x="150" y="164" width="32" height="26" rx="3" fill="#fed405"/><rect x="163" y="164" width="6" height="26" fill="#00369f"/><rect x="150" y="174" width="32" height="5" fill="#00369f" opacity=".85"/>
+          <path d="M166 164c-8-12-18-4-8 0M166 164c8-12 18-4 8 0" fill="none" stroke="#00369f" stroke-width="3" stroke-linecap="round"/>
+          <rect x="188" y="152" width="30" height="38" rx="3" fill="#e6682b"/><rect x="200" y="152" width="6" height="38" fill="#fed405"/><rect x="188" y="168" width="30" height="5" fill="#fed405" opacity=".9"/>
+          <path d="M203 152c-8-12-18-4-8 0M203 152c8-12 18-4 8 0" fill="none" stroke="#fed405" stroke-width="3" stroke-linecap="round"/>
+          <rect x="222" y="176" width="16" height="14" rx="2" fill="#02d4fc"/><rect x="228" y="176" width="4" height="14" fill="#fff"/>
+        </g>
+        <!-- muñeco de nieve -->
+        <g class="snowman">
+          <circle cx="104" cy="160" r="34" fill="url(#sn)"/>
+          <circle cx="104" cy="113" r="26" fill="url(#sn)"/>
+          <circle cx="104" cy="73" r="20" fill="url(#sn)"/>
+          <path d="M96 122 L58 94 M70 100 L60 108 M70 100 L66 90" stroke="#7a4d22" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+          <path d="M112 122 L150 94 M138 100 L146 110 M138 100 L148 92" stroke="#7a4d22" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+          <rect x="86" y="45" width="36" height="22" rx="3" fill="#00369f"/><rect x="86" y="56" width="36" height="5" fill="#fed405"/>
+          <rect x="78" y="64" width="52" height="6" rx="3" fill="#00369f"/>
+          <circle cx="97" cy="75" r="2.3" fill="#040a14"/><circle cx="111" cy="75" r="2.3" fill="#040a14"/>
+          <polygon points="104,79 127,83 104,86" fill="#e6682b"/>
+          <circle cx="94" cy="84" r="1.4" fill="#040a14"/><circle cx="98" cy="87.5" r="1.4" fill="#040a14"/><circle cx="104" cy="89" r="1.4" fill="#040a14"/><circle cx="110" cy="87.5" r="1.4" fill="#040a14"/>
+          <rect x="82" y="90" width="44" height="10" rx="5" fill="#fed405"/>
+          <rect x="112" y="94" width="10" height="30" rx="4" fill="#e6682b"/>
+          <circle cx="104" cy="108" r="2.6" fill="#00369f"/><circle cx="104" cy="120" r="2.6" fill="#00369f"/><circle cx="104" cy="148" r="2.8" fill="#00369f"/><circle cx="104" cy="162" r="2.8" fill="#00369f"/>
+        </g>
+      </svg>
+
       <h1>Que la magia<br>sea <em>de verdad</em> secreta</h1>
-      <p class="lead">Organiza tu intercambio en minutos. El sorteo es privado: ni tú sabrás quién le regala a quién.</p>
+      <p class="lead">Organiza tu amigo secreto en 2 minutos y comparte <b>un solo enlace</b> con tu grupo de WhatsApp. El sorteo es privado: ni tú sabrás quién le regala a quién.</p>
     </div>
+
+    <section class="how-card" aria-label="Cómo funciona">
+      <h2>Así funciona</h2>
+      <ol class="how">
+        <li><i>👥</i><div><b>Participantes</b><span>Escribes los nombres de todos los que juegan.</span></div></li>
+        <li><i>📅</i><div><b>Datos del grupo</b><span>Pones la fecha del intercambio, el presupuesto y un mensaje para el grupo.</span></div></li>
+        <li><i>🚫</i><div><b>Exclusiones <em>(opcional)</em></b><span>Para que dos personas <u>no se toquen entre sí</u>, por ejemplo una pareja. Si eliges a Ana y a Luis, a Ana nunca le saldrá Luis ni a Luis le saldrá Ana.</span></div></li>
+        <li><i>🎁</i><div><b>Lista de deseos <em>(opcional)</em></b><span>Cada persona escribe, en su propio enlace, qué le gustaría recibir. Quien le regale lo verá. Tú no tienes que adivinar nada.</span></div></li>
+        <li><i>🔗</i><div><b>Enlace del sorteo</b><span>Te damos un enlace para pegar en tu grupo de WhatsApp. Cada persona entra, elige su nombre y descubre a su amigo secreto con una sorpresa.</span></div></li>
+      </ol>
+      <p class="muted small-note">¿No tienes grupo? También puedes enviar un enlace privado a cada persona, uno por uno.</p>
+    </section>
 
     <ol class="stepper" id="stepper" aria-label="Progreso">
       <li data-step="1"><span>1</span><em>Participantes</em></li>
@@ -56,24 +120,17 @@
     <div class="panel" data-panel="1">
       <h2>¿Quiénes juegan?</h2>
 
-      <ul class="how">
-        <li><b>1</b><span>Escribe los nombres de todos los participantes.</span></li>
-        <li><b>2</b><span>Cuéntanos fecha, presupuesto y un mensaje para el grupo.</span></li>
-        <li><b>3</b><span>Haz el sorteo: cada persona recibe un enlace único y secreto.</span></li>
-        <li><b>4</b><span>Al abrir su enlace, descubre a su amigo secreto con una sorpresa.</span></li>
-      </ul>
-
       <label class="field" for="name-input">
-        <span>Agrega un nombre</span>
+        <span>Escribe un nombre y pulsa «Agregar»</span>
         <div class="row">
           <input id="name-input" type="text" maxlength="40" autocomplete="off" enterkeyhint="done" placeholder="Ej. Camila">
           <button type="button" class="btn btn-blue" id="add-name">Agregar</button>
         </div>
-        <small class="hint">Puedes pegar varios nombres separados por comas o por líneas.</small>
+        <small class="hint">Truco: puedes pegar varios nombres de una vez, separados por comas.</small>
       </label>
 
       <div class="count" id="count-line"></div>
-      <ul class="chips" id="people-list" aria-live="polite"></ul>
+      <ol class="names" id="people-list" aria-live="polite"></ol>
       <p class="error" id="err-1" role="alert" hidden></p>
 
       <div class="nav">
@@ -116,19 +173,24 @@
     <div class="panel" data-panel="3" hidden>
       <h2>Opciones</h2>
 
-      <h3>Exclusiones <i>(opcional)</i></h3>
-      <p class="muted">¿Hay parejas u otras personas que no deben tocarse entre sí? Elígelas aquí.</p>
+      <h3>🚫 Exclusiones <i>(opcional)</i></h3>
+      <div class="explain">
+        <p><b>¿Para qué sirve?</b> Para evitar que dos personas se toquen entre sí.</p>
+        <p><b>Ejemplo:</b> Ana y Luis son pareja y ya se regalan por su cuenta. Eliges «Ana» y «Luis» y pulsas <i>Añadir</i>: a Ana nunca le saldrá Luis, y a Luis nunca le saldrá Ana.</p>
+        <p class="muted">¿Todos pueden tocarse con todos? Déjalo vacío y pulsa Continuar.</p>
+      </div>
       <div class="pair">
         <select id="ex-a" aria-label="Primera persona"></select>
         <span class="pair-x" aria-hidden="true">✕</span>
         <select id="ex-b" aria-label="Segunda persona"></select>
-        <button type="button" class="btn btn-blue" id="add-ex">Añadir</button>
+        <button type="button" class="btn btn-blue" id="add-ex">Añadir esta exclusión</button>
       </div>
       <ul class="chips" id="ex-list"></ul>
 
-      <h3>Lista de deseos <i>(opcional)</i></h3>
-      <p class="muted">Una pista ayuda mucho. Quien le regale a esa persona la verá al revelar su amigo secreto.</p>
-      <div id="wish-list" class="wishes"></div>
+      <h3>🎁 Lista de deseos</h3>
+      <div class="explain explain-gold">
+        <p>No tienes que llenar nada aquí. <b>Cada participante escribirá su lista</b> cuando abra su enlace («¿qué te gustaría recibir?») y quien le regale la verá en su pantalla.</p>
+      </div>
 
       <p class="error" id="err-3" role="alert" hidden></p>
       <div class="nav">
@@ -139,8 +201,9 @@
 
     <!-- PASO 4 -->
     <div class="panel" data-panel="4" hidden>
-      <h2>Todo listo para el sorteo</h2>
+      <h2>Todo listo</h2>
       <div class="summary" id="summary"></div>
+      <p class="muted">Al crear el enlace se hace el sorteo en nuestro servidor. Después no se puede cambiar.</p>
 
       <label class="check">
         <input type="checkbox" id="c-privacy">
@@ -158,36 +221,73 @@
       <p class="error" id="err-4" role="alert" hidden></p>
       <div class="nav">
         <button type="button" class="btn btn-ghost" data-back="3">Atrás</button>
-        <button type="button" class="btn btn-gold btn-big" id="do-draw">🎁 Hacer el sorteo</button>
+        <button type="button" class="btn btn-gold btn-big" id="do-draw">🔗 Crear el enlace del sorteo</button>
       </div>
     </div>
   </section>
 
-  <!-- ============ VISTA: PANEL DEL ORGANIZADOR (enlaces) ============ -->
+  <!-- ============ VISTA: PANEL DEL ORGANIZADOR ============ -->
   <section id="view-results" class="view" hidden>
     <div class="hero hero-sm">
-      <p class="eyebrow">¡Sorteo hecho!</p>
+      <p class="eyebrow">✦ ¡Sorteo hecho! ✦</p>
       <h1 id="res-title">Tu grupo</h1>
       <p class="lead" id="res-sub"></p>
     </div>
 
-    <div class="panel">
-      <h2>Envía a cada persona su enlace</h2>
-      <p class="muted">Cada enlace es único y solo funciona para esa persona. Compártelo por WhatsApp o cópialo. Nadie, ni tú, ve los emparejamientos de otros.</p>
-      <ul class="links" id="links-list"></ul>
-
-      <div class="notice">
-        <strong>Guarda tu enlace de organizador</strong>
-        <p class="muted">Con él puedes volver a ver quién ya abrió el suyo.</p>
-        <div class="row">
-          <input id="org-link" type="text" readonly>
-          <button type="button" class="btn btn-blue" id="copy-org">Copiar</button>
-        </div>
+    <div class="panel panel-hl">
+      <h2>1. Copia el enlace y pégalo en tu grupo</h2>
+      <p class="muted">Cada persona entra, elige su nombre, crea un PIN de 4 números y descubre a su amigo secreto. Nadie, ni tú, ve los emparejamientos de otros.</p>
+      <div class="row linkbox">
+        <input id="grp-link" type="text" readonly aria-label="Enlace del grupo">
       </div>
+      <div class="nav nav-center">
+        <button type="button" class="btn btn-gold btn-big" id="copy-grp">📋 Copiar enlace del grupo</button>
+        <a class="btn btn-wa btn-big" id="wa-grp" target="_blank" rel="noopener noreferrer" href="#">Compartir por WhatsApp</a>
+      </div>
+    </div>
 
+    <div class="panel">
+      <h2>2. Mira quién ya entró</h2>
+      <ul class="status" id="status-list"></ul>
+      <div class="nav nav-center"><button type="button" class="btn btn-blue btn-sm" id="refresh">Actualizar</button></div>
+
+      <details class="indiv">
+        <summary>¿Prefieres enviar un enlace privado a cada persona?</summary>
+        <p class="muted">Útil si no tienes un grupo. Cada enlace solo funciona para esa persona y no pide PIN.</p>
+        <ul class="links" id="links-list"></ul>
+      </details>
+    </div>
+
+    <div class="panel">
+      <strong class="gold">Guarda tu enlace de organizador</strong>
+      <p class="muted">Con él puedes volver a este panel cuando quieras.</p>
+      <div class="row"><input id="org-link" type="text" readonly aria-label="Enlace del organizador"><button type="button" class="btn btn-blue" id="copy-org">Copiar</button></div>
+      <div class="nav"><button type="button" class="btn btn-ghost btn-sm" id="new-draw">Hacer un sorteo nuevo</button><span></span></div>
+    </div>
+  </section>
+
+  <!-- ============ VISTA: ENTRADA POR ENLACE DE GRUPO ============ -->
+  <section id="view-group" class="view" hidden>
+    <div class="hero hero-sm">
+      <p class="eyebrow">✦ Amigo secreto ✦</p>
+      <h1 id="gp-title">Tu grupo</h1>
+      <p class="lead" id="gp-sub"></p>
+    </div>
+    <div class="panel" id="gp-pick">
+      <h2>¿Quién eres tú?</h2>
+      <p class="muted">Toca tu nombre. Elige solo el tuyo: el resultado es secreto y solo se muestra con tu PIN.</p>
+      <ul class="pick" id="gp-list"></ul>
+    </div>
+    <div class="panel" id="gp-pin" hidden>
+      <h2 id="gp-pin-title"></h2>
+      <p class="muted" id="gp-pin-help"></p>
+      <label class="field"><span>PIN de 4 números</span>
+        <input id="gp-pin-input" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" placeholder="••••">
+      </label>
+      <p class="error" id="err-g" role="alert" hidden></p>
       <div class="nav">
-        <button type="button" class="btn btn-ghost" id="new-draw">Nuevo sorteo</button>
-        <button type="button" class="btn btn-blue" id="refresh">Actualizar estado</button>
+        <button type="button" class="btn btn-ghost" id="gp-back">Atrás</button>
+        <button type="button" class="btn btn-gold btn-big" id="gp-go">🎁 Descubrir</button>
       </div>
     </div>
   </section>
@@ -215,9 +315,11 @@
         <div><dt>Presupuesto</dt><dd id="rv-budget"></dd></div>
       </dl>
 
-      <div class="fact-block" id="rv-wish-wrap" hidden>
+      <div class="fact-block">
         <h3>Lo que le haría ilusión</h3>
         <p id="rv-wish"></p>
+        <p class="muted" id="rv-wish-empty" hidden>Todavía no escribió su lista de deseos. Vuelve a mirar en unos días.</p>
+        <button type="button" class="btn btn-ghost btn-sm" id="rv-refresh">Revisar de nuevo</button>
       </div>
       <div class="fact-block" id="rv-msg-wrap" hidden>
         <h3>Mensaje de <span id="rv-org"></span></h3>
@@ -229,6 +331,13 @@
         <button type="button" class="btn btn-ghost" id="hide-card">Ocultar</button>
       </div>
       <p class="error" id="err-r" role="alert" hidden></p>
+    </div>
+
+    <div class="panel" id="my-wish-card" hidden>
+      <h2>🎁 Tu lista de deseos</h2>
+      <p class="muted">Cuéntale a quien te regale qué te gustaría recibir (gustos, talla, colores…). Solo esa persona la verá, sin saber que eres tú.</p>
+      <textarea id="my-wish" rows="3" maxlength="300" placeholder="Ej. Me encanta el café, los libros de misterio y el color azul"></textarea>
+      <div class="nav"><span class="hint"><span id="wish-count">0</span>/300</span><button type="button" class="btn btn-blue" id="save-wish">Guardar mi lista</button></div>
     </div>
 
     <div class="reveal-card" id="reveal-hidden" hidden>
@@ -254,6 +363,7 @@
 </main>
 
 <footer class="foot">
+  <svg class="drift" viewBox="0 0 360 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40V22C40 6 80 6 120 18s80 14 120 2 80-12 120 4v14z" fill="rgba(216,239,255,.1)"/><path d="M0 40V30c50-12 100-10 150-2s140 8 210-6v18z" fill="rgba(216,239,255,.07)"/></svg>
   <p class="tagline">El futuro no espera. Nosotros tampoco. <b>Activa el poder.</b></p>
   <p class="small">© Poseidón · Ecuador · <button type="button" class="link" id="open-privacy-2">Aviso de privacidad</button></p>
 </footer>
@@ -264,9 +374,9 @@
     <h2 id="pv-title">Aviso de privacidad</h2>
     <div class="modal-body">
       <p><b>Responsable:</b> Poseidón (Ecuador). Contacto: <a href="mailto:soporte@poseidonmk.com">soporte@poseidonmk.com</a>.</p>
-      <p><b>Qué datos recogemos:</b> los nombres que escribes de los participantes, el nombre del organizador y del grupo, la fecha, el presupuesto, tu mensaje y las pistas de regalo. Solo si lo marcas, tu WhatsApp o correo para enviarte información de Poseidón.</p>
+      <p><b>Qué datos recogemos:</b> los nombres que escribes de los participantes, el nombre del organizador y del grupo, la fecha, el presupuesto, tu mensaje, el PIN que cada persona elige y la lista de deseos que cada participante decida escribir. Solo si lo marcas, tu WhatsApp o correo para enviarte información de Poseidón.</p>
       <p><b>Para qué:</b> únicamente para hacer el sorteo y mostrar a cada persona su amigo secreto. No vendemos ni compartimos estos datos.</p>
-      <p><b>Privacidad del sorteo:</b> el sorteo lo realiza nuestro servidor. Los emparejamientos solo se entregan a cada participante a través de su enlace único. El organizador únicamente ve quién ya abrió su enlace.</p>
+      <p><b>Privacidad del sorteo:</b> el sorteo lo realiza nuestro servidor. Los emparejamientos solo se entregan a cada participante tras elegir su nombre y su PIN, o con su enlace único. El organizador únicamente ve quién ya entró.</p>
       <p><b>Cuánto tiempo:</b> borramos automáticamente los datos del grupo después de la fecha del intercambio.</p>
       <p><b>Tus derechos:</b> acceso, rectificación, eliminación y oposición, conforme a la Ley Orgánica de Protección de Datos Personales de Ecuador. Escríbenos al correo de contacto.</p>
       <p><b>Importante:</b> al escribir nombres de otras personas, confirmas que están de acuerdo en participar.</p>

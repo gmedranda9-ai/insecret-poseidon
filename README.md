@@ -15,7 +15,11 @@ Sorteador de amigo secreto navideño de **Poseidón**. Sitio estático (HTML/CSS
 ## Vista previa local
 `python3 -m http.server 8000` y abre `http://localhost:8000/?demo=1` (modo demo: todo queda en tu navegador, solo para ver el diseño).
 
-## Contrato con el backend (RPC)
-- `create_draw(p_group, p_organizer, p_event_date, p_budget, p_message, p_participants, p_exclusions, p_contact, p_marketing)`
-- `organizer_status(p_token)` · solo devuelve quién abrió su enlace
-- `reveal_assignment(p_token)` · devuelve el emparejamiento de **esa** persona y marca el enlace como abierto
+## Contrato con el backend (RPC de Supabase)
+- `create_draw(p_group, p_organizer, p_event_date, p_budget, p_message, p_participants, p_exclusions, p_contact, p_marketing)` → `{organizer_token, group_token}`
+- `organizer_status(p_token)` → participantes con `ref, name, token, opened, claimed` (el organizador nunca ve emparejamientos)
+- `reset_participant(p_org_token, p_ref)` → rota el token y borra el PIN de esa persona
+- `group_info(p_group_token)` → nombres del grupo y quién ya entró
+- `group_enter(p_group_token, p_ref, p_pin)` → `{token}`; la primera vez fija el PIN, luego lo verifica (bloqueo a los 5 intentos)
+- `reveal_assignment(p_token)` → amigo secreto de esa persona + lista de deseos de él/ella; marca el enlace como abierto
+- `save_wish(p_token, p_wish)` → cada participante guarda su propia lista de deseos

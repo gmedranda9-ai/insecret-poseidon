@@ -12,11 +12,12 @@
   var ORG_KEY = 'insecret_org';
   var MAX_PEOPLE = 50, MIN_PEOPLE = 3;
 
-  var S = { step: 1, uid: 0, people: [], ex: [], g: { organizer: '', name: '', date: '', budget: '', message: '' }, org: null, poll: null };
+  var S = { step: 1, uid: 0, people: [], ex: [], g: { organizer: '', name: '', date: '', budget: '', message: '' }, orgToken: null, poll: null, tok: null };
 
   /* ---------- utilidades de UI ---------- */
-  var views = ['wizard', 'results', 'reveal', 'error', 'loading'];
+  var views = ['wizard', 'results', 'group', 'reveal', 'error', 'loading'];
   function show(v) { views.forEach(function (n) { $('view-' + n).hidden = n !== v; }); window.scrollTo({ top: 0 }); }
+  function noindex() { var m = document.createElement('meta'); m.name = 'robots'; m.content = 'noindex,nofollow'; document.head.appendChild(m); }
   function toast(msg) {
     var t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.t);
     toast.t = setTimeout(function () { t.hidden = true; }, 2400);
@@ -42,7 +43,7 @@
   function todayISO() { var d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); }
 
   /* ---------- Stepper ---------- */
-  function go(step) {
+  function go(step, quiet) {
     S.step = step;
     document.querySelectorAll('[data-panel]').forEach(function (p) { p.hidden = Number(p.dataset.panel) !== step; });
     document.querySelectorAll('#stepper li').forEach(function (li) {
@@ -50,7 +51,7 @@
     });
     if (step === 3) renderStep3();
     if (step === 4) renderSummary();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (!quiet) $('stepper').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   /* ---------- Paso 1: participantes ---------- */
@@ -60,12 +61,12 @@
       if (n.length > 40) n = n.slice(0, 40);
       if (S.people.some(function (p) { return key(p.name) === key(n); })) { msg = '“' + n + '” ya está en la lista. Si hay dos personas con el mismo nombre, agrega una inicial (Ana M.).'; return; }
       if (S.people.length >= MAX_PEOPLE) { msg = 'El máximo es ' + MAX_PEOPLE + ' participantes.'; return; }
-      S.people.push({ id: ++S.uid, name: n, wish: '' }); added++;
+      S.people.push({ id: ++S.uid, name: n }); added++;
     });
     err('err-1', msg); renderPeople(); return added;
   }
   function renderPeople() {
-    var ul = $('people-list'); ul.innerHTML = '';
+    var ol = $('people-list'); ol.innerHTML = '';
     S.people.forEach(function (p) {
       var li = document.createElement('li');
       li.innerHTML = '<span>' + esc(p.name) + '</span><button type="button" aria-label="Quitar a ' + esc(p.name) + '">✕</button>';
@@ -74,10 +75,10 @@
         S.ex = S.ex.filter(function (e) { return e[0] !== p.id && e[1] !== p.id; });
         renderPeople();
       });
-      ul.appendChild(li);
+      ol.appendChild(li);
     });
     var n = S.people.length;
-    $('count-line').textContent = n ? n + (n === 1 ? ' participante' : ' participantes') + (n < MIN_PEOPLE ? ' · faltan ' + (MIN_PEOPLE - n) + ' para poder sortear' : '') : 'Aún no hay participantes';
+    $('count-line').textContent = n ? n + (n === 1 ? ' participante' : ' participantes') + (n < MIN_PEOPLE ? ' · faltan ' + (MIN_PEOPLE - n) + ' para poder sortear' : ' ✓') : 'Aún no hay participantes. Los nombres que agregues aparecerán aquí, uno por fila.';
   }
   $('add-name').addEventListener('click', function () { var i = $('name-input'); if (addNames(i.value)) i.value = ''; i.focus(); });
   $('name-input').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); $('add-name').click(); } });
@@ -106,20 +107,12 @@
     err('err-2'); go(3);
   });
 
-  /* ---------- Paso 3: exclusiones y deseos ---------- */
+  /* ---------- Paso 3: exclusiones ---------- */
   function renderStep3() {
     var a = $('ex-a'), b = $('ex-b'), opts = S.people.map(function (p) { return '<option value="' + p.id + '">' + esc(p.name) + '</option>'; }).join('');
     var av = a.value, bv = b.value; a.innerHTML = opts; b.innerHTML = opts;
     if (av) a.value = av; if (bv) b.value = bv; else if (S.people[1]) b.value = S.people[1].id;
     renderEx();
-    var w = $('wish-list'); w.innerHTML = '';
-    S.people.forEach(function (p) {
-      var l = document.createElement('label');
-      l.innerHTML = '<span>' + esc(p.name) + '</span><input type="text" maxlength="200" placeholder="Ej. libros, café, algo azul…">';
-      var inp = l.querySelector('input'); inp.value = p.wish;
-      inp.addEventListener('input', function () { p.wish = inp.value; });
-      w.appendChild(l);
-    });
   }
   function nameOf(id) { var p = S.people.filter(function (x) { return x.id === id; })[0]; return p ? p.name : '?'; }
   function renderEx() {
@@ -146,7 +139,7 @@
     err('err-3'); go(4);
   });
 
-  /* ---------- Paso 4: resumen y sorteo ---------- */
+  /* ---------- Paso 4: resumen y creación ---------- */
   function renderSummary() {
     var g = S.g;
     $('summary').innerHTML =
@@ -164,89 +157,163 @@
     var marketing = $('c-marketing').checked, contact = norm($('f-contact').value);
     if (marketing && !contact) return err('err-4', 'Escribe tu WhatsApp o correo, o desmarca la casilla de novedades.');
     if (!API.ready) return err('err-4', 'El servicio de sorteo todavía se está conectando. Vuelve en unos minutos.');
-    err('err-4'); btn.disabled = true; btn.textContent = 'Sorteando…';
+    err('err-4'); btn.disabled = true; btn.textContent = 'Creando tu enlace…';
     API.createDraw({
       group_name: S.g.name, organizer: S.g.organizer, event_date: S.g.date, budget: Number(S.g.budget) || 0, message: S.g.message,
-      participants: S.people.map(function (p) { return { name: p.name, wish: norm(p.wish) }; }),
+      participants: S.people.map(function (p) { return { name: p.name }; }),
       exclusions: idxPairs(), contact: marketing ? contact : null, marketing: marketing
     }).then(function (r) {
       try { localStorage.setItem(ORG_KEY, r.organizer_token); } catch (e) {}
-      S.org = { token: r.organizer_token, links: r.participants };
-      return loadOrganizer(r.organizer_token, r.participants);
+      return loadOrganizer(r.organizer_token);
     }).catch(function (e) {
-      btn.disabled = false; btn.textContent = '🎁 Hacer el sorteo';
+      btn.disabled = false; btn.textContent = '🔗 Crear el enlace del sorteo';
       err('err-4', e.code === 'NO_SOLUTION' ? 'No se pudo armar el sorteo con esas exclusiones. Quita alguna e inténtalo otra vez.'
         : e.code === 'NETWORK' ? 'Sin conexión. Revisa tu internet e inténtalo de nuevo.' : 'No pudimos hacer el sorteo. Inténtalo de nuevo en un momento.');
     });
   });
 
   /* ---------- Panel del organizador ---------- */
-  var linkMap = {};   // token -> link
-  function loadOrganizer(orgToken, firstLinks) {
+  function loadOrganizer(orgToken) {
     return API.organizerStatus(orgToken).then(function (st) {
+      S.orgToken = orgToken; S.st = st;
       $('res-title').textContent = st.group_name;
       $('res-sub').textContent = 'Organiza ' + st.organizer + ' · ' + fmtDate(st.event_date) + ' · ' + fmtMoney(st.budget);
+      var gl = link(st.group_token, 'g');
+      $('grp-link').value = gl;
       $('org-link').value = link(orgToken, 'o');
-      renderLinks(st);
-      show('results');
+      $('wa-grp').href = 'https://wa.me/?text=' + encodeURIComponent('🎄 ¡Amigo secreto «' + st.group_name + '»!\n' + st.organizer + ' organizó el sorteo. Entra aquí, elige tu nombre y descubre a quién le regalas (es un secreto 🤫):\n' + gl);
+      renderStatus(st); noindex(); show('results');
       clearInterval(S.poll); S.poll = setInterval(function () { refresh(true); }, 30000);
-      S.orgToken = orgToken; S.st = st;
     });
   }
-  function renderLinks(st) {
-    var ul = $('links-list'); ul.innerHTML = '';
+  function renderStatus(st) {
+    var ul = $('status-list'); ul.innerHTML = '';
+    st.participants.forEach(function (p) {
+      var li = document.createElement('li');
+      li.innerHTML = '<strong>' + esc(p.name) + '</strong><span class="badge' + (p.opened ? ' ok' : '') + '">' + (p.opened ? 'Ya abrió ✓' : (p.claimed ? 'Eligió su nombre' : 'Sin abrir')) + '</span>' +
+        (p.claimed || p.opened ? '<button type="button" class="reset" title="Si alguien eligió un nombre que no era suyo">Reiniciar</button>' : '');
+      var rb = li.querySelector('.reset');
+      if (rb) rb.addEventListener('click', function () {
+        if (!confirm('¿Reiniciar el acceso de ' + p.name + '? Su PIN y su enlace anteriores dejarán de funcionar y podrá volver a elegir su nombre.')) return;
+        API.resetParticipant(S.orgToken, p.ref).then(function () { toast('Acceso de ' + p.name + ' reiniciado'); refresh(true); }, function () { toast('No se pudo reiniciar'); });
+      });
+      ul.appendChild(li);
+    });
+    var ll = $('links-list'); ll.innerHTML = '';
     st.participants.forEach(function (p) {
       var url = link(p.token, 't'), li = document.createElement('li');
-      var msg = 'Hola ' + p.name + '! 🎄 ' + st.organizer + ' te invita al amigo secreto “' + st.group_name + '”. ' +
-        'Descubre a quién le regalas aquí (es solo para ti): ' + url;
-      li.innerHTML = '<div class="who"><strong>' + esc(p.name) + '</strong><span class="badge' + (p.opened ? ' ok' : '') + '">' + (p.opened ? 'Ya abrió ✓' : 'Sin abrir') + '</span></div>' +
+      var msg = 'Hola ' + p.name + '! 🎄 ' + st.organizer + ' te invita al amigo secreto «' + st.group_name + '». Descubre a quién le regalas aquí (es solo para ti): ' + url;
+      li.innerHTML = '<div class="who"><strong>' + esc(p.name) + '</strong></div>' +
         '<div class="acts"><button type="button" class="btn btn-blue btn-sm" data-c>Copiar enlace</button>' +
-        '<a class="btn btn-wa btn-sm" target="_blank" rel="noopener noreferrer" href="https://wa.me/?text=' + encodeURIComponent(msg) + '">Enviar por WhatsApp</a></div>';
+        '<a class="btn btn-wa btn-sm" target="_blank" rel="noopener noreferrer" href="https://wa.me/?text=' + encodeURIComponent(msg) + '">WhatsApp</a></div>';
       li.querySelector('[data-c]').addEventListener('click', function () { copy(url, 'Enlace de ' + p.name + ' copiado'); });
-      ul.appendChild(li);
+      ll.appendChild(li);
     });
   }
   function refresh(silent) {
     if (!S.orgToken) return;
-    API.organizerStatus(S.orgToken).then(function (st) { renderLinks(st); if (!silent) toast('Estado actualizado'); }, function () { if (!silent) toast('No se pudo actualizar'); });
+    API.organizerStatus(S.orgToken).then(function (st) { renderStatus(st); if (!silent) toast('Estado actualizado'); }, function () { if (!silent) toast('No se pudo actualizar'); });
   }
   $('refresh').addEventListener('click', function () { refresh(false); });
+  $('copy-grp').addEventListener('click', function () { copy($('grp-link').value, 'Enlace del grupo copiado. ¡Pégalo en tu WhatsApp!'); });
   $('copy-org').addEventListener('click', function () { copy($('org-link').value, 'Enlace de organizador copiado'); });
+  $('grp-link').addEventListener('focus', function () { this.select(); });
   $('new-draw').addEventListener('click', function () {
     if (!confirm('¿Empezar un sorteo nuevo? Guarda antes tu enlace de organizador si quieres volver a este.')) return;
     try { localStorage.removeItem(ORG_KEY); } catch (e) {}
     location.href = BASE + (API.mode === 'demo' ? '?demo=1' : '');
   });
 
-  /* ---------- Revelación ---------- */
-  var REV = null;
-  function startReveal(tok) {
-    API.reveal(tok).then(function (r) {
-      REV = r;
-      $('rv-hello').textContent = 'Hola, ' + r.giver;
-      $('rv-friend').textContent = r.receiver;
-      $('rv-group').textContent = r.group_name;
-      $('rv-date').textContent = fmtDate(r.event_date);
-      $('rv-budget').textContent = fmtMoney(r.budget);
-      if (r.wish) { $('rv-wish').textContent = r.wish; $('rv-wish-wrap').hidden = false; }
-      if (r.message) { $('rv-msg').textContent = r.message; $('rv-org').textContent = r.organizer; $('rv-msg-wrap').hidden = false; }
-      var m = document.createElement('meta'); m.name = 'robots'; m.content = 'noindex,nofollow'; document.head.appendChild(m);
-      show('reveal');
+  /* ---------- Entrada por enlace de grupo ---------- */
+  var GP = { token: null, info: null, pick: null };
+  function startGroup(gt) {
+    GP.token = gt;
+    API.groupInfo(gt).then(function (info) {
+      GP.info = info; noindex();
+      $('gp-title').textContent = info.group_name;
+      $('gp-sub').textContent = 'Organiza ' + info.organizer + ' · ' + fmtDate(info.event_date);
+      var ul = $('gp-list'); ul.innerHTML = '';
+      info.participants.forEach(function (p) {
+        var li = document.createElement('li'), b = document.createElement('button'); b.type = 'button';
+        b.innerHTML = esc(p.name) + (p.claimed ? '<small>ya entró · usa tu PIN</small>' : '');
+        b.addEventListener('click', function () { pickName(p); });
+        li.appendChild(b); ul.appendChild(li);
+      });
+      $('gp-pick').hidden = false; $('gp-pin').hidden = true; show('group');
     }).catch(function (e) { fail(e.code === 'NOT_FOUND' ? 'Enlace no válido' : 'No pudimos cargarlo',
-      e.code === 'NOT_FOUND' ? 'Este enlace no existe o el grupo ya fue borrado después del intercambio. Pídele al organizador que te lo reenvíe.' : 'Revisa tu conexión e inténtalo otra vez.'); });
+      e.code === 'NOT_FOUND' ? 'Este enlace no existe o el grupo ya fue borrado después del intercambio.' : 'Revisa tu conexión e inténtalo otra vez.'); });
+  }
+  function pickName(p) {
+    GP.pick = p; err('err-g'); $('gp-pin-input').value = '';
+    $('gp-pin-title').textContent = 'Hola, ' + p.name;
+    $('gp-pin-help').textContent = p.claimed
+      ? 'Escribe el PIN de 4 números que creaste la primera vez.'
+      : 'Crea un PIN de 4 números. Solo tú lo sabrás: lo necesitarás si vuelves a entrar desde este enlace. Anótalo o recuérdalo.';
+    $('gp-pick').hidden = true; $('gp-pin').hidden = false; $('gp-pin-input').focus();
+  }
+  $('gp-back').addEventListener('click', function () { $('gp-pin').hidden = true; $('gp-pick').hidden = false; });
+  $('gp-pin-input').addEventListener('input', function () { this.value = this.value.replace(/\D/g, '').slice(0, 4); });
+  $('gp-pin-input').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('gp-go').click(); });
+  $('gp-go').addEventListener('click', function () {
+    var pin = $('gp-pin-input').value, btn = this;
+    if (!/^\d{4}$/.test(pin)) return err('err-g', 'El PIN son exactamente 4 números.');
+    err('err-g'); btn.disabled = true;
+    API.groupEnter(GP.token, GP.pick.ref, pin).then(function (r) {
+      history.replaceState(null, '', link(r.token, 't'));
+      show('loading'); startReveal(r.token);
+    }).catch(function (e) {
+      err('err-g', e.code === 'BAD_PIN' ? 'Ese PIN no es el correcto. Inténtalo otra vez.'
+        : e.code === 'LOCKED' ? 'Demasiados intentos. Pídele al organizador que reinicie tu acceso.'
+        : e.code === 'NETWORK' ? 'Sin conexión. Inténtalo de nuevo.' : 'No pudimos entrar. Inténtalo de nuevo.');
+    }).then(function () { btn.disabled = false; });
+  });
+
+  /* ---------- Revelación ---------- */
+  var REV = null, opened = false;
+  function paintReveal(r) {
+    REV = r;
+    $('rv-friend').textContent = r.receiver;
+    $('rv-group').textContent = r.group_name;
+    $('rv-date').textContent = fmtDate(r.event_date);
+    $('rv-budget').textContent = fmtMoney(r.budget);
+    $('rv-wish').textContent = r.wish || ''; $('rv-wish').hidden = !r.wish; $('rv-wish-empty').hidden = !!r.wish;
+    if (r.message) { $('rv-msg').textContent = r.message; $('rv-org').textContent = r.organizer; $('rv-msg-wrap').hidden = false; }
+  }
+  function startReveal(tok) {
+    S.tok = tok;
+    API.reveal(tok).then(function (r) {
+      $('rv-hello').textContent = 'Hola, ' + r.giver;
+      paintReveal(r);
+      $('my-wish').value = r.my_wish || ''; $('wish-count').textContent = ($('my-wish').value || '').length;
+      noindex(); show('reveal');
+      if (opened) { $('stage').hidden = true; $('reveal-card').hidden = false; $('my-wish-card').hidden = false; $('rv-cta').hidden = false; }
+    }).catch(function (e) { fail(e.code === 'NOT_FOUND' ? 'Enlace no válido' : 'No pudimos cargarlo',
+      e.code === 'NOT_FOUND' ? 'Este enlace no existe, fue reiniciado por el organizador o el grupo ya se borró después del intercambio. Pídele al organizador que te ayude.' : 'Revisa tu conexión e inténtalo otra vez.'); });
   }
   function openGift() {
     var gift = $('gift'); if (gift.classList.contains('open')) return;
-    gift.classList.add('open'); $('rv-tap').hidden = true; FX.confetti();
+    gift.classList.add('open'); $('rv-tap').hidden = true; FX.confetti(); opened = true;
     setTimeout(function () {
       $('stage').classList.add('gone');
-      setTimeout(function () { $('stage').hidden = true; $('reveal-card').hidden = false; $('rv-cta').hidden = false; window.scrollTo({ top: 0, behavior: 'smooth' }); }, 450);
+      setTimeout(function () {
+        $('stage').hidden = true; $('reveal-card').hidden = false; $('my-wish-card').hidden = false; $('rv-cta').hidden = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 450);
     }, 1100);
   }
   $('gift').addEventListener('click', openGift);
   $('gift').addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openGift(); } });
   $('hide-card').addEventListener('click', function () { $('reveal-card').hidden = true; $('reveal-hidden').hidden = false; });
   $('show-card').addEventListener('click', function () { $('reveal-hidden').hidden = true; $('reveal-card').hidden = false; });
+  $('rv-refresh').addEventListener('click', function () {
+    API.reveal(S.tok).then(function (r) { paintReveal(r); toast(r.wish ? '¡Ya escribió su lista!' : 'Todavía no escribe su lista'); }, function () { toast('No se pudo revisar'); });
+  });
+  $('my-wish').addEventListener('input', function () { $('wish-count').textContent = this.value.length; });
+  $('save-wish').addEventListener('click', function () {
+    var b = this; b.disabled = true;
+    API.saveWish(S.tok, $('my-wish').value.trim()).then(function () { toast('¡Lista guardada! Tu amigo secreto la verá.'); }, function () { toast('No se pudo guardar. Inténtalo otra vez.'); })
+      .then(function () { b.disabled = false; });
+  });
   $('dl-card').addEventListener('click', function () {
     if (!REV) return; var b = this; b.disabled = true;
     FX.cardBlob({ receiver: REV.receiver, group_name: REV.group_name, dateText: fmtDate(REV.event_date), budgetText: fmtMoney(REV.budget), wish: REV.wish })
@@ -274,18 +341,20 @@
     FX.snow();
     if (API.mode === 'demo') $('demo-banner').hidden = false;
     renderPeople();
-    var t = qs.get('t'), o = qs.get('o');
-    if (t) { if (!API.ready) return fail('Casi listo', 'InSecret se está conectando. Vuelve a abrir tu enlace en unos minutos.'); return startReveal(t); }
+    var t = qs.get('t'), g = qs.get('g'), o = qs.get('o');
+    if ((t || g) && !API.ready) return fail('Casi listo', 'InSecret se está conectando. Vuelve a abrir tu enlace en unos minutos.');
+    if (t) return startReveal(t);
+    if (g) return startGroup(g);
     var saved = null; try { saved = localStorage.getItem(ORG_KEY); } catch (e) {}
     var tok = o || saved;
     if (tok && API.ready) {
       return loadOrganizer(tok).catch(function () {
         try { localStorage.removeItem(ORG_KEY); } catch (e) {}
         if (o) return fail('Enlace de organizador no válido', 'No encontramos ese grupo. Puede que ya se haya borrado después del intercambio.');
-        show('wizard'); go(1);
+        show('wizard'); go(1, true);
       });
     }
-    show('wizard'); go(1);
+    show('wizard'); go(1, true); window.scrollTo({ top: 0 });
   }
   boot();
 })();
