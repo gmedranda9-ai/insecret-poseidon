@@ -136,3 +136,32 @@ body{background:radial-gradient(110% 70% at 50% -5%,#06223d 0%,#040f1d 40%,#040a
 .go-s{margin-top:10px;font-weight:600;color:var(--ac)}
 .final{text-align:center;padding-bottom:10px}
 .final .btn{margin-top:4px}
+
+/* ===== v4: portada compacta, logo a la izquierda y tarjetas en el primer vistazo ===== */
+.top{padding-top:10px}
+.hero-row{display:grid;grid-template-columns:auto 1fr;grid-template-areas:"logo head" "lead lead" "cta cta";align-items:center;gap:8px 14px;text-align:left;max-width:980px;padding:6px 18px 0}
+.hero-row .logo-big{grid-area:logo;width:92px;margin:0;animation:float 6s ease-in-out infinite}
+.hero-row .logo-big img{filter:drop-shadow(0 0 16px rgba(0,158,231,.6))}
+.hero-head{grid-area:head;min-width:0}
+.hero-row .wordmark{font-size:clamp(1.7rem,8.5vw,2.4rem);letter-spacing:.12em;padding:0;margin:0;text-align:left}
+.hero-row h1{font-size:clamp(.95rem,4vw,1.15rem);margin:4px 0 0}
+.hero-row .lead{grid-area:lead;margin:4px 0 0;font-size:.95rem}
+.hero-row .cta-row{grid-area:cta;justify-content:flex-start;margin-top:6px}
+.hero-row .btn{padding:.65rem 1.2rem;font-size:.95rem}
+@media(min-width:760px){
+  .hero-row{grid-template-columns:auto 1fr;grid-template-areas:"logo head" "logo lead" "logo cta";gap:4px 30px;justify-content:center;padding-top:14px}
+  .hero-row .logo-big{width:170px}
+  .hero-row .wordmark{font-size:3.4rem;letter-spacing:.16em}
+  .hero-row h1{font-size:1.5rem}
+  .hero-row .lead{max-width:520px;font-size:1.02rem}
+}
+.mini-head{padding:22px 20px 0}
+.mini-head h2{font-size:clamp(1.2rem,4.6vw,1.6rem)}
+.doors{padding-top:14px;gap:14px}
+.door{padding:14px 16px 16px}
+.art{height:96px;margin:-2px 0 2px}.art svg{height:96px;width:125px}
+.door h3{font-size:1.3rem}.door p{font-size:.92rem;margin-bottom:10px}
+.go{padding:.65rem 1rem}
+.trust{padding-top:14px}
+@media(min-width:760px){.art{height:110px}.art svg{height:110px;width:143px}}
+@media(max-width:520px){.hero-row .cta-row{flex-wrap:nowrap;gap:8px}.hero-row .btn{padding:.6rem .85rem;font-size:.88rem;white-space:nowrap}}

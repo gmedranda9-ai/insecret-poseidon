@@ -388,3 +388,19 @@ textarea{resize:vertical}
 .rc-or{display:block;margin-bottom:.7rem}
 /* v12 */
 .pill-home{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.25)!important;color:#fff!important}
+/* v13: cabecera ordenada */
+.topbar{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:.5rem .8rem;padding:18px 20px 0;max-width:900px}
+.topbar .brand{grid-column:1}
+.topbar .brand img{width:46px;height:46px}
+.bt{display:flex;flex-direction:column;line-height:1.1;min-width:0}
+.bt-name{font-family:var(--serif);font-size:1.4rem;font-weight:700;color:#fff;text-decoration:none}
+.topbar .by-pos{align-self:flex-start;padding:0;border:0;font-size:.68rem}
+.topbar .pill{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;font:500 .9rem 'Outfit',system-ui,sans-serif;text-decoration:none;border-radius:999px;padding:.55rem 1rem;cursor:pointer;border:1px solid transparent;color:#fff;transition:transform .2s,filter .2s;white-space:nowrap}
+.topbar .pill:hover{transform:translateY(-1px);filter:brightness(1.1)}
+.topbar .pill-org{grid-column:3}
+.topbar .pill-home{grid-column:4}
+@media(max-width:620px){
+  .topbar{grid-template-columns:auto 1fr auto}
+  .topbar .pill-home{grid-column:3;grid-row:1}
+  .topbar .pill-org{grid-column:1/-1;grid-row:2;width:100%}
+}
