@@ -324,6 +324,59 @@
     var m = (t.maplink || '').match(/@(-?\d+\.\d+),(-?\d+\.\d+)/), q = m ? m[1] + ',' + m[2] : t.place + ', ' + (t.mapq || '');
     return '<iframe class="mapframe" loading="lazy" referrerpolicy="no-referrer" title="Mapa del lugar" src="https://www.google.com/maps?q=' + encodeURIComponent(q) + '&output=embed"></iframe>';
   }
+
+  /* ---------- decoración de la tarjeta + recorrido por pasos ---------- */
+  function flake(cx0, cy0, r) {
+    var a = '';
+    for (var i = 0; i < 6; i++) { var ang = i * 60; a += '<g transform="rotate(' + ang + ' ' + cx0 + ' ' + cy0 + ')"><line x1="' + cx0 + '" y1="' + cy0 + '" x2="' + cx0 + '" y2="' + (cy0 - r) + '"/><path d="M' + cx0 + ' ' + (cy0 - r * .55) + 'l-' + r * .22 + ' -' + r * .2 + 'M' + cx0 + ' ' + (cy0 - r * .55) + 'l' + r * .22 + ' -' + r * .2 + 'M' + cx0 + ' ' + (cy0 - r * .8) + 'l-' + r * .15 + ' -' + r * .14 + 'M' + cx0 + ' ' + (cy0 - r * .8) + 'l' + r * .15 + ' -' + r * .14 + '"/></g>'; }
+    return '<g>' + a + '</g>';
+  }
+  function orn(x, len, r, c1, c2, d, kind) {
+    var g = '<g class="swing" style="transform-origin:' + x + 'px 0;animation-delay:' + d + 's"><line x1="' + x + '" y1="0" x2="' + x + '" y2="' + len + '" stroke="#e3c27a" stroke-width="1.3"/>';
+    if (kind === 'star') { var pts = [], R = r, rr = r * .45; for (var i = 0; i < 10; i++) { var ang = -Math.PI / 2 + i * Math.PI / 5, rad = i % 2 ? rr : R; pts.push((x + Math.cos(ang) * rad).toFixed(1) + ',' + (len + R + Math.sin(ang) * rad).toFixed(1)); } return g + '<polygon points="' + pts.join(' ') + '" fill="url(#gold)"/></g>'; }
+    return g + '<rect x="' + (x - 4) + '" y="' + len + '" width="8" height="6" rx="1.5" fill="#caa24e"/><circle cx="' + x + '" cy="' + (len + 6 + r) + '" r="' + r + '" fill="url(#' + c1 + ')"/><ellipse cx="' + (x - r * .35) + '" cy="' + (len + 6 + r * .6) + '" rx="' + r * .22 + '" ry="' + r * .35 + '" fill="rgba(255,255,255,.55)"/><path d="M' + (x - r * .8) + ' ' + (len + 6 + r) + 'q' + r * .8 + ' ' + r * .5 + ' ' + r * 1.6 + ' 0" fill="none" stroke="' + c2 + '" stroke-width="1.6" opacity=".7"/></g>';
+  }
+  function cardDeco(k) {
+    var el = $('cdeco'), eb = $('cdeco-b'); el.innerHTML = ''; eb.innerHTML = '';
+    if (k !== 'navidad' && k !== 'fin') return;
+    var defs = '<defs><radialGradient id="rd" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#ff7a82"/><stop offset="1" stop-color="#b3202f"/></radialGradient><radialGradient id="gd" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#fff0b8"/><stop offset="1" stop-color="#b8862b"/></radialGradient><radialGradient id="sl" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#8fa4b8"/></radialGradient><linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff0b8"/><stop offset="1" stop-color="#c9992f"/></linearGradient></defs>';
+    var orns = k === 'navidad'
+      ? orn(322, 38, 15, 'rd', '#ffd9a0', 0) + orn(358, 66, 11, 'gd', '#fff', .6) + orn(286, 22, 8, 'sl', '#fff', 1.1) + orn(60, 30, 20, 'star', '', .3, 'star') + orn(30, 20, 10, 'gd', '#fff', .9) + orn(344, 14, 14, 'star', '', .2, 'star')
+      : orn(330, 34, 17, 'gd', '#fff', 0) + orn(364, 60, 11, 'sl', '#fff', .7) + orn(60, 26, 18, 'star', '', .4, 'star') + orn(300, 20, 8, 'gd', '#fff', 1.2);
+    el.innerHTML = '<svg viewBox="0 0 400 190" preserveAspectRatio="xMidYMin meet">' + defs + '<path id="wire" d="M-6 6Q50 56 100 24T200 30T300 24T406 8" fill="none" stroke="#6b6046" stroke-width="1.6"/><g id="bulbs"></g>' + orns + '</svg>';
+    var wire = el.querySelector('#wire'), bulbs = el.querySelector('#bulbs'), L = wire.getTotalLength(), N = 15, cols = k === 'navidad' ? ['#ffd86b', '#ff5a5f', '#4fd8ff', '#fff4d6', '#7dff9a'] : ['#ffe9a8', '#fff', '#ffd86b', '#fff4d6'];
+    for (var i = 0; i <= N; i++) {
+      var pt = wire.getPointAtLength(L * i / N), c = cols[i % cols.length];
+      bulbs.insertAdjacentHTML('beforeend', '<g class="bulb" data-i="' + i + '" style="--c:' + c + ';--d:' + (i * .09).toFixed(2) + 's"><rect x="' + (pt.x - 2.5) + '" y="' + (pt.y - 1) + '" width="5" height="5" rx="1" fill="#6b6046"/><ellipse cx="' + pt.x.toFixed(1) + '" cy="' + (pt.y + 9).toFixed(1) + '" rx="4.6" ry="6.4"/></g>');
+    }
+    bulbs.addEventListener('click', function (e) { var b = e.target.closest('.bulb'); if (!b || !el.classList.contains('on')) return; var n = cols[(cols.indexOf(b.style.getPropertyValue('--c')) + 1) % cols.length]; b.style.setProperty('--c', n); chime([76]); });
+    eb.innerHTML = '<svg viewBox="0 0 400 150" preserveAspectRatio="xMidYMax meet"><g fill="none" stroke="#e3c27a" stroke-width="1.3" stroke-linecap="round" opacity=".38">' + flake(48, 100, 58) + flake(350, 78, 44) + flake(212, 128, 20) + '</g></svg>';
+  }
+  function lights(on) { $('cdeco').classList.toggle('on', on); }
+  var SG = {}, LAB = { navidad: ['✨ Encender las luces', 'Ver más detalles', 'Confirmar mi asistencia'], fin: ['🥂 Brindemos', 'Ver más detalles', 'Confirmar mi asistencia'], boda: ['💍 Continuar', 'Ver más detalles', 'Responder'], cumple: ['🎉 ¡Sigue la fiesta!', 'Ver más detalles', 'Responder'], cita: ['💘 Continuar', 'Ver más detalles', 'Responder'] };
+  function initStory() {
+    var card = $('card'), q = function (s) { return card.querySelector(s); };
+    [['sg2', [q('.when'), $('count')]], ['sg3', [$('toy'), q('.tap-hint'), $('tiles')]], ['sg4', [$('rsvp'), q('.tools')]]].forEach(function (g) {
+      var w = document.createElement('div'); w.className = 'sg'; w.id = g[0]; g[1][0].parentNode.insertBefore(w, g[1][0]); g[1].forEach(function (n) { w.appendChild(n); }); SG[g[0]] = w;
+    });
+    [1, 2, 3].forEach(function (n) {
+      var d = document.createElement('div'); d.className = 'sn'; d.id = 'sn' + n; d.hidden = true; d.innerHTML = '<button type="button" class="story-btn" data-n="' + n + '"></button>' + (n === 1 ? '<button type="button" class="story-all" id="story-all">Ver todo de una vez</button>' : '');
+      SG['sg' + (n + 1)].parentNode.insertBefore(d, SG['sg' + (n + 1)]);
+      d.querySelector('.story-btn').addEventListener('click', function () { revealStep(n); });
+    });
+    $('story-all').addEventListener('click', function () { [1, 2, 3].forEach(function (n) { $('sn' + n).hidden = true; SG['sg' + (n + 1)].classList.add('show'); }); lights(true); });
+  }
+  function revealStep(n) {
+    $('sn' + n).hidden = true; var g = SG['sg' + (n + 1)]; g.classList.add('show');
+    if (n === 1) { lights(true); chime([72, 76, 79, 84]); var r = $('cdeco').getBoundingClientRect(); burstAt(innerWidth / 2, r.top + 40, T[cur].fx === 'nieve' ? 'chispas' : T[cur].fx, 26); } else chime([76, 83]);
+    if (n < 3) $('sn' + (n + 1)).hidden = false;
+    setTimeout(function () { g.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); }, 80);
+  }
+  function resetStory() {
+    if (!SG.sg2) return; lights(false);
+    ['sg2', 'sg3', 'sg4'].forEach(function (k) { SG[k].classList.remove('show'); }); [2, 3].forEach(function (n) { $('sn' + n).hidden = true; }); $('sn1').hidden = false;
+    var lb = LAB[cur] || LAB.navidad; [1, 2, 3].forEach(function (n) { $('sn' + n).querySelector('.story-btn').textContent = lb[n - 1]; });
+  }
   function setTheme(k) {
     cur = k; var t = T[k], d = parse(t.date);
     document.body.setAttribute('data-theme', k);
@@ -337,7 +390,7 @@
     $('map').href = mapHref(t);
     $('wa').href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent('Hola Poseidón 👋 Vi la invitación interactiva de «' + t.title + '» y quiero una para mi evento.');
     $('r-title').textContent = t.rsvp[0]; $('yes').textContent = t.rsvp[1]; $('no').textContent = t.rsvp[2];
-    drawOrn(k); buildTiles(t); buildToy(k); resetRsvp(); closeEnvelope(); startCount(); if (gestured) startMusic(k);
+    drawOrn(k); cardDeco(k); buildTiles(t); buildToy(k); resetRsvp(); resetStory(); closeEnvelope(); startCount(); if (gestured) startMusic(k);
     P = P.filter(function (p) { return p.burst; });
   }
 
@@ -353,7 +406,7 @@
     setTimeout(function () { $('env').classList.add('open'); }, 380 * step);
     setTimeout(function () {
       $('scene-env').classList.add('gone'); $('card').hidden = false; $('again').hidden = false;
-      $('card').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      requestAnimationFrame(function () { requestAnimationFrame(function () { var y = $('card').getBoundingClientRect().top + scrollY - 6; scrollTo({ top: Math.max(0, y), behavior: 'auto' }); }); });
     }, 1700 * step);
   }
   $('seal').addEventListener('click', openEnvelope);
@@ -428,7 +481,7 @@
     if (!name) { er.textContent = 'Escribe tu nombre para que sepan quién eres.'; er.hidden = false; $('who').focus(); return; }
     function ok() {
       $('send').hidden = true; var d = $('done'); d.hidden = false;
-      d.textContent = (rsvp.ans === 'si' ? '¡Listo, ' + name + '! Contamos con ' + rsvp.n + (rsvp.n === 1 ? ' persona.' : ' personas.') : 'Gracias por avisar, ' + name + '. Te vamos a extrañar.') + (note ? ' Anotamos: «' + note + '».' : '') +
+      d.textContent = (rsvp.ans === 'si' ? '¡Listo, ' + name + '! ' + (T[cur].noguests ? 'Te esperamos.' : 'Contamos con ' + rsvp.n + (rsvp.n === 1 ? ' persona.' : ' personas.')) : 'Gracias por avisar, ' + name + '. Te vamos a extrañar.') + (note ? ' Anotamos: «' + note + '».' : '') +
         (REAL ? '' : ' (Ejemplo: en tu invitación, esta respuesta le llega al anfitrión en su panel privado.)');
       if (rsvp.ans === 'si') burst(d);
     }
@@ -461,13 +514,13 @@
   function hexRGB(h) { return [1, 3, 5].map(function (i) { return parseInt(h.slice(i, i + 2), 16); }); }
   function lum(h) { var c = hexRGB(h).map(function (v) { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }); return .2126 * c[0] + .7152 * c[1] + .0722 * c[2]; }
   function mix(h, k) { return '#' + hexRGB(h).map(function (v) { return ('0' + Math.round(v * k).toString(16)).slice(-2); }).join(''); }
-  function enableCorp(acc) {
+  function enableCorp(acc, theme_) {
     var a = /^#[0-9a-fA-F]{6}$/.test(acc || '') ? acc : '#1f3a5f', L = lum(a), s = document.body.style;
-    document.body.classList.add('corp');
+    document.body.classList.add('corp'); var dark = cur === 'navidad' || cur === 'fin' || theme_ === 'navidad' || theme_ === 'fin'; document.body.classList.toggle('corp-dark', dark); document.body.classList.toggle('corp-light', !dark);
     s.setProperty('--c-acc', a); s.setProperty('--c-on', L > .45 ? '#14161d' : '#ffffff');
     s.setProperty('--c-title', L < .3 ? a : (L < .6 ? mix(a, .6) : '#1d2433'));
     s.setProperty('--c-bg1', L < .06 ? '#141b30' : mix(a, .55)); s.setProperty('--c-bg2', L < .06 ? '#080b14' : mix(a, .22));
-    s.setProperty('--accent', L < .3 ? a : '#8a6d2b');
+    s.setProperty('--accent', L < .3 ? a : '#8a6d2b'); s.setProperty('--c-card1', mix(L < .06 ? '#2a3a66' : a, .78)); s.setProperty('--c-card2', mix(L < .06 ? '#2a3a66' : a, .34));
   }
   function applyReal(theme, cfg) {
     var t = T[theme];
@@ -475,8 +528,8 @@
     if (!cfg.target) delete t.target;
     var b = cfg.brand || {};
     if (b.accent && /^#[0-9a-fA-F]{6}$/.test(b.accent)) document.body.style.setProperty('--accent', b.accent);
-    if (cfg.corp) enableCorp(b.accent);
-    if (b.logo && /^data:image\/(png|jpeg|webp);base64,/.test(b.logo)) { $('brand-logo').src = b.logo; $('brand-logo').hidden = false; }
+    if (cfg.corp) enableCorp(b.accent, theme);
+    if (b.logo && /^data:image\/(png|jpeg|webp);base64,/.test(b.logo)) { $('brand-logo').src = b.logo; $('brand-logo').hidden = false; $('logo-wrap').hidden = false; }
     if (b.sign) { $('sign').textContent = b.sign; $('sign').hidden = false; }
     document.title = (t.title || 'Invitación') + ' · Invitación';
   }
@@ -484,7 +537,15 @@
     document.body.classList.add('real');
     document.querySelector('main').innerHTML = '<section class="sell" style="margin-top:20vh"><h2>Esta invitación ya no está disponible</h2><p>Puede que el enlace esté mal escrito o que el evento ya haya pasado. Pídele el enlace al anfitrión.</p><p class="by">Hecho por <a href="https://poseidonmk.com" target="_blank" rel="noopener">Poseidón</a></p></section>';
   }
+  initStory();
+  function corpDemo(k) {
+    var t = T[k]; t.corp = true; t.host = 'Empresa Ejemplo S.A.'; t.to = 'Para el equipo de Empresa Ejemplo'; t.lead = 'Estás cordialmente invitado'; t.noguests = true;
+    t.title = k === 'fin' ? 'Cena de Fin de Año 2026' : 'Cena Navideña 2026'; t.msg = 'Gracias por un año de trabajo y compromiso. Celebremos juntos.'; t.place = 'Salón Principal'; t.mapq = 'Quito, Ecuador';
+    document.body.classList.add('corp-demo'); $('brand-logo').src = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="140" height="64" viewBox="0 0 140 64"><rect x="6" y="8" width="48" height="48" rx="10" fill="#0b2a5b"/><text x="30" y="43" font-size="30" text-anchor="middle" fill="#e3c27a" font-family="Georgia,serif" font-weight="700">E</text><text x="64" y="30" font-size="15" fill="#0b2a5b" font-family="Georgia,serif" font-weight="700">EMPRESA</text><text x="64" y="47" font-size="11" fill="#6a7080" font-family="Arial,sans-serif" letter-spacing="3">EJEMPLO S.A.</text></svg>');
+    $('brand-logo').hidden = false; $('logo-wrap').hidden = false; $('sign').textContent = 'Con aprecio, Recursos Humanos'; $('sign').hidden = false;
+  }
   function start(k) {
+    if (!REAL && QS.get('corp') && (k === 'navidad' || k === 'fin')) { corpDemo(k); setTheme(k); enableCorp('#0b2a5b', k); return; }
     setTheme(k);
     if (GUEST) { $('to-line').textContent = 'Para ' + GUEST; $('who').value = GUEST; }
   }

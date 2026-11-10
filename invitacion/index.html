@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;1,500;1,700&family=Playfair+Display:ital,wght@1,600&family=Bricolage+Grotesque:wght@800&family=Fraunces:ital,opsz,wght@1,9..144,600&family=Italiana&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="invitacion.css?v=12">
+<link rel="stylesheet" href="invitacion.css?v=15">
 </head>
 <body data-theme="navidad">
 
@@ -67,8 +67,9 @@
 
   <!-- ESCENA 2: la invitación -->
   <article class="card" id="card" hidden>
+    <div class="cdeco" id="cdeco" aria-hidden="true"></div>
     <svg class="orn" id="orn" viewBox="0 0 320 90" aria-hidden="true"></svg>
-    <img class="brand-logo" id="brand-logo" alt="" hidden>
+    <div class="logo-wrap" id="logo-wrap" hidden><img class="brand-logo" id="brand-logo" alt="" hidden><svg class="hat" viewBox="0 0 64 58" aria-hidden="true"><path d="M7 46C9 20 28 3 52 10c-5 12 1 25 7 36z" fill="#d6283a"/><path d="M7 46C9 30 18 16 30 9c-6 10-8 24-6 37z" fill="#b01e2e" opacity=".55"/><rect x="3" y="43" width="58" height="11" rx="5.5" fill="#fff"/><circle cx="53" cy="9" r="7" fill="#fff"/></svg></div>
     <p class="host rv" id="c-host"></p>
     <h1 class="title" id="c-title"></h1>
     <p class="msg rv" id="c-msg"></p>
@@ -115,6 +116,7 @@
       <button type="button" id="ics">Agregar al calendario</button>
       <a id="map" target="_blank" rel="noopener noreferrer" href="#">Cómo llegar</a>
     </div>
+      <div class="cdeco-b" id="cdeco-b" aria-hidden="true"></div>
   </article>
 
   <!-- Venta -->
@@ -129,6 +131,6 @@
 
 <script src="../config.js?v=1"></script>
 <script src="defaults.js?v=1"></script>
-<script src="invitacion.js?v=12"></script>
+<script src="invitacion.js?v=16"></script>
 </body>
 </html>

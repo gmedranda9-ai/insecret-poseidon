@@ -355,7 +355,7 @@
     if (r.message) { $('rv-msg').textContent = r.message; $('rv-org').textContent = r.organizer; $('rv-msg-wrap').hidden = false; }
   }
   function startReveal(tok) {
-    S.tok = tok;
+    S.tok = tok; document.body.classList.add('rv-mode'); if (qs.get('e')) document.body.classList.add('rv-emp');
     API.reveal(tok).then(function (r) {
       if (r.was_opened) opened = true;
       $('rv-reset').hidden = !(r.resets > 0);

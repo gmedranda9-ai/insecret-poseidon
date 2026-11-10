@@ -426,3 +426,8 @@ textarea{resize:vertical}
 .cf-acts{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 .warn{background:rgba(230,104,43,.14);border:1px solid rgba(230,104,43,.5);border-radius:12px;padding:.6rem .8rem;color:#ffd2b8}
 .redo-note{margin-bottom:.8rem}
+
+/* v16 página del participante: sutil, sin controles de organizador */
+body.rv-mode .pill-org,body.rv-mode .pill-home{display:none!important}
+body.rv-emp #rv-cta{display:none!important}
+body.rv-emp .bt-name{display:none}

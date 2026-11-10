@@ -92,7 +92,7 @@ Deno.serve(async (req) => {
     while (i < clean.length) {
       const p = clean[i++]; const tk = tokens[p.name.toLowerCase()] || "";
       const inv = slug ? `${SITE}/invitacion/?i=${slug}&para=${encodeURIComponent(p.name)}` : undefined;
-      const ss = withSS && tk ? `${SITE}/amigo-secreto/?t=${tk}` : undefined;
+      const ss = withSS && tk ? `${SITE}/amigo-secreto/?t=${tk}&e=1` : undefined;
       const subj = `${p.name.split(" ")[0]}, ${slug ? `te invitamos a ${title}` : "tu amigo secreto está listo"}`;
       const err = await send(BREVO, { email: p.email, name: p.name }, subj, mail({ company, name: p.name, title, accent, sign, intro, inv, ss, when }), company);
       results.push({ name: p.name, email: p.email, token: tk, ok: !err, error: err });

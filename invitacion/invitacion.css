@@ -382,4 +382,61 @@ body.corp .send{background:var(--c-acc);color:var(--c-on);border-radius:999px;le
 body.corp .tools button,body.corp .tools a{border-color:rgba(29,36,51,.25);color:#1d2433}
 body.corp .done{color:#1d2433}
 body.corp .title,body.corp .title *{color:var(--c-title)!important;-webkit-text-fill-color:var(--c-title)!important;background:none!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;text-shadow:none!important}
-body.corp #fx{display:none}
+body.corp-light #fx{display:none}
+
+/* ===== recorrido por pasos ===== */
+.sg{display:none}.sg.show{display:block;animation:sgIn .8s cubic-bezier(.2,.8,.2,1) both}
+@keyframes sgIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+.sg.show *{animation-delay:.05s!important}
+.sg.show .tile{animation-delay:calc(var(--i,0)*.1s + .1s)!important}
+.sn{margin:28px auto 6px;display:grid;justify-items:center;gap:10px}
+.story-btn{font:600 1.02rem var(--body,'Outfit',sans-serif);padding:.95rem 1.7rem;border-radius:999px;border:0;cursor:pointer;background:var(--btn);color:var(--btn-ink);box-shadow:0 12px 28px rgba(0,0,0,.35),0 0 0 0 var(--accent);animation:pulseB 2.4s ease-in-out infinite;transition:transform .2s}
+.story-btn:hover{transform:translateY(-2px)}
+@keyframes pulseB{0%,100%{box-shadow:0 12px 28px rgba(0,0,0,.35),0 0 0 0 rgba(255,255,255,.0)}50%{box-shadow:0 12px 28px rgba(0,0,0,.35),0 0 0 10px rgba(255,255,255,.08)}}
+.story-all{background:none;border:0;color:var(--ink-soft);font:400 .82rem var(--body,'Outfit',sans-serif);text-decoration:underline;cursor:pointer;opacity:.8}
+/* ===== decoración navideña de la tarjeta ===== */
+.card{overflow:visible}
+.cdeco{position:absolute;left:0;right:0;top:-2px;height:0;pointer-events:none;z-index:3}
+.cdeco svg{display:block;width:100%;height:auto;overflow:visible}
+.cdeco .bulb ellipse{fill:#39414d;transition:fill .5s,filter .5s}
+.cdeco.on .bulb ellipse{fill:var(--c);filter:drop-shadow(0 0 6px var(--c));animation:bt 1.6s ease-in-out infinite alternate;animation-delay:var(--d)}
+.cdeco.on .bulb{pointer-events:auto;cursor:pointer}
+@keyframes bt{0%{opacity:.5}100%{opacity:1}}
+.cdeco .swing{animation:swing 4.2s ease-in-out infinite}
+@keyframes swing{0%,100%{transform:rotate(-3.5deg)}50%{transform:rotate(3.5deg)}}
+.cdeco-b{position:absolute;left:0;right:0;bottom:0;pointer-events:none;z-index:0}
+.cdeco-b svg{display:block;width:100%;height:auto}
+body[data-theme=navidad] .card,body[data-theme=fin] .card{padding-top:104px}
+.card>*:not(.cdeco):not(.cdeco-b){position:relative;z-index:1}
+@media(prefers-reduced-motion:reduce){.cdeco .swing,.cdeco.on .bulb ellipse,.story-btn{animation:none}}
+/* gorrito */
+.logo-wrap{position:relative;display:inline-block;margin:6px auto 12px}
+.logo-wrap .brand-logo{margin:0}
+.hat{position:absolute;top:-26px;right:-22px;width:54px;transform:rotate(16deg);filter:drop-shadow(0 4px 6px rgba(0,0,0,.35));display:none;animation:hatw 3.6s ease-in-out infinite;transform-origin:50% 100%}
+body[data-theme=navidad] .hat{display:block}
+@keyframes hatw{0%,100%{transform:rotate(14deg)}50%{transform:rotate(20deg)}}
+/* ===== corporativo oscuro (navidad y fin de año) ===== */
+body.corp-dark[data-theme]{--paper:#0b1220;--ink:#f6f1e4;--ink-soft:#bdb7a4;--rule:rgba(227,194,122,.4);--btn:#e3c27a;--btn-ink:#1a1405;--accent:#e3c27a}
+body.corp-dark .card{background:radial-gradient(120% 60% at 50% 0%,var(--c-card1),var(--c-card2) 70%);color:#f6f1e4;box-shadow:0 34px 80px rgba(0,0,0,.65),0 0 0 1px rgba(227,194,122,.18)}
+body.corp-dark .card::before{border-color:rgba(227,194,122,.5)}body.corp-dark .card::after{border-color:rgba(227,194,122,.18)}
+body.corp-dark .brand-logo{background:#fff;padding:8px 14px;border-radius:12px;max-height:84px}
+body.corp-dark .host{color:#e3c27a}
+body.corp-dark .title,body.corp-dark .title *{color:#f3dfae!important;-webkit-text-fill-color:#f3dfae!important}
+body.corp-dark .title::after{background:linear-gradient(90deg,transparent,#e3c27a,transparent)}
+body.corp-dark .msg{color:#e9e4d6}body.corp-dark .sign{color:#e3c27a}
+body.corp-dark .when{border-color:rgba(227,194,122,.28)}body.corp-dark .when>*+*{border-color:rgba(227,194,122,.28)}
+body.corp-dark .when *{color:#f6f1e4}body.corp-dark .when span{color:#c9b98d}
+body.corp-dark .count div{border-color:rgba(227,194,122,.25)}body.corp-dark .count b{color:#f6f1e4}body.corp-dark .count small,body.corp-dark .tap-hint{color:#e3c27a}
+body.corp-dark .tile{background:rgba(255,255,255,.05);border-color:rgba(227,194,122,.3);box-shadow:none;color:#f6f1e4}
+body.corp-dark .tile:hover,body.corp-dark .tile[open]{background:rgba(255,255,255,.08);border-color:rgba(227,194,122,.7)}
+body.corp-dark .tile *{--ink:#f6f1e4;--ink-soft:#bdb7a4}
+body.corp-dark .rsvp{border-top-color:rgba(227,194,122,.25)}
+body.corp-dark .seg button{border-color:rgba(227,194,122,.45);color:#f6f1e4}
+body.corp-dark .seg button[aria-pressed=true],body.corp-dark .send{background:#e3c27a;border-color:#e3c27a;color:#1a1405}
+body.corp-dark .send:disabled{background:rgba(227,194,122,.25);color:rgba(246,241,228,.5)}
+body.corp-dark .note-in input{background:rgba(255,255,255,.07);border-color:rgba(227,194,122,.35);color:#f6f1e4}
+body.corp-dark .tools button,body.corp-dark .tools a{border-color:rgba(227,194,122,.45);color:#f6f1e4}
+body.corp-dark .done{color:#f6f1e4}
+body.corp-dark .story-all{color:#c9b98d}
+
+body.corp-demo .themes,body.corp-demo .back{display:none}
