@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi panel · Invitación · Poseidón</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#040a14">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://*.supabase.co; base-uri 'none'; form-action 'none'">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/admin.css?v=1">
+<style>.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center}.stat b{display:block;font:700 2rem/1 'Playfair Display',serif;color:var(--oro)}.stat span{font-size:.85rem;color:var(--soft)}.rs{display:grid;gap:8px}.r{border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:grid;gap:2px}.r.no{opacity:.75}.r b{font-weight:600}.r small{color:var(--soft)}.tag{font-size:.78rem;border-radius:999px;padding:.05rem .55rem;border:1px solid var(--azul);color:var(--cian);margin-left:6px}.tag.no{border-color:var(--nar);color:#ffb48a}textarea{min-height:110px}</style>
+</head>
+<body>
+<header class="ah"><img src="../assets/logo.png" alt="" width="40" height="40"><div><strong>Mi panel</strong><small>Confirmaciones de tu invitación · Poseidón</small></div></header>
+<main class="wrap">
+  <section class="card" id="loading"><p class="muted">Cargando…</p></section>
+  <section class="card" id="bad" hidden><h1>Enlace no válido</h1><p class="muted">Revisa que el enlace esté completo o escríbenos por WhatsApp.</p></section>
+  <div id="ok" hidden>
+    <section class="card"><h1 id="h-title"></h1><p class="muted" id="h-when"></p><p class="err" id="h-off" hidden>Esta invitación ya no está activa.</p>
+      <div class="stats"><div class="stat"><b id="s-yes">0</b><span>asistentes</span></div><div class="stat"><b id="s-no">0</b><span>no van</span></div><div class="stat"><b id="s-n">0</b><span>respuestas</span></div></div>
+      <div class="btns"><button type="button" class="btn gold" id="share">Compartir resumen</button><button type="button" class="btn ghost" id="reload">Actualizar</button></div></section>
+    <section class="card"><h2>Respuestas</h2><div class="rs" id="rs"></div><p class="muted" id="rs-empty" hidden>Aún no hay respuestas.</p></section>
+    <section class="card"><h2>Enlace para invitados</h2><div class="cp"><input id="inv" readonly><button type="button" class="btn ghost" id="cp-inv">Copiar</button></div>
+      <h2>Enlaces personalizados</h2><p class="muted small">Pega un nombre por línea y obtén un enlace que saluda a cada invitado por su nombre.</p>
+      <textarea id="names" placeholder="María&#10;Juan Pérez"></textarea><button type="button" class="btn gold" id="gen">Generar enlaces</button><textarea id="links" readonly hidden></textarea><button type="button" class="btn ghost" id="cp-links" hidden>Copiar todos</button></section>
+  </div>
+</main>
+<div class="toast" id="toast" hidden></div>
+<script src="../config.js"></script>
+<script src="anfitrion.js?v=1"></script>
+</body>
+</html>

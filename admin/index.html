@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Administración · Invitaciones · Poseidón</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#040a14">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src https://*.supabase.co; base-uri 'none'; form-action 'none'">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/admin.css?v=1">
+</head>
+<body>
+<header class="ah"><img src="../assets/logo.png" alt="" width="40" height="40"><div><strong>Invitaciones interactivas</strong><small>Administración privada · Poseidón</small></div><button type="button" class="btn ghost" id="logout" hidden>Salir</button></header>
+
+<main class="wrap">
+  <!-- Acceso -->
+  <section class="card" id="v-login">
+    <h1>Entrar</h1>
+    <p class="muted">Escribe tu clave de administrador. Solo tú la conoces.</p>
+    <label class="f"><span>Clave</span><input id="key" type="password" autocomplete="current-password" placeholder="••••••••••"></label>
+    <p class="err" id="e-login" hidden></p>
+    <button type="button" class="btn gold" id="go">Entrar</button>
+  </section>
+
+  <!-- Lista -->
+  <section id="v-list" hidden>
+    <div class="row-head"><h1>Mis invitaciones</h1><button type="button" class="btn gold" id="new">+ Nueva invitación</button></div>
+    <p class="muted" id="list-empty" hidden>Todavía no hay ninguna. Toca «Nueva invitación» para crear la primera.</p>
+    <div id="items" class="items"></div>
+  </section>
+
+  <!-- Formulario -->
+  <section id="v-form" hidden>
+    <div class="row-head"><h1 id="f-h">Nueva invitación</h1><button type="button" class="btn ghost" id="back">‹ Volver a la lista</button></div>
+    <form id="form" autocomplete="off" novalidate>
+      <fieldset class="card"><legend>1 · Cliente y cobro <em>(solo tú lo ves)</em></legend>
+        <label class="f"><span>Nombre del cliente *</span><input id="client" maxlength="80" placeholder="Ej. Familia Andrade / Empresa Mariscos del Sur"></label>
+        <label class="f"><span>WhatsApp del cliente</span><input id="contact" maxlength="30" inputmode="tel" placeholder="Ej. 0991234567"></label>
+        <label class="f"><span>Notas (precio, forma de pago, pendientes)</span><textarea id="notes" rows="2" maxlength="400" placeholder="Ej. $25 pagado por transferencia el 10/11"></textarea></label>
+        <label class="chk"><input type="checkbox" id="active" checked> Invitación activa (si la desactivas, el enlace deja de abrir)</label>
+      </fieldset>
+
+      <fieldset class="card"><legend>2 · Ocasión</legend>
+        <label class="f"><span>Tipo de invitación *</span>
+          <select id="theme"><option value="navidad">Cena navideña</option><option value="fin">Fin de año</option><option value="boda">Boda o aniversario</option><option value="cumple">Cumpleaños</option><option value="cita">Cita romántica</option></select></label>
+        <button type="button" class="btn ghost" id="load-def">Cargar los textos de ejemplo de esta ocasión</button>
+        <p class="muted small">Al cambiar de ocasión puedes cargar el ejemplo para ir editándolo en vez de escribir todo desde cero.</p>
+      </fieldset>
+
+      <fieldset class="card"><legend>3 · Textos principales</legend>
+        <label class="f"><span>Frase del sobre cerrado</span><input id="lead" maxlength="60"><small>Aparece sobre el sobre antes de abrirlo.</small></label>
+        <label class="f"><span>Línea «Para …» del sobre</span><input id="to" maxlength="60"><small>Si el anfitrión usa enlaces personales, se cambia por «Para Ana».</small></label>
+        <label class="f"><span>Quién invita (primera línea de la tarjeta)</span><input id="host" maxlength="90" placeholder="Ej. La familia Andrade te invita a la"></label>
+        <label class="f"><span>Título grande *</span><input id="title" maxlength="60" placeholder="Ej. Cena de Navidad"></label>
+        <label class="f"><span>Mensaje</span><textarea id="msg" rows="2" maxlength="220"></textarea></label>
+      </fieldset>
+
+      <fieldset class="card"><legend>4 · Cuándo y dónde</legend>
+        <label class="f"><span>Fecha y hora del evento *</span><input id="date" type="datetime-local"></label>
+        <label class="f"><span>Cuenta regresiva hasta <em>(opcional)</em></span><input id="target" type="datetime-local"><small>Déjalo vacío para contar hasta la hora del evento. En fin de año suele ser la medianoche.</small></label>
+        <label class="f"><span>Nombre del lugar</span><input id="place" maxlength="120" placeholder="Ej. Casa de los Andrade, Pedernales"></label>
+        <label class="f"><span>Ciudad y país (para el mapa)</span><input id="mapq" maxlength="80" placeholder="Ej. Pedernales, Manabí, Ecuador"></label>
+      </fieldset>
+
+      <fieldset class="card"><legend>5 · Itinerario <em>(vacío = no se muestra)</em></legend>
+        <div id="it-rows" class="rows"></div><button type="button" class="btn ghost" id="it-add">+ Agregar momento</button>
+      </fieldset>
+
+      <fieldset class="card"><legend>6 · Vestimenta <em>(sin texto = no se muestra)</em></legend>
+        <label class="f"><span>Qué deben ponerse</span><input id="dress" maxlength="140"></label>
+        <div class="colors"><label>Color 1<input type="color" id="c1"></label><label>Color 2<input type="color" id="c2"></label><label>Color 3<input type="color" id="c3"></label></div>
+      </fieldset>
+
+      <fieldset class="card"><legend>7 · Menú <em>(vacío = no se muestra)</em></legend>
+        <div id="me-rows" class="rows"></div><button type="button" class="btn ghost" id="me-add">+ Agregar plato</button>
+      </fieldset>
+
+      <fieldset class="card"><legend>8 · Dato extra <em>(sin título = no se muestra)</em></legend>
+        <label class="f"><span>Título</span><input id="x-t" maxlength="40" placeholder="Ej. Amigo secreto, Regalos, Una sola regla"></label>
+        <label class="f"><span>Texto</span><textarea id="x-x" rows="2" maxlength="220"></textarea></label>
+      </fieldset>
+
+      <fieldset class="card"><legend>9 · Confirmación de asistencia</legend>
+        <label class="f"><span>Pregunta</span><input id="r-q" maxlength="60"></label>
+        <label class="f"><span>Botón «sí»</span><input id="r-y" maxlength="30"></label>
+        <label class="f"><span>Botón «no»</span><input id="r-n" maxlength="30"></label>
+      </fieldset>
+
+      <fieldset class="card"><legend>10 · Versión empresa <em>(opcional)</em></legend>
+        <label class="f"><span>Logo de la empresa</span><input type="file" id="logo" accept="image/png,image/jpeg,image/webp"><small>Se reduce solo. Mejor con fondo transparente (PNG).</small></label>
+        <div class="logo-prev" id="logo-prev" hidden><img id="logo-img" alt=""><button type="button" class="btn ghost" id="logo-del">Quitar logo</button></div>
+        <label class="chk"><input type="checkbox" id="use-accent"> Usar el color de la empresa en la invitación</label>
+        <label class="f"><span>Color de la empresa</span><input type="color" id="accent" value="#009ee7"></label>
+        <label class="f"><span>Firma al pie de la tarjeta</span><input id="sign" maxlength="80" placeholder="Ej. Con cariño, Gerencia General"></label>
+      </fieldset>
+
+      <fieldset class="card"><legend>11 · Enlace</legend>
+        <label class="f"><span>Nombre del enlace <em>(opcional)</em></span><input id="slug" maxlength="54" placeholder="Se arma solo con el nombre del cliente"><small>Solo letras, números y guiones. Ej. cena-andrade</small></label>
+      </fieldset>
+
+      <p class="err" id="e-form" hidden></p>
+      <div class="sticky"><button type="submit" class="btn gold big" id="save">Guardar invitación</button></div>
+    </form>
+  </section>
+
+  <!-- Resultado -->
+  <section class="card" id="v-done" hidden>
+    <h1>¡Invitación lista!</h1>
+    <p class="muted">Estos son los enlaces. Cópialos o envíale el mensaje al cliente.</p>
+    <label class="f"><span>Enlace de la invitación (lo comparten los invitados)</span><div class="cp"><input id="d-inv" readonly><button type="button" class="btn ghost" data-cp="d-inv">Copiar</button></div></label>
+    <label class="f"><span>Enlace privado del anfitrión (ve quién confirmó)</span><div class="cp"><input id="d-host" readonly><button type="button" class="btn ghost" data-cp="d-host">Copiar</button></div></label>
+    <label class="f"><span>Mensaje listo para el cliente</span><textarea id="d-msg" rows="9" readonly></textarea></label>
+    <div class="btns"><a class="btn gold" id="d-wa" target="_blank" rel="noopener">Enviar por WhatsApp al cliente</a><button type="button" class="btn ghost" data-cp="d-msg">Copiar mensaje</button><a class="btn ghost" id="d-view" target="_blank" rel="noopener">Ver la invitación</a></div>
+    <div class="btns"><button type="button" class="btn ghost" id="d-edit">Seguir editando</button><button type="button" class="btn ghost" id="d-list">Volver a la lista</button></div>
+  </section>
+</main>
+<div class="toast" id="toast" hidden></div>
+<script src="../config.js?v=1"></script>
+<script src="../invitacion/defaults.js?v=1"></script>
+<script src="../js/admin.js?v=1"></script>
+</body>
+</html>

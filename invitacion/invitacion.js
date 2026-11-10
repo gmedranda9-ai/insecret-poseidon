@@ -14,48 +14,8 @@
   };
   var CHEV = '<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>';
 
-  var T = {
-    navidad: { glyph: 'N', lead: 'Tienes una invitación', to: 'Para la familia y los amigos', host: 'La familia Andrade te invita a la', title: 'Cena de Navidad',
-      msg: 'Una noche para brindar, comer rico y estar juntos.', date: '2026-12-24T20:00', place: 'Casa de los Andrade, Pedernales', mapq: 'Pedernales, Manabí, Ecuador', orn: 'pino',
-      fx: 'nieve', chime: [523.25, 659.25, 783.99, 1046.5],
-      it: [['20:00', 'Llegada y brindis de bienvenida'], ['21:00', 'Cena navideña'], ['23:00', 'Intercambio de amigo secreto'], ['00:00', 'Feliz Navidad: abrazos y villancicos']],
-      dress: ['Rojo, verde o dorado. Un detalle navideño suma.', ['#b3202f', '#1d4a37', '#e0b04b']],
-      menu: [['Entrada', 'Ensalada de manzana y nueces'], ['Fuerte', 'Pavo al horno con puré'], ['Postre', 'Pristiños y chocolate caliente']],
-      extra: ['gi', 'Amigo secreto', 'Trae un regalo de máximo $10 envuelto, con el nombre de tu amigo secreto. Lo repartimos a las 23:00.'],
-      rsvp: ['¿Nos acompañas?', 'Sí, voy', 'No puedo'] },
-    fin: { glyph: '27', lead: 'Se acerca la medianoche', to: 'Para ti y tu acompañante', host: 'Despide el año con nosotros en la', title: 'Noche de fin de año',
-      msg: 'Brindamos por lo vivido y recibimos el 2027 a medianoche.', date: '2026-12-31T21:00', target: '2027-01-01T00:00', place: 'Terraza del Mar, Manta', mapq: 'Manta, Manabí, Ecuador', orn: 'burbujas',
-      fx: 'chispas', chime: [392, 523.25, 659.25, 783.99],
-      it: [['21:00', 'Cóctel de bienvenida'], ['22:30', 'Cena servida'], ['23:50', 'Cuenta regresiva'], ['00:00', 'Brindis con champán'], ['00:30', 'Baile hasta el amanecer']],
-      dress: ['Blanco y dorado. Brillos bienvenidos.', ['#f6f1e6', '#d8bd82', '#0a0f2a']],
-      menu: [['Cóctel', 'Mini canapés y espumante'], ['Cena', 'Lomo en salsa de vino'], ['Brindis', 'Champán y uvas de la suerte']],
-      extra: ['gi', 'Las 12 uvas', 'Habrá 12 uvas para cada uno. Pide un deseo con cada campanada.'],
-      rsvp: ['¿Brindas con nosotros?', 'Sí, voy', 'No puedo'] },
-    boda: { glyph: '&', lead: 'Nos casamos', to: 'Con todo nuestro cariño', host: 'Ana y Diego te invitan a su', title: 'Ana & Diego',
-      msg: 'Después de siete años, decimos que sí. Queremos que estés ahí.', date: '2027-02-20T16:00', place: 'Jardín Los Cocos, Portoviejo', mapq: 'Portoviejo, Manabí, Ecuador', orn: 'olivo',
-      fx: 'petalos', chime: [440, 554.37, 659.25, 880],
-      it: [['16:00', 'Ceremonia en el jardín'], ['17:00', 'Cóctel y fotos'], ['19:00', 'Cena'], ['21:00', 'Primer baile y fiesta'], ['23:30', 'Despedida con luces']],
-      dress: ['Formal en tonos pastel. Evita el blanco: es de la novia.', ['#e8c9c0', '#b9c7b0', '#d8c38a']],
-      menu: [['Cóctel', 'Ceviche en copa y canapés'], ['Cena', 'Filete con risotto o corvina al coco'], ['Postre', 'Torta de bodas y mesa de dulces']],
-      extra: ['gi', 'Tu mejor regalo', 'Tu presencia es lo que más queremos. Si deseas tener un detalle, habrá una urna de sobres en la entrada.'],
-      rsvp: ['¿Nos acompañas en este día?', 'Con mucho gusto', 'No podré ir'] },
-    cumple: { glyph: '30', lead: '¡Estás invitado a la fiesta!', to: 'Para mis favoritos', host: 'Daniela te invita a su fiesta de', title: 'Daniela cumple 30',
-      msg: 'Piscina, música y pastel. Ven con ganas de bailar.', date: '2027-01-16T16:00', place: 'Quinta Las Palmas, Pedernales', mapq: 'Pedernales, Manabí, Ecuador', orn: 'confeti',
-      fx: 'confeti', chime: [523.25, 659.25, 783.99, 1046.5, 1318.5],
-      it: [['16:00', 'Llegada y piscina'], ['17:30', 'Música y juegos'], ['18:30', 'Pastel y canción'], ['19:30', 'Baile hasta cansarnos']],
-      dress: ['Ropa fresca. Trae traje de baño y toalla.', ['#ff4f9a', '#ffd23f', '#1620b8']],
-      menu: [['Para picar', 'Mini pizzas y nachos'], ['Fuerte', 'Parrillada'], ['Postre', 'Pastel de chocolate y helados']],
-      extra: ['gi', 'Lista de deseos', 'Daniela no necesita nada, pero le encantan los libros, las plantas y los vales de café.'],
-      rsvp: ['¿Vienes a bailar?', 'Voy', 'No puedo'] },
-    cita: { glyph: '♥', lead: 'Alguien quiere verte', to: 'Solo para ti', host: 'Esta noche tengo una invitación para ti:', title: 'Una cena para dos',
-      msg: 'Mesa con velas, buena música y tú. Solo falta que digas que sí.', date: '2027-02-13T20:00', place: 'Terraza El Mirador, Manta', mapq: 'Manta, Manabí, Ecuador', orn: 'corazon',
-      fx: 'corazones', chime: [392, 493.88, 587.33, 783.99],
-      it: [['20:00', 'Nos vemos en la terraza'], ['20:30', 'Cena a la luz de las velas'], ['22:00', 'Postre y un baile lento'], ['23:00', 'Paseo bajo las estrellas']],
-      dress: ['Elegante casual, en tonos vino o negro.', ['#8c1d40', '#e8b4a0', '#2a0f2e']],
-      menu: [['Entrada', 'Carpaccio de res'], ['Fuerte', 'Pasta fresca con camarones'], ['Postre', 'Fondant de chocolate para compartir']],
-      extra: ['gi', 'Una sola regla', 'No traigas nada. Solo trae tu mejor sonrisa y tu historia favorita.'],
-      rsvp: ['¿Aceptas mi invitación?', 'Sí, acepto', 'Otro día'] }
-  };
+  var T = {"navidad": {"glyph": "N", "orn": "pino", "fx": "nieve", "chime": [523.25, 659.25, 783.99, 1046.5]}, "fin": {"glyph": "27", "orn": "burbujas", "fx": "chispas", "chime": [392, 523.25, 659.25, 783.99]}, "boda": {"glyph": "&", "orn": "olivo", "fx": "petalos", "chime": [440, 554.37, 659.25, 880]}, "cumple": {"glyph": "30", "orn": "confeti", "fx": "confeti", "chime": [523.25, 659.25, 783.99, 1046.5, 1318.5]}, "cita": {"glyph": "♥", "orn": "corazon", "fx": "corazones", "chime": [392, 493.88, 587.33, 783.99]}};
+  Object.keys(T).forEach(function (k) { Object.keys(window.INV_DEF[k]).forEach(function (f) { T[k][f] = window.INV_DEF[k][f]; }); });
   var DOW = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
   var MON = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   var cur = 'navidad', tick = null, rsvp = { ans: null, n: 1 }, soundOn = true, dodges = 0, TOYSTATE = {};
@@ -324,7 +284,8 @@
     var q2 = encodeURIComponent(t.place + ', ' + t.mapq);
     var pl = '<div class="mapv"><svg viewBox="0 0 300 150" role="img" aria-label="Mapa ilustrado"><rect width="300" height="150" class="mb"/><g class="mr"><path d="M0 40h300M0 100h300M60 0v150M170 0v150M250 0v150"/></g><path class="mp" d="M30 128H60V100H170V40H250" /><circle cx="30" cy="128" r="5" class="ms"/><g class="pin" transform="translate(250 40)"><circle r="16" class="ring"/><path d="M0 0c-9-12-12-17-12-23a12 12 0 0124 0c0 6-3 11-12 23z" transform="translate(0 -2)" class="pb"/><circle cy="-25" r="4.5" fill="#fff"/></g></svg></div><p><b>' + esc(t.place) + '</b></p><p><a class="btn-map" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&query=' + q2 + '">Cómo llegar · Google Maps</a></p><small>Hay parqueadero cerca. Si vienes en taxi, llega 10 minutos antes.</small>';
     var ex = '<button type="button" class="gift" aria-label="Abrir sorpresa"><svg viewBox="0 0 100 90" width="110"><g class="lid"><rect x="8" y="24" width="84" height="18" rx="3" fill="var(--accent)"/><rect x="45" y="24" width="10" height="18" fill="rgba(255,255,255,.55)"/><path d="M50 24c-14-18-30-6-18 0M50 24c14-18 30-6 18 0" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="4" stroke-linecap="round"/></g><rect x="14" y="42" width="72" height="42" rx="3" fill="var(--accent)" opacity=".85"/><rect x="45" y="42" width="10" height="42" fill="rgba(255,255,255,.55)"/></svg><span>Toca para abrir</span></button><p class="gtx">' + esc(t.extra[2]) + '</p>';
-    $('tiles').innerHTML = tile('it', 'it', 'Itinerario', it) + tile('dr', 'dr', 'Vestimenta', dr) + tile('me', 'me', 'Menú', me) + tile('pl', 'pl', 'Lugar', pl) + tile('ex', t.extra[0], t.extra[1], ex);
+    var has = { it: t.it && t.it.length, dr: t.dress && t.dress[0], me: t.menu && t.menu.length, pl: t.place, ex: t.extra && t.extra[1] };
+    $('tiles').innerHTML = (has.it ? tile('it', 'it', 'Itinerario', it) : '') + (has.dr ? tile('dr', 'dr', 'Vestimenta', dr) : '') + (has.me ? tile('me', 'me', 'Menú', me) : '') + (has.pl ? tile('pl', 'pl', 'Lugar', pl) : '') + (has.ex ? tile('ex', t.extra[0] || 'gi', t.extra[1], ex) : '');
   }
   function setTheme(k) {
     cur = k; var t = T[k], d = parse(t.date);
@@ -408,11 +369,11 @@
   /* ---------- confirmación (demo: no se envía a ningún lado) ---------- */
   function resetRsvp() {
     rsvp = { ans: null, n: 1 }; dodges = 0; $('yes').setAttribute('aria-pressed', 'false'); $('no').setAttribute('aria-pressed', 'false'); $('no').style.transform = '';
-    $('guests').hidden = true; $('note-in').hidden = true; $('dodge').hidden = true; $('g-n').textContent = '1'; $('note').value = ''; $('send').disabled = true; $('send').hidden = false; $('done').hidden = true;
+    $('guests').hidden = true; $('who-in').hidden = true; $('rs-err').hidden = true; $('note-in').hidden = true; $('dodge').hidden = true; $('g-n').textContent = '1'; $('note').value = ''; $('send').disabled = true; $('send').hidden = false; $('done').hidden = true;
   }
   function pick(a) {
     rsvp.ans = a; $('yes').setAttribute('aria-pressed', String(a === 'si')); $('no').setAttribute('aria-pressed', String(a === 'no'));
-    $('guests').hidden = a !== 'si'; $('note-in').hidden = false; $('send').disabled = false;
+    $('guests').hidden = a !== 'si'; $('who-in').hidden = false; $('note-in').hidden = false; $('send').disabled = false;
     if (a === 'si') { burst($('yes')); chime(); }
   }
   $('yes').addEventListener('click', function () { pick('si'); });
@@ -426,10 +387,18 @@
   $('g-minus').addEventListener('click', function () { rsvp.n = Math.max(1, rsvp.n - 1); $('g-n').textContent = rsvp.n; });
   $('g-plus').addEventListener('click', function () { rsvp.n = Math.min(10, rsvp.n + 1); $('g-n').textContent = rsvp.n; });
   $('send').addEventListener('click', function () {
-    $('send').hidden = true; var d = $('done'); d.hidden = false; var note = $('note').value.trim();
-    d.textContent = (rsvp.ans === 'si' ? '¡Listo! Contamos con ' + rsvp.n + (rsvp.n === 1 ? ' persona.' : ' personas.') : 'Gracias por avisar. Te vamos a extrañar.') + (note ? ' Anotamos: «' + note + '».' : '') +
-      ' (Ejemplo: en tu invitación, esta respuesta le llega al anfitrión por WhatsApp.)';
-    if (rsvp.ans === 'si') burst(d);
+    var name = $('who').value.trim(), note = $('note').value.trim(), er = $('rs-err'); er.hidden = true;
+    if (!name) { er.textContent = 'Escribe tu nombre para que sepan quién eres.'; er.hidden = false; $('who').focus(); return; }
+    function ok() {
+      $('send').hidden = true; var d = $('done'); d.hidden = false;
+      d.textContent = (rsvp.ans === 'si' ? '¡Listo, ' + name + '! Contamos con ' + rsvp.n + (rsvp.n === 1 ? ' persona.' : ' personas.') : 'Gracias por avisar, ' + name + '. Te vamos a extrañar.') + (note ? ' Anotamos: «' + note + '».' : '') +
+        (REAL ? '' : ' (Ejemplo: en tu invitación, esta respuesta le llega al anfitrión en su panel privado.)');
+      if (rsvp.ans === 'si') burst(d);
+    }
+    if (!REAL) return ok();
+    var btn = $('send'); btn.disabled = true; btn.textContent = 'Enviando…';
+    rpc('invite_rsvp', { p_slug: SLUG, p_name: name, p_answer: rsvp.ans, p_guests: rsvp.n, p_note: note }).then(function () { btn.textContent = 'Confirmar'; ok(); },
+      function (e) { btn.disabled = false; btn.textContent = 'Confirmar'; er.textContent = e.message === 'BUSY' ? 'Esta invitación ya recibió muchas respuestas. Avísale al anfitrión.' : e.message === 'NOT_FOUND' ? 'Esta invitación ya no está disponible.' : 'No pudimos enviar tu respuesta. Revisa tu internet e inténtalo otra vez.'; er.hidden = false; });
   });
 
   /* ---------- calendario .ics ---------- */
@@ -443,6 +412,42 @@
     document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
   });
 
-  var q = new URLSearchParams(location.search).get('t');
-  setTheme(T[q] ? q : 'navidad');
+  /* ---------- modo real: invitación de un cliente (?i=...) ---------- */
+  var QS = new URLSearchParams(location.search), SLUG = (QS.get('i') || '').toLowerCase().replace(/[^a-z0-9-]/g, ''), GUEST = (QS.get('para') || '').trim().slice(0, 40), REAL = false;
+  function rpc(fn, body) {
+    var C = window.INSECRET_CONFIG || {};
+    return fetch(C.supabaseUrl + '/rest/v1/rpc/' + fn, { method: 'POST', headers: { apikey: C.supabaseKey, Authorization: 'Bearer ' + C.supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) { var e = new Error(j && j.message || 'ERROR'); throw e; } return j; }); },
+        function () { throw new Error('NETWORK'); });
+  }
+  var EDIT = ['lead', 'to', 'host', 'title', 'msg', 'date', 'target', 'place', 'mapq', 'it', 'dress', 'menu', 'extra', 'rsvp'];
+  function applyReal(theme, cfg) {
+    var t = T[theme];
+    EDIT.forEach(function (f) { if (cfg[f] !== undefined && cfg[f] !== null) t[f] = cfg[f]; });
+    if (!cfg.target) delete t.target;
+    var b = cfg.brand || {};
+    if (b.accent && /^#[0-9a-fA-F]{6}$/.test(b.accent)) document.body.style.setProperty('--accent', b.accent);
+    if (b.logo && /^data:image\/(png|jpeg|webp);base64,/.test(b.logo)) { $('brand-logo').src = b.logo; $('brand-logo').hidden = false; }
+    if (b.sign) { $('sign').textContent = b.sign; $('sign').hidden = false; }
+    document.title = (t.title || 'Invitación') + ' · Invitación';
+  }
+  function notFound() {
+    document.body.classList.add('real');
+    document.querySelector('main').innerHTML = '<section class="sell" style="margin-top:20vh"><h2>Esta invitación ya no está disponible</h2><p>Puede que el enlace esté mal escrito o que el evento ya haya pasado. Pídele el enlace al anfitrión.</p><p class="by">Hecho por <a href="https://poseidonmk.com" target="_blank" rel="noopener">Poseidón</a></p></section>';
+  }
+  function start(k) {
+    setTheme(k);
+    if (GUEST) { $('to-line').textContent = 'Para ' + GUEST; $('who').value = GUEST; }
+  }
+  if (SLUG) {
+    document.body.classList.add('real', 'loading');
+    var meta = document.createElement('meta'); meta.name = 'robots'; meta.content = 'noindex,nofollow'; document.head.appendChild(meta);
+    rpc('invite_get', { p_slug: SLUG }).then(function (r) {
+      if (!T[r.theme]) return notFound();
+      REAL = true; applyReal(r.theme, r.config || {}); document.body.classList.remove('loading'); start(r.theme);
+    }, function () { notFound(); });
+  } else {
+    var q = QS.get('t'); start(T[q] ? q : 'navidad');
+  }
+
 })();

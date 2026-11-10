@@ -6,7 +6,7 @@
 <title>Invitaciones interactivas · Poseidón</title>
 <meta name="description" content="Un sobre con sello que se rompe, cuenta regresiva, confirmación de asistencia y calendario. Ejemplo de invitación interactiva hecha por Poseidón.">
 <meta name="theme-color" content="#08190f">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src https://*.supabase.co; base-uri 'none'; form-action 'none'">
 <link rel="canonical" href="https://insecret.poseidonmk.com/invitacion/">
 <meta property="og:site_name" content="Poseidón">
 <meta property="og:locale" content="es_EC">
@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;1,500;1,700&family=Playfair+Display:ital,wght@1,600&family=Bricolage+Grotesque:wght@800&family=Fraunces:ital,opsz,wght@1,9..144,600&family=Italiana&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="invitacion.css?v=6">
+<link rel="stylesheet" href="invitacion.css?v=7">
 </head>
 <body data-theme="navidad">
 
@@ -67,9 +67,11 @@
   <!-- ESCENA 2: la invitación -->
   <article class="card" id="card" hidden>
     <svg class="orn" id="orn" viewBox="0 0 320 90" aria-hidden="true"></svg>
+    <img class="brand-logo" id="brand-logo" alt="" hidden>
     <p class="host rv" id="c-host"></p>
     <h1 class="title" id="c-title"></h1>
     <p class="msg rv" id="c-msg"></p>
+    <p class="sign rv" id="sign" hidden></p>
 
     <div class="when rv">
       <div class="when-day"><span id="c-dow"></span><strong id="c-num"></strong><span id="c-mon"></span></div>
@@ -101,7 +103,9 @@
         <output id="g-n">1</output>
         <button type="button" id="g-plus" aria-label="Una persona más">+</button>
       </div>
+      <label class="note-in" id="who-in" hidden><span>Tu nombre</span><input id="who" type="text" maxlength="60" autocomplete="name" placeholder="Para saber quién eres"></label>
       <label class="note-in" id="note-in" hidden><span>¿Alguna alergia o comentario?</span><input id="note" type="text" maxlength="80" placeholder="Opcional"></label>
+      <p class="dodge err" id="rs-err" role="alert" hidden></p>
       <button type="button" class="send" id="send" disabled>Confirmar</button>
       <p class="done" id="done" hidden></p>
     </div>
@@ -122,6 +126,8 @@
   </section>
 </main>
 
-<script src="invitacion.js?v=6"></script>
+<script src="../config.js?v=1"></script>
+<script src="defaults.js?v=1"></script>
+<script src="invitacion.js?v=8"></script>
 </body>
 </html>

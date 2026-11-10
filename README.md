@@ -52,3 +52,9 @@ Sorteador de amigo secreto navideño de **Poseidón**. Sitio estático (HTML/CSS
 
 - Panel del organizador: «Rehacer el sorteo» (prellena el formulario con los nombres; el sorteo viejo sigue vivo hasta crear el nuevo y entonces se borra) y «Eliminar este sorteo» (borra todo, sin deshacer).
 - RPC `org_delete(p_org_token)` y `organizer_status` ahora devuelve `message`.
+
+## v12 · Generador de invitaciones (modo asistido)
+- `/admin/` (privado, noindex): login con clave de administrador (hash bcrypt en `insecret.admin_cfg`; 5 fallos = bloqueo 15 min). Lista, crea, edita y elimina invitaciones; versión empresa (logo, color, firma); genera enlace de invitación, enlace del panel del anfitrión y mensaje listo para WhatsApp.
+- Clave: se crea una sola vez en el SQL Editor de Supabase con `select insecret.set_admin_key('...');` (mín. 10 caracteres). Nunca se pega en el chat ni en el código.
+- `/invitacion/?i=slug[&para=Nombre]`: invitación real. `/anfitrion/?h=TOKEN`: panel con respuestas, resumen para WhatsApp y enlaces personalizados.
+- Las invitaciones y respuestas se borran 7 días después del evento (pg_cron).
