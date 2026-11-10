@@ -221,3 +221,14 @@ body{background:radial-gradient(110% 70% at 50% -5%,#06223d 0%,#040f1d 40%,#040a
 .mail-d .m-b2{background:transparent!important;border:2px solid #e3c27a!important;color:#e3c27a!important}
 .mail-d .m-sign{border-top:1px solid rgba(227,194,122,.25);color:#e3c27a;font-style:italic;font-family:Georgia,serif}
 @media(max-width:720px){.two{grid-template-columns:1fr}}
+
+.col-mail{margin-top:18px;padding-top:14px;border-top:1px dashed rgba(227,194,122,.35)}
+.col-mail .emp-cap{text-align:center;margin:0 0 10px}
+.col-mail .mail{max-width:none;width:100%;margin:0 auto}
+.col-mail .m-meta{text-align:left;font-size:.72rem}
+.col-mail .m-meta>div{display:flex;gap:8px;flex-wrap:wrap}
+
+.doors-emp{max-width:980px;margin:14px auto 0;padding:0 18px}
+.door-e{display:flex;align-items:center;gap:16px;padding:18px 22px;border-radius:22px;text-decoration:none;color:#fff;background:linear-gradient(120deg,rgba(227,194,122,.16),rgba(0,158,231,.1));border:1px solid rgba(227,194,122,.5);transition:transform .2s,box-shadow .3s}
+.door-e:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(227,194,122,.18)}
+.e-ic{font-size:2rem}.e-tx{flex:1;display:flex;flex-direction:column;gap:3px}.e-tx b{font:700 1.2rem 'Playfair Display',serif;color:#e3c27a}.e-tx small{opacity:.78;font-size:.88rem;line-height:1.4}.door-e i{font-style:normal;font-size:1.4rem;color:#e3c27a}

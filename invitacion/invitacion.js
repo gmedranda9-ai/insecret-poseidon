@@ -360,11 +360,10 @@
       var w = document.createElement('div'); w.className = 'sg'; w.id = g[0]; g[1][0].parentNode.insertBefore(w, g[1][0]); g[1].forEach(function (n) { w.appendChild(n); }); SG[g[0]] = w;
     });
     [1, 2, 3].forEach(function (n) {
-      var d = document.createElement('div'); d.className = 'sn'; d.id = 'sn' + n; d.hidden = true; d.innerHTML = '<button type="button" class="story-btn" data-n="' + n + '"></button>' + (n === 1 ? '<button type="button" class="story-all" id="story-all">Ver todo de una vez</button>' : '');
+      var d = document.createElement('div'); d.className = 'sn'; d.id = 'sn' + n; d.hidden = true; d.innerHTML = '<button type="button" class="story-btn" data-n="' + n + '"></button>';
       SG['sg' + (n + 1)].parentNode.insertBefore(d, SG['sg' + (n + 1)]);
       d.querySelector('.story-btn').addEventListener('click', function () { revealStep(n); });
     });
-    $('story-all').addEventListener('click', function () { [1, 2, 3].forEach(function (n) { $('sn' + n).hidden = true; SG['sg' + (n + 1)].classList.add('show'); }); lights(true); });
   }
   function revealStep(n) {
     $('sn' + n).hidden = true; var g = SG['sg' + (n + 1)]; g.classList.add('show');
