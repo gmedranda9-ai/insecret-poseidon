@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/styles.css?v=13">
+<link rel="stylesheet" href="../css/styles.css?v=14">
 </head>
 <body>
 <canvas id="snow" aria-hidden="true"></canvas>
@@ -228,6 +228,8 @@
     </div>
 
     <section class="how-wrap" id="como" aria-label="Cómo funciona">
+      <button type="button" class="how-toggle" id="how-toggle" aria-expanded="false" aria-controls="how-body" hidden><span id="how-lbl">Ver cómo funciona</span> <i aria-hidden="true">▾</i></button>
+      <div class="how-body" id="how-body"><div class="how-in">
       <h2 class="how-title">¿Cómo funciona?</h2>
       <p class="muted how-sub">Tú haces los primeros cuatro pasos. Lo demás lo hace cada participante.</p>
       <div class="how-grid">
@@ -240,6 +242,7 @@
         <article class="hcard hcard-alt"><span class="hnum">7</span><i class="hico">🔑</i><h3>Si eres organizador</h3><p>Vuelves a tu panel desde cualquier teléfono con tu WhatsApp y tu PIN de organizador. Ahí ves quién ya abrió su regalo.</p></article>
         <article class="hcard hcard-alt"><span class="hnum">8</span><i class="hico">🤫</i><h3>Secreto de verdad</h3><p>El sorteo lo hace nuestro servidor. Nadie ve quién le toca a quién, ni siquiera quien organiza. Si tú juegas, también te sorprendes.</p></article>
       </div>
+      </div></div>
     </section>
   </section>
 
@@ -463,9 +466,9 @@
 
 <noscript><p style="padding:2rem;text-align:center;color:#fff">InSecret necesita JavaScript para funcionar.</p></noscript>
 
-<script src="../config.js?v=13"></script>
-<script src="../js/api.js?v=13"></script>
-<script src="../js/fx.js?v=13"></script>
-<script src="../js/app.js?v=13"></script>
+<script src="../config.js?v=14"></script>
+<script src="../js/api.js?v=14"></script>
+<script src="../js/fx.js?v=14"></script>
+<script src="../js/app.js?v=14"></script>
 </body>
 </html>

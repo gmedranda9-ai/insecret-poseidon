@@ -404,3 +404,12 @@ textarea{resize:vertical}
   .topbar .pill-home{grid-column:3;grid-row:1}
   .topbar .pill-org{grid-column:1/-1;grid-row:2;width:100%}
 }
+/* v14: cómo funciona plegable */
+.how-body{display:grid;grid-template-rows:1fr;transition:grid-template-rows .45s cubic-bezier(.3,.8,.3,1)}
+.how-in{overflow:hidden;min-height:0}
+.how-wrap.collapsed .how-body{grid-template-rows:0fr}
+.how-wrap.collapsed{margin-top:18px;padding-bottom:40px}
+.how-toggle{display:flex;align-items:center;justify-content:center;gap:.5rem;margin:0 auto 14px;font:500 .95rem 'Outfit',system-ui,sans-serif;color:var(--gold);background:rgba(254,212,5,.08);border:1px dashed rgba(254,212,5,.5);border-radius:999px;padding:.6rem 1.2rem;cursor:pointer}
+.how-toggle[hidden]{display:none}
+.how-toggle i{font-style:normal;transition:transform .3s}
+.how-toggle[aria-expanded=true] i{transform:rotate(180deg)}

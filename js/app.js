@@ -56,12 +56,20 @@
   function todayISO() { var d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); }
 
   /* ---------- Stepper ---------- */
+  /* "Cómo funciona": abierto en el paso 1; del paso 2 en adelante queda plegado con un botón */
+  function setHow(open, withBtn) {
+    var w = $('como'), t = $('how-toggle'); if (!w || !t) return;
+    w.classList.toggle('collapsed', !open); t.setAttribute('aria-expanded', String(open));
+    $('how-lbl').textContent = open ? 'Ocultar cómo funciona' : 'Ver cómo funciona';
+    t.hidden = (S.step === 1);
+  }
   function go(step, quiet) {
     S.step = step;
     document.querySelectorAll('[data-panel]').forEach(function (p) { p.hidden = Number(p.dataset.panel) !== step; });
     document.querySelectorAll('#stepper li').forEach(function (li) {
       var n = Number(li.dataset.step); li.classList.toggle('active', n === step); li.classList.toggle('done', n < step);
     });
+    setHow(step === 1);
     if (step === 3) renderStep3();
     if (step === 4) renderSummary();
     if (!quiet) $('stepper').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -429,5 +437,7 @@
     renderMine();
     show('wizard'); go(1, true); window.scrollTo({ top: 0 });
   }
+  $('how-toggle').addEventListener('click', function () { setHow(this.getAttribute('aria-expanded') !== 'true'); if (this.getAttribute('aria-expanded') === 'true') $('como').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  document.querySelectorAll('a[href="#como"]').forEach(function (l) { l.addEventListener('click', function () { setHow(true); }); });
   boot();
 })();
