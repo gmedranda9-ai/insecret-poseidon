@@ -296,7 +296,29 @@
       '<path class="star" d="M150 6l5 11 12 1-9 8 3 12-11-7-11 7 3-12-9-8 12-1z" fill="#ffd86b"/>' +
       bulbs.map(function (b, i) { return '<circle class="bl" cx="' + b[0] + '" cy="' + b[1] + '" r="5" fill="' + cols[i % 5] + '" style="color:' + cols[i % 5] + ';--d:' + ((i * 37 % 10) / 10).toFixed(1) + '"/>'; }).join('') + '</svg>';
   }
-  var DECO = { navidad: treeSvg };
+  function fireSvg() {
+    var cols = ['#ffd86b', '#4fd8ff', '#ffffff', '#ff8fd0'], B = [[80, 82], [150, 44], [225, 90], [112, 128], [196, 138]], out = '';
+    B.forEach(function (b, k) {
+      var c = cols[k % 4], l = '';
+      for (var i = 0; i < 14; i++) { var a = i / 14 * Math.PI * 2, x2 = b[0] + Math.cos(a) * 34, y2 = b[1] + Math.sin(a) * 34, x1 = b[0] + Math.cos(a) * 12, y1 = b[1] + Math.sin(a) * 12; l += '<line x1="' + x1.toFixed(1) + '" y1="' + y1.toFixed(1) + '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '"/><circle cx="' + (b[0] + Math.cos(a) * 40).toFixed(1) + '" cy="' + (b[1] + Math.sin(a) * 40).toFixed(1) + '" r="1.8"/>'; }
+      out += '<g class="fw" style="--d:' + (k * .55).toFixed(2) + 's;transform-origin:' + b[0] + 'px ' + b[1] + 'px;color:' + c + '" stroke="' + c + '" fill="' + c + '" stroke-width="2.4" stroke-linecap="round">' + l + '</g>';
+    });
+    return '<svg viewBox="0 0 300 250">' + out + '</svg>';
+  }
+  function ringsSvg() {
+    var sp = ''; [[70, 50], [236, 60], [150, 22], [92, 150], [214, 148]].forEach(function (s, i) { sp += '<path class="spk" style="--d:' + (i * .4) + 's;transform-origin:' + s[0] + 'px ' + s[1] + 'px" d="M' + s[0] + ' ' + (s[1] - 9) + 'q1 8 9 9q-8 1-9 9q-1-8-9-9q8-1 9-9z" fill="#fff4c9"/>'; });
+    return '<svg viewBox="0 0 300 250"><defs><linearGradient id="gr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff2c4"/><stop offset=".5" stop-color="#d9b04a"/><stop offset="1" stop-color="#9c7a2c"/></linearGradient></defs><g class="rings"><circle cx="124" cy="104" r="44" fill="none" stroke="url(#gr)" stroke-width="9"/><circle cx="176" cy="104" r="44" fill="none" stroke="url(#gr)" stroke-width="9"/><path d="M150 66a44 44 0 010 76" fill="none" stroke="url(#gr)" stroke-width="9"/></g>' + sp + '</svg>';
+  }
+  function balloonsSvg() {
+    var B = [[88, 98, '#ff4f9a', 0], [150, 64, '#fed405', .7], [212, 100, '#02d4fc', 1.4]], o = '';
+    B.forEach(function (b) { o += '<g class="bal" style="--d:' + b[3] + 's;transform-origin:' + b[0] + 'px 260px"><path d="M' + b[0] + ' ' + (b[1] + 40) + 'Q' + (b[0] + 8) + ' 190 150 262" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6"/><ellipse cx="' + b[0] + '" cy="' + b[1] + '" rx="31" ry="39" fill="' + b[2] + '"/><ellipse cx="' + (b[0] - 10) + '" cy="' + (b[1] - 14) + '" rx="7" ry="11" fill="rgba(255,255,255,.45)"/><path d="M' + b[0] + ' ' + (b[1] + 39) + 'l-5 8h10z" fill="' + b[2] + '"/></g>'; });
+    return '<svg viewBox="0 0 300 250">' + o + '</svg>';
+  }
+  function heartSvg() {
+    var s = ''; [[60, 150, .0], [244, 140, .6], [96, 60, 1.2], [214, 52, 1.8]].forEach(function (h, i) { s += '<path class="fh" style="--d:' + h[2] + 's" transform="translate(' + h[0] + ' ' + h[1] + ') scale(.22)" d="M0 40C-60 0 -60-50 -25-50 -10-50 0-38 0-30 0-38 10-50 25-50 60-50 60 0 0 40z" fill="#ff8fa8"/>'; });
+    return '<svg viewBox="0 0 300 250"><defs><radialGradient id="hg" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#ffb3c4"/><stop offset="1" stop-color="#e0446a"/></radialGradient></defs><g class="hb"><path d="M150 150C86 108 86 50 124 50 140 50 150 63 150 72 150 63 160 50 176 50 214 50 214 108 150 150z" fill="url(#hg)"/><path d="M122 66q-10 6-8 22" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="4" stroke-linecap="round"/></g>' + s + '</svg>';
+  }
+  var DECO = { navidad: treeSvg, fin: fireSvg, boda: ringsSvg, cumple: balloonsSvg, cita: heartSvg };
   function mapHref(t) { return /^https:\/\/(www\.google\.[a-z.]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps|maps\.google\.[a-z.]+)/i.test(t.maplink || '') ? t.maplink : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(t.place + ', ' + (t.mapq || '')); }
   function mapEmbed(t) {
     var m = (t.maplink || '').match(/@(-?\d+\.\d+),(-?\d+\.\d+)/), q = m ? m[1] + ',' + m[2] : t.place + ', ' + (t.mapq || '');

@@ -63,8 +63,8 @@
   $('d-list').addEventListener('click', loadList);
 
   /* ---------- formulario ---------- */
-  function rowIt(t, x) { var d = document.createElement('div'); d.className = 'rw'; d.innerHTML = '<input type="time" value="' + esc(t || '') + '" aria-label="Hora"><input maxlength="80" value="' + esc(x || '') + '" placeholder="Qué pasa" aria-label="Momento"><button type="button" class="x" aria-label="Quitar">✕</button>'; d.querySelector('.x').onclick = function () { d.remove(); }; $('it-rows').appendChild(d); }
-  function rowMe(a, b) { var d = document.createElement('div'); d.className = 'rw two'; d.innerHTML = '<input maxlength="30" value="' + esc(a || '') + '" placeholder="Entrada" aria-label="Tipo"><input maxlength="90" value="' + esc(b || '') + '" placeholder="Plato" aria-label="Plato"><button type="button" class="x" aria-label="Quitar">✕</button>'; d.querySelector('.x').onclick = function () { d.remove(); }; $('me-rows').appendChild(d); }
+  function rowIt(t, x, box) { var d = document.createElement('div'); d.className = 'rw'; d.innerHTML = '<input type="time" value="' + esc(t || '') + '" aria-label="Hora"><input maxlength="80" value="' + esc(x || '') + '" placeholder="Qué pasa" aria-label="Momento"><button type="button" class="x" aria-label="Quitar">✕</button>'; d.querySelector('.x').onclick = function () { d.remove(); }; (box || $('it-rows')).appendChild(d); }
+  function rowMe(a, b, box) { var d = document.createElement('div'); d.className = 'rw two'; d.innerHTML = '<input maxlength="30" value="' + esc(a || '') + '" placeholder="Entrada" aria-label="Tipo"><input maxlength="90" value="' + esc(b || '') + '" placeholder="Plato" aria-label="Plato"><button type="button" class="x" aria-label="Quitar">✕</button>'; d.querySelector('.x').onclick = function () { d.remove(); }; (box || $('me-rows')).appendChild(d); }
   $('it-add').onclick = function () { rowIt('', ''); };
   $('me-add').onclick = function () { rowMe('', ''); };
 
@@ -159,7 +159,7 @@
   $('c-list').addEventListener('input', function () { var n = parseList().length; $('c-count').textContent = n + (n === 1 ? ' persona' : ' personas'); });
   $('c-ss').addEventListener('change', function () { $('c-ssbox').hidden = !this.checked; });
   $('new-comp').addEventListener('click', function () {
-    CINV = null; setCLogo(''); $('c-occ').value = 'navidad'; fillOcc(); $('c-res').hidden = true; $('c-err').hidden = true; view('comp');
+    CINV = null; setCLogo(''); $('c-it-rows').innerHTML = ''; $('c-me-rows').innerHTML = ''; $('c-dress').value = ''; $('c-x-t').value = ''; $('c-x-x').value = ''; $('c-occ').value = 'navidad'; fillOcc(); $('c-res').hidden = true; $('c-err').hidden = true; view('comp');
   });
   $('comp-back').addEventListener('click', loadList);
   function cerr(t) { $('c-err').textContent = t; $('c-err').hidden = false; $('c-err').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
@@ -170,12 +170,16 @@
   function exDate() { return ($('c-same').checked && $('c-occ').value && $('c-when').value) ? $('c-when').value.slice(0, 10) : $('c-date').value; }
   function syncSame() { var can = !!$('c-occ').value; $('c-same-w').hidden = !can; $('c-date-w').hidden = can && $('c-same').checked; }
   $('c-same').addEventListener('change', syncSame);
+  $('c-it-add').onclick = function () { rowIt('', '', $('c-it-rows')); };
+  $('c-me-add').onclick = function () { rowMe('', '', $('c-me-rows')); };
+  $('c-ex').onclick = function () { var d = DEF[$('c-occ').value] || {}; $('c-it-rows').innerHTML = ''; (d.it || []).forEach(function (r) { rowIt(r[0], r[1], $('c-it-rows')); }); $('c-me-rows').innerHTML = ''; (d.menu || []).forEach(function (r) { rowMe(r[0], r[1], $('c-me-rows')); }); $('c-dress').value = (d.dress && d.dress[0]) || ''; var cs = (d.dress && d.dress[1]) || []; if (cs[0]) { $('c-c1').value = cs[0]; $('c-c2').value = cs[1]; $('c-c3').value = cs[2]; } $('c-x-t').value = (d.extra && d.extra[1]) || ''; $('c-x-x').value = (d.extra && d.extra[2]) || ''; };
   function fillOcc() { var k = $('c-occ').value; $('c-invbox').hidden = !k; syncSame(); if (k) { var d = DEF[k] || {}; $('c-title').value = d.title || ''; $('c-place').value = ''; $('c-imsg').value = d.msg || ''; } }
   $('c-occ').addEventListener('change', fillOcc);
+  function rows(box) { return [].map.call(box.children, function (r) { var i = r.querySelectorAll('input'); return [i[0].value.trim(), i[1].value.trim()]; }).filter(function (r) { return r[1]; }); }
   function ensureInvite() {
     var k = $('c-occ').value; if (!k) return Promise.resolve({ slug: '' });
     var d = DEF[k] || {}, cfg = JSON.parse(JSON.stringify(d));
-    cfg.title = $('c-title').value.trim(); cfg.date = $('c-when').value; cfg.place = $('c-place').value.trim(); cfg.msg = $('c-imsg').value.trim(); cfg.host = $('c-co').value.trim(); cfg.mapq = $('c-city').value.trim(); cfg.maplink = $('c-maplink').value.trim(); cfg.noguests = true; cfg.it = []; cfg.menu = []; cfg.dress = ['', ['#888888', '#aaaaaa', '#cccccc']]; cfg.extra = ['gi', '', ''];
+    cfg.title = $('c-title').value.trim(); cfg.date = $('c-when').value; cfg.place = $('c-place').value.trim(); cfg.msg = $('c-imsg').value.trim(); cfg.host = $('c-co').value.trim(); cfg.mapq = $('c-city').value.trim(); cfg.maplink = $('c-maplink').value.trim(); cfg.noguests = true; cfg.it = rows($('c-it-rows')); cfg.menu = rows($('c-me-rows')); cfg.dress = [$('c-dress').value.trim(), [$('c-c1').value, $('c-c2').value, $('c-c3').value]]; cfg.extra = ['gi', $('c-x-t').value.trim(), $('c-x-x').value.trim()];
     delete cfg.target; var br = { accent: $('c-accent').value }; if (CLOGO) br.logo = CLOGO; if ($('c-sign').value.trim()) br.sign = $('c-sign').value.trim(); cfg.brand = br;
     var slug = CINV ? CINV.slug : slugify($('c-co').value) + '-' + k;
     return rpc('admin_save', { p_key: KEY, p_id: CINV ? CINV.id : null, p_slug: slug, p_theme: k, p_client: $('c-co').value.trim(), p_contact: '', p_notes: 'Paquete Empresa', p_config: cfg, p_active: true }).then(function (r) { if (r.error || r.message) { cerr(msg(r)); return null; } CINV = { id: r.id, slug: r.slug, host: r.host_token }; return CINV; });

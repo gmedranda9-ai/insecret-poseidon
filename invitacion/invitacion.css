@@ -322,7 +322,7 @@ body.loading main{visibility:hidden}
 .stage{position:relative}.env-wrap{position:relative;z-index:2}
 .deco{position:absolute;left:50%;top:0;width:min(66vw,270px);transform:translateX(-50%);pointer-events:none;z-index:1}
 .deco svg{display:block;width:100%;height:auto;overflow:visible}
-body[data-theme=navidad] .stage{padding-top:150px}
+.stage{padding-top:150px}
 .deco .bl{animation:tw 1.7s ease-in-out infinite alternate;animation-delay:calc(var(--d)*1s);filter:drop-shadow(0 0 5px currentColor)}
 .deco .star{animation:starp 2.6s ease-in-out infinite;transform-origin:150px 22px;filter:drop-shadow(0 0 10px #ffd86b)}
 @keyframes tw{0%{opacity:.25;transform:scale(.8)}100%{opacity:1;transform:scale(1.15)}}
@@ -333,3 +333,17 @@ a.by img{border-radius:50%;box-shadow:0 0 14px rgba(0,158,231,.55)}
 a.by span{display:grid;text-align:left;line-height:1.2;font-size:.85rem}a.by b{font-weight:700}a.by small{opacity:.65;font-size:.74rem}
 .mapframe{width:100%;height:200px;border:0;border-radius:14px;margin-top:10px;background:#0b1a2e}
 [hidden]{display:none!important}
+
+.deco .fw{animation:burst 3.2s ease-out infinite;animation-delay:var(--d)}
+@keyframes burst{0%{transform:scale(.1);opacity:0}12%{opacity:1}65%{opacity:1}100%{transform:scale(1.15);opacity:0}}
+.deco .rings{animation:ringsw 5s ease-in-out infinite;transform-origin:150px 104px;filter:drop-shadow(0 0 10px rgba(255,226,140,.65))}
+@keyframes ringsw{0%,100%{transform:rotate(-4deg) scale(1)}50%{transform:rotate(4deg) scale(1.05)}}
+.deco .spk{animation:spk 2.4s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes spk{0%,100%{opacity:0;transform:scale(.3)}50%{opacity:1;transform:scale(1.1)}}
+.deco .bal{animation:balf 4s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes balf{0%,100%{transform:rotate(-3deg) translateY(0)}50%{transform:rotate(3deg) translateY(-8px)}}
+.deco .hb{animation:hbeat 1.6s ease-in-out infinite;transform-origin:150px 100px;filter:drop-shadow(0 0 14px rgba(255,100,140,.7))}
+@keyframes hbeat{0%,100%{transform:scale(1)}15%{transform:scale(1.12)}30%{transform:scale(1)}45%{transform:scale(1.08)}}
+.deco .fh{animation:fhf 3.4s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes fhf{0%,100%{opacity:.25}50%{opacity:1}}
+@media(prefers-reduced-motion:reduce){.deco .fw,.deco .rings,.deco .spk,.deco .bal,.deco .hb,.deco .fh{animation:none}}

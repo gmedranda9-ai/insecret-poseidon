@@ -123,6 +123,16 @@
         <label class="f"><span>Ciudad y país</span><input id="c-city" maxlength="60" placeholder="Quito, Ecuador"></label>
         <label class="f"><span>Enlace de Google Maps del lugar <em>(opcional)</em></span><input id="c-maplink" maxlength="300" placeholder="https://maps.app.goo.gl/..."><small>En Google Maps toca «Compartir» y pega el enlace. Aparece el mapa en la invitación.</small></label>
         <label class="f"><span>Mensaje para los invitados <em>(opcional)</em></span><textarea id="c-imsg" maxlength="300" rows="3"></textarea></label>
+      <details class="card" style="margin:0"><summary style="cursor:pointer;font-weight:600;color:var(--oro)">Más detalles de la invitación (opcional)</summary>
+        <p class="muted small">Lo que llenes aparece en la invitación como tarjetas interactivas. Lo que dejes vacío no se muestra.</p>
+        <div class="row-head"><strong>Horario del evento</strong><button type="button" class="btn ghost" id="c-it-add">+ Agregar momento</button></div><div class="rows" id="c-it-rows"></div>
+        <label class="f"><span>Vestimenta</span><input id="c-dress" maxlength="80" placeholder="Ej.: Formal elegante"></label>
+        <div class="colors"><label>Color 1<input type="color" id="c-c1" value="#0b2a5b"></label><label>Color 2<input type="color" id="c-c2" value="#d9b04a"></label><label>Color 3<input type="color" id="c-c3" value="#ffffff"></label></div>
+        <div class="row-head"><strong>Menú</strong><button type="button" class="btn ghost" id="c-me-add">+ Agregar plato</button></div><div class="rows" id="c-me-rows"></div>
+        <label class="f"><span>Sorpresa (título)</span><input id="c-x-t" maxlength="40" placeholder="Ej.: Un detalle para ti"></label>
+        <label class="f"><span>Sorpresa (texto que se descubre al tocar)</span><input id="c-x-x" maxlength="120"></label>
+        <button type="button" class="btn ghost" id="c-ex">Cargar ejemplo de la ocasión</button>
+      </details>
       </div>
     </fieldset>
     <fieldset class="card"><legend>2 · Amigo secreto</legend>
@@ -162,6 +172,6 @@
 <div class="toast" id="toast" hidden></div>
 <script src="../config.js?v=1"></script>
 <script src="../invitacion/defaults.js?v=1"></script>
-<script src="../js/admin.js?v=5"></script>
+<script src="../js/admin.js?v=6"></script>
 </body>
 </html>
