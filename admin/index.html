@@ -111,33 +111,42 @@
   <section id="v-comp" hidden>
     <div class="row-head"><h1>Paquete Empresa</h1><button type="button" class="btn ghost" id="comp-back">‹ Volver a la lista</button></div>
     <p class="muted">Envía a cada colaborador un correo con su invitación y su amigo secreto. Los correos no se guardan: se usan solo para enviar.</p>
-    <fieldset class="card"><legend>Evento</legend>
-      <label class="f"><span>Empresa</span><input id="c-co" maxlength="50" placeholder="Empresa Ejemplo S.A."></label>
-      <label class="f"><span>Invitación <em>(opcional)</em></span><select id="c-slug"><option value="">Sin invitación (solo amigo secreto)</option></select></label>
+    <fieldset class="card"><legend>1 · La empresa y su evento</legend>
+      <label class="f"><span>Empresa *</span><input id="c-co" maxlength="50" placeholder="Empresa Ejemplo S.A."></label>
+      <label class="f"><span>Tipo de invitación</span><select id="c-occ"><option value="navidad">Cena navideña</option><option value="fin">Fin de año</option><option value="">Sin invitación (solo amigo secreto)</option></select></label>
+      <div id="c-invbox" class="card" style="margin:0">
+        <label class="f"><span>Título de la invitación *</span><input id="c-title" maxlength="60"></label>
+        <label class="f"><span>Fecha y hora del evento *</span><input id="c-when" type="datetime-local"></label>
+        <label class="f"><span>Lugar</span><input id="c-place" maxlength="80" placeholder="Salón, hotel o restaurante"></label>
+        <label class="f"><span>Mensaje para los invitados <em>(opcional)</em></span><textarea id="c-imsg" maxlength="300" rows="3"></textarea></label>
+      </div>
+    </fieldset>
+    <fieldset class="card"><legend>2 · Amigo secreto</legend>
       <label class="chk"><input type="checkbox" id="c-ss" checked> Incluir amigo secreto (sorteo automático)</label>
       <div id="c-ssbox" class="card" style="margin:0">
-        <label class="f"><span>Fecha del intercambio</span><input type="date" id="c-date"></label>
+        <label class="f"><span>Fecha del intercambio *</span><input type="date" id="c-date"></label>
         <label class="f"><span>Presupuesto sugerido (USD) <em>(opcional)</em></span><input type="number" id="c-budget" min="0" max="10000" step="1"></label>
         <label class="f"><span>Mensaje para los participantes <em>(opcional)</em></span><textarea id="c-msg" maxlength="280" rows="2"></textarea></label>
       </div>
     </fieldset>
-    <fieldset class="card"><legend>Aspecto del correo</legend>
+    <fieldset class="card"><legend>3 · Aspecto de la empresa</legend>
       <label class="f"><span>Color de la empresa</span><input type="color" id="c-accent" value="#0b5d3b"></label>
+      <label class="f"><span>Logo <em>(opcional, se ve en la invitación)</em></span><input type="file" id="c-logo" accept="image/*"><div class="logo-prev" id="c-logo-prev" hidden><img id="c-logo-img" alt="Logo"><button type="button" class="btn ghost" id="c-logo-del">Quitar</button></div></label>
       <label class="f"><span>Firma <em>(opcional)</em></span><textarea id="c-sign" maxlength="160" rows="2" placeholder="Con cariño, Recursos Humanos"></textarea></label>
     </fieldset>
-    <fieldset class="card"><legend>Colaboradores</legend>
+    <fieldset class="card"><legend>4 · Colaboradores</legend>
       <label class="f"><span>Uno por línea: nombre y correo <em>(sirve pegar desde Excel)</em></span><textarea id="c-list" rows="8" placeholder="Laura Pérez, laura@empresa.com&#10;Juan Mora, juan@empresa.com"></textarea><small id="c-count">0 personas</small></label>
     </fieldset>
     <p class="err" id="c-err" hidden></p>
     <button type="button" class="btn gold big" id="c-send">Enviar correos</button>
-    <section class="card" id="c-res" hidden><h2 id="c-res-h"></h2><div id="c-rows" class="rows"></div><div class="btns"><button type="button" class="btn ghost" id="c-retry" hidden>Reintentar los fallidos</button></div></section>
+    <section class="card" id="c-res" hidden><h2 id="c-res-h"></h2><p class="muted small" id="c-res-extra"></p><div id="c-rows" class="rows"></div><div class="btns"><button type="button" class="btn ghost" id="c-retry" hidden>Reintentar los fallidos</button></div></section>
   </section>
   <section class="card" id="v-done" hidden>
     <h1>¡Invitación lista!</h1>
-    <p class="muted">Estos son los enlaces. Cópialos o envíale el mensaje al cliente.</p>
-    <label class="f"><span>Enlace de la invitación (lo comparten los invitados)</span><div class="cp"><input id="d-inv" readonly><button type="button" class="btn ghost" data-cp="d-inv">Copiar</button></div></label>
-    <label class="f"><span>Enlace privado del anfitrión (ve quién confirmó)</span><div class="cp"><input id="d-host" readonly><button type="button" class="btn ghost" data-cp="d-host">Copiar</button></div></label>
-    <label class="f"><span>Mensaje listo para el cliente</span><textarea id="d-msg" rows="9" readonly></textarea></label>
+    <p class="muted">Se guardó. Ahora hay <b>tres cosas</b> para pasarle al cliente: el enlace que reparte a sus invitados, su enlace privado para ver las confirmaciones, y un mensaje ya escrito que trae los dos. Lo más fácil: toca «Enviar por WhatsApp al cliente».</p>
+    <label class="f"><span>1 · Enlace de la invitación — el cliente se lo manda a sus invitados</span><div class="cp"><input id="d-inv" readonly><button type="button" class="btn ghost" data-cp="d-inv">Copiar</button></div></label>
+    <label class="f"><span>2 · Enlace privado del anfitrión — solo para el cliente. Ahí ve quién confirmó. No se reparte a los invitados</span><div class="cp"><input id="d-host" readonly><button type="button" class="btn ghost" data-cp="d-host">Copiar</button></div></label>
+    <label class="f"><span>3 · Mensaje listo para el cliente (ya incluye los dos enlaces)</span><textarea id="d-msg" rows="9" readonly></textarea></label>
     <div class="btns"><a class="btn gold" id="d-wa" target="_blank" rel="noopener">Enviar por WhatsApp al cliente</a><button type="button" class="btn ghost" data-cp="d-msg">Copiar mensaje</button><a class="btn ghost" id="d-view" target="_blank" rel="noopener">Ver la invitación</a></div>
     <div class="btns"><button type="button" class="btn ghost" id="d-edit">Seguir editando</button><button type="button" class="btn ghost" id="d-list">Volver a la lista</button></div>
   </section>
@@ -145,6 +154,6 @@
 <div class="toast" id="toast" hidden></div>
 <script src="../config.js?v=1"></script>
 <script src="../invitacion/defaults.js?v=1"></script>
-<script src="../js/admin.js?v=2"></script>
+<script src="../js/admin.js?v=3"></script>
 </body>
 </html>

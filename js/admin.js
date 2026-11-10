@@ -99,8 +99,7 @@
   $('load-def').addEventListener('click', function () { if (confirm('Se reemplazan los textos de abajo por el ejemplo de esta ocasión. ¿Continuar?')) fillText($('theme').value); });
 
   /* logo: se reduce y se guarda dentro de la invitación */
-  $('logo').addEventListener('change', function () {
-    var f = this.files && this.files[0]; if (!f) return;
+  function readLogo(f, cb) {
     var rd = new FileReader();
     rd.onload = function () {
       var im = new Image();
@@ -109,13 +108,14 @@
         cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height);
         var url = cv.toDataURL('image/webp', .85); if (url.indexOf('data:image/webp') !== 0) url = cv.toDataURL('image/png');
         if (url.length > 140000) return toast('El logo es muy pesado. Prueba con otro archivo más simple.');
-        setLogo(url);
+        cb(url);
       };
       im.onerror = function () { toast('No se pudo leer esa imagen.'); };
       im.src = rd.result;
     };
     rd.readAsDataURL(f);
-  });
+  }
+  $('logo').addEventListener('change', function () { var f = this.files && this.files[0]; if (f) readLogo(f, setLogo); });
   $('logo-del').addEventListener('click', function () { setLogo(''); $('logo').value = ''; });
 
   function collect() {
@@ -159,23 +159,38 @@
   $('c-list').addEventListener('input', function () { var n = parseList().length; $('c-count').textContent = n + (n === 1 ? ' persona' : ' personas'); });
   $('c-ss').addEventListener('change', function () { $('c-ssbox').hidden = !this.checked; });
   $('new-comp').addEventListener('click', function () {
-    var sel = $('c-slug'); sel.innerHTML = '<option value="">Sin invitación (solo amigo secreto)</option>';
-    ITEMS.forEach(function (i) { var o = document.createElement('option'); o.value = i.slug; o.textContent = i.client_name + ' · ' + (i.title || i.slug); sel.appendChild(o); });
-    $('c-res').hidden = true; $('c-err').hidden = true; view('comp');
+    CINV = null; setCLogo(''); $('c-occ').value = 'navidad'; fillOcc(); $('c-res').hidden = true; $('c-err').hidden = true; view('comp');
   });
   $('comp-back').addEventListener('click', loadList);
   function cerr(t) { $('c-err').textContent = t; $('c-err').hidden = false; $('c-err').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+  var CLOGO = '', CINV = null;
+  function setCLogo(u) { CLOGO = u || ''; $('c-logo-prev').hidden = !CLOGO; if (CLOGO) $('c-logo-img').src = CLOGO; }
+  $('c-logo').addEventListener('change', function () { var f = this.files && this.files[0]; if (f) readLogo(f, setCLogo); });
+  $('c-logo-del').addEventListener('click', function () { setCLogo(''); $('c-logo').value = ''; });
+  function fillOcc() { var k = $('c-occ').value; $('c-invbox').hidden = !k; if (k) { var d = DEF[k] || {}; $('c-title').value = d.title || ''; $('c-place').value = ''; $('c-imsg').value = d.msg || ''; } }
+  $('c-occ').addEventListener('change', fillOcc);
+  function ensureInvite() {
+    var k = $('c-occ').value; if (!k) return Promise.resolve({ slug: '' });
+    var d = DEF[k] || {}, cfg = JSON.parse(JSON.stringify(d));
+    cfg.title = $('c-title').value.trim(); cfg.date = $('c-when').value; cfg.place = $('c-place').value.trim(); cfg.msg = $('c-imsg').value.trim(); cfg.host = $('c-co').value.trim(); cfg.mapq = cfg.place; cfg.it = []; cfg.menu = []; cfg.dress = ['', ['#888888', '#aaaaaa', '#cccccc']]; cfg.extra = ['gi', '', ''];
+    delete cfg.target; var br = { accent: $('c-accent').value }; if (CLOGO) br.logo = CLOGO; if ($('c-sign').value.trim()) br.sign = $('c-sign').value.trim(); cfg.brand = br;
+    var slug = CINV ? CINV.slug : slugify($('c-co').value) + '-' + k;
+    return rpc('admin_save', { p_key: KEY, p_id: CINV ? CINV.id : null, p_slug: slug, p_theme: k, p_client: $('c-co').value.trim(), p_contact: '', p_notes: 'Paquete Empresa', p_config: cfg, p_active: true }).then(function (r) { if (r.error || r.message) { cerr(msg(r)); return null; } CINV = { id: r.id, slug: r.slug, host: r.host_token }; return CINV; });
+  }
   function sendComp(people, resend) {
     var btn = $('c-send'); btn.disabled = true; btn.textContent = 'Enviando…'; $('c-err').hidden = true;
-    var body = { key: KEY, company: $('c-co').value.trim(), slug: $('c-slug').value, withSecret: $('c-ss').checked, eventDate: $('c-date').value, budget: $('c-budget').value, message: $('c-msg').value, accent: $('c-accent').value, sign: $('c-sign').value, organizer: $('c-co').value.trim(), people: people };
+    return ensureInvite().then(function (inv) { if (!inv) { btn.disabled = false; btn.textContent = 'Enviar correos'; return; } return doSend(people, resend, inv, btn); });
+  }
+  function doSend(people, resend, inv, btn) {
+    var body = { key: KEY, company: $('c-co').value.trim(), slug: inv.slug, withSecret: $('c-ss').checked, eventDate: $('c-date').value, budget: $('c-budget').value, message: $('c-msg').value, accent: $('c-accent').value, sign: $('c-sign').value, organizer: $('c-co').value.trim(), people: people };
     return fetch(C.supabaseUrl + '/functions/v1/send-company', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
       .then(function (r) { return r.json().catch(function () { return { error: 'NETWORK' }; }); }, function () { return { error: 'NETWORK' }; })
       .then(function (r) {
         btn.disabled = false; btn.textContent = 'Enviar correos';
         if (!r.ok) { var m = CERR[r.error] || ERR[r.error] || 'No se pudo enviar. Inténtalo otra vez.'; if (r.error === 'BAD_EMAIL' || r.error === 'DUP_NAME') m += (r.who || r.detail || ''); return cerr(m); }
         var keep = resend ? CRES.filter(function (x) { return x.ok; }) : []; CRES = keep.concat(r.results); r.sent += keep.length; r.failed = CRES.filter(function (x) { return !x.ok; }).length; r.results = CRES; var box = $('c-rows'); box.innerHTML = '';
-        r.results.forEach(function (x) { var d = document.createElement('div'); d.className = 'rw'; d.style.gridTemplateColumns = '1fr auto'; d.innerHTML = '<span>' + esc(x.name) + ' <small class="muted">' + esc(x.email) + '</small></span><span class="pill' + (x.ok ? '' : ' off') + '">' + (x.ok ? 'Enviado' : 'Falló') + '</span>'; box.appendChild(d); });
-        $('c-res-h').textContent = r.sent + ' enviados' + (r.failed ? ' · ' + r.failed + ' fallaron' : ''); $('c-retry').hidden = !r.failed; $('c-res').hidden = false; $('c-res').scrollIntoView({ behavior: 'smooth' });
+        r.results.forEach(function (x) { var d = document.createElement('div'); d.className = 'rw'; d.style.gridTemplateColumns = '1fr auto'; d.innerHTML = '<span>' + esc(x.name) + ' <small class="muted">' + esc(x.email) + '</small>' + (x.ok ? '' : '<br><small class="muted">' + esc(x.error || '') + '</small>') + '</span><span class="pill' + (x.ok ? '' : ' off') + '">' + (x.ok ? 'Enviado' : 'Falló') + '</span>'; box.appendChild(d); });
+        $('c-res-extra').innerHTML = inv.slug ? 'Invitación: <b>' + esc(location.origin + '/invitacion/?i=' + inv.slug) + '</b><br>Panel privado para Recursos Humanos: <b>' + esc(location.origin + '/anfitrion/?h=' + inv.host) + '</b>' : ''; $('c-res-h').textContent = r.sent + ' enviados' + (r.failed ? ' · ' + r.failed + ' fallaron' : ''); $('c-retry').hidden = !r.failed; $('c-res').hidden = false; $('c-res').scrollIntoView({ behavior: 'smooth' });
       });
   }
   $('c-send').addEventListener('click', function () {
@@ -184,7 +199,8 @@
     var bad = ps.filter(function (p) { return !p.name || !p.email; }); if (bad.length) return cerr('Revisa esta línea: ' + (bad[0].name || '(vacía)') + ' — falta el correo o el nombre.');
     if ($('c-ss').checked && ps.length < 3) return cerr('El amigo secreto necesita al menos 3 personas.');
     if ($('c-ss').checked && !$('c-date').value) return cerr('Elige la fecha del intercambio.');
-    if (!$('c-ss').checked && !$('c-slug').value) return cerr('Elige una invitación o activa el amigo secreto.');
+    if (!$('c-ss').checked && !$('c-occ').value) return cerr('Elige un tipo de invitación o activa el amigo secreto.');
+    if ($('c-occ').value && (!$('c-title').value.trim() || !$('c-when').value)) return cerr('Escribe el título y la fecha y hora del evento.');
     if (!confirm('Se enviarán ' + ps.length + ' correos' + ($('c-ss').checked ? ' y se hará el sorteo (no se puede repetir)' : '') + '. ¿Continuar?')) return;
     sendComp(ps);
   });
@@ -192,6 +208,9 @@
     var f = CRES.filter(function (x) { return !x.ok; }).map(function (x) { return { name: x.name, email: x.email, token: x.token }; });
     if (f.length) sendComp(f, true);
   });
+
+  /* abrir el calendario al tocar los campos de fecha */
+  document.addEventListener('click', function (e) { var i = e.target; if (i && i.tagName === 'INPUT' && /^(date|datetime-local|time)$/.test(i.type) && i.showPicker) { try { i.showPicker(); } catch (x) {} } });
 
   /* ---------- resultado ---------- */
   function clientMsg(client, title, slug, host) {
