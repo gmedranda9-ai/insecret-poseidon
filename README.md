@@ -63,3 +63,7 @@ Sorteador de amigo secreto navideño de **Poseidón**. Sitio estático (HTML/CSS
 - Admin → «📧 Paquete Empresa»: se pega nombre y correo de cada colaborador; se hace el sorteo en el servidor (`public.admin_company_draw`, requiere la clave de administrador) y la Edge Function `send-company` envía a cada persona un correo con dos botones (invitación con `?para=` y amigo secreto con su enlace privado `?t=`).
 - Los correos no se guardan. Remitente `no-reply@poseidonmk.com`, respuestas a `soporte@poseidonmk.com`. Requiere el secreto `BREVO_API_KEY` en Supabase.
 - Los envíos fallidos se pueden reintentar sin repetir el sorteo.
+
+## v14 · Correo oscuro, ejemplos en dos columnas
+- Correo de Paquete Empresa: banner navideño/fin de año, botones dorados, pie con Poseidón (Edge Function `send-company` v5). La vista previa del admin refleja el mismo diseño.
+- Invitaciones: modo paso a paso (botones), luces, adornos y gorro; estilo corporativo oscuro (`?corp=1`). `/invitaciones/` muestra individuales (izquierda) y empresariales (derecha).

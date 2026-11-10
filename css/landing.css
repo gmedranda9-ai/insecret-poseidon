@@ -197,3 +197,27 @@ body{background:radial-gradient(110% 70% at 50% -5%,#06223d 0%,#040f1d 40%,#040a
 
 /* v7 wordmark blanco */
 .wordmark,.hero-row .wordmark{background:none!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;-webkit-text-fill-color:#fff!important;color:#fff!important;animation:none!important;text-shadow:0 0 28px rgba(0,158,231,.35)}
+
+/* v8 ejemplos en dos columnas + correo oscuro */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px;max-width:920px;margin:26px auto 0}
+.col{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:22px 18px}
+.col-e{border-color:rgba(227,194,122,.45);background:linear-gradient(180deg,rgba(227,194,122,.08),rgba(255,255,255,.03))}
+.col-t{margin:0;font:700 1.25rem 'Playfair Display',serif;text-align:center}
+.col-e .col-t{color:#e3c27a}
+.col-s{margin:4px 0 16px;text-align:center;font-size:.85rem;opacity:.7}
+.ex{display:flex;align-items:center;gap:12px;padding:12px 14px;margin-top:10px;border-radius:14px;text-decoration:none;color:#fff;background:rgba(4,10,20,.55);border:1px solid rgba(255,255,255,.1);border-left:3px solid var(--ac);transition:transform .2s,background .2s}
+.ex:hover{transform:translateX(4px);background:rgba(4,10,20,.85)}
+.ex .oi{font-size:1.5rem}.ex span:nth-child(2){flex:1;display:flex;flex-direction:column}
+.ex b{font-weight:600;font-size:.98rem}.ex small{opacity:.65;font-size:.8rem}.ex i{font-style:normal;color:var(--ac);font-size:1.1rem}
+.ex-more{border-style:dashed}
+.block + .block .feat{margin-top:18px}
+.mail-d .m-body{background:#0b1220;color:#f6f1e4;padding:0}
+.mail-d .m-ban{display:block;width:100%;height:auto}
+.mail-d .m-pad{padding:22px 22px 20px;text-align:center}
+.mail-d .m-co{font:700 .7rem Arial;letter-spacing:.3em;text-transform:uppercase;color:#e3c27a}
+.mail-d h3{font:700 1.6rem Georgia,serif;color:#f3dfae;margin:12px 0}
+.mail-d p{color:#e9e4d6}.mail-d .m-g{color:#e3c27a}
+.mail-d .m-b1{background:#e3c27a!important;color:#1a1405!important;border:0!important}
+.mail-d .m-b2{background:transparent!important;border:2px solid #e3c27a!important;color:#e3c27a!important}
+.mail-d .m-sign{border-top:1px solid rgba(227,194,122,.25);color:#e3c27a;font-style:italic;font-family:Georgia,serif}
+@media(max-width:720px){.two{grid-template-columns:1fr}}

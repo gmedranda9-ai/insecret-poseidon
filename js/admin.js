@@ -186,15 +186,16 @@
   }
   function fmtWhen() { try { return new Date($('c-when').value + ':00-05:00').toLocaleString('es-EC', { timeZone: 'America/Guayaquil', dateStyle: 'full', timeStyle: 'short' }); } catch (e) { return ''; } }
   function previewHtml(name) {
-    var ac = $('c-accent').value, inv = !!$('c-occ').value, ss = $('c-ss').checked, first = esc(name.split(' ')[0]), sign = $('c-sign').value.trim(), intro = $('c-intro').value.trim();
-    var btn = function (l, solid) { return '<span style="display:block;text-align:center;font:600 16px Arial,sans-serif;padding:14px 18px;border-radius:999px;margin:10px 0;' + (solid ? 'background:' + ac + ';color:#fff;' : 'border:2px solid ' + ac + ';color:' + ac + ';background:#fff;') + '">' + l + '</span>'; };
-    var text = intro ? esc(intro).replace(/\n/g, '<br>') : (inv ? 'Te invitamos a <b>' + esc($('c-title').value) + '</b>' + (fmtWhen() ? ' — ' + esc(fmtWhen()) : '') + '.' : '') + (ss ? (inv ? ' Además, este año hay' : ' Este año hay') + ' <b>amigo secreto</b>.' : '');
-    return '<div style="max-width:480px;margin:0 auto;background:#fff;color:#1b2430;border-radius:16px;overflow:hidden;font-family:Arial,sans-serif"><div style="height:6px;background:' + ac + '"></div><div style="padding:24px 22px">' +
-      (CLOGO ? '<img src="' + CLOGO + '" alt="" style="max-height:40px;max-width:140px;display:block;margin-bottom:8px">' : '') +
-      '<div style="font:700 15px Arial;color:' + ac + ';margin-bottom:10px">' + esc($('c-co').value || 'Tu empresa') + '</div><h2 style="margin:0 0 10px;font-size:22px">Hola, ' + first + ' 👋</h2><p style="line-height:1.55;font-size:16px;margin:0 0 8px">' + text + '</p>' +
+    var ac = $('c-accent').value, inv = !!$('c-occ').value, ss = $('c-ss').checked, sign = $('c-sign').value.trim(), intro = $('c-intro').value.trim(), gold = '#e3c27a';
+    var nice = function (n) { n = n.replace(/\s+/g, ' ').trim(); return n === n.toUpperCase() || n === n.toLowerCase() ? n.toLowerCase().replace(/(^|\s)\S/g, function (c) { return c.toUpperCase(); }) : n; };
+    var first = esc(nice(name).split(' ')[0]), banner = '../assets/mail/' + ($('c-occ').value === 'fin' ? 'fin' : 'navidad') + '.jpg';
+    var btn = function (l, solid) { return '<span style="display:block;text-align:center;font:700 16px Arial,sans-serif;padding:15px 18px;border-radius:999px;margin:12px 0;' + (solid ? 'background:' + gold + ';color:#1a1405;' : 'border:2px solid ' + gold + ';color:' + gold + ';') + '">' + l + '</span>'; };
+    var text = intro ? esc(intro).replace(/\n/g, '<br>') : (inv ? 'Te invitamos a <b style="color:#fff">' + esc($('c-title').value) + '</b>' + (fmtWhen() ? '<br><span style="color:' + gold + '">' + esc(fmtWhen()) + '</span>' : '') + '.' : '') + (ss ? '<br>' + (inv ? 'Además, este año hay' : 'Este año hay') + ' <b style="color:#fff">amigo secreto</b>.' : '');
+    return '<div style="max-width:480px;margin:0 auto;background:#0b1220;color:#f6f1e4;border-radius:16px;overflow:hidden;font-family:Arial,sans-serif;border:1px solid rgba(227,194,122,.35)"><img src="' + banner + '" alt="" style="display:block;width:100%;height:auto"><div style="height:6px;background:' + ac + '"></div><div style="padding:28px 26px 24px">' +
+      '<div style="font:700 12px Arial;letter-spacing:.3em;text-transform:uppercase;color:' + gold + ';text-align:center">' + esc($('c-co').value || 'Tu empresa') + '</div><h2 style="margin:14px 0 12px;font:700 26px Georgia,serif;text-align:center;color:#f3dfae">Hola, ' + first + '</h2><p style="line-height:1.7;font-size:16px;margin:0 0 14px;text-align:center;color:#e9e4d6">' + text + '</p>' +
       (inv ? btn('Ver mi invitación y confirmar', true) : '') + (ss ? btn('🎁 Descubrir mi amigo secreto', !inv) : '') +
-      '<p style="font-size:13px;color:#7b8794;margin:10px 0 0">' + (ss ? 'El enlace del amigo secreto es solo tuyo. No lo compartas.' : '') + '</p>' +
-      (sign ? '<p style="border-top:1px solid #e4e9ef;margin-top:16px;padding-top:12px;font-size:14px;color:#3a4654">' + esc(sign).replace(/\n/g, '<br>') + '</p>' : '') + '</div></div>';
+      '<p style="font-size:12px;color:#8f99ab;margin:12px 0 0;text-align:center">' + (ss ? 'El enlace del amigo secreto es solo tuyo. No lo compartas.' : '') + '</p>' +
+      (sign ? '<p style="border-top:1px solid rgba(227,194,122,.25);margin-top:20px;padding-top:14px;font:italic 15px Georgia,serif;color:' + gold + ';text-align:center">' + esc(sign).replace(/\n/g, '<br>') + '</p>' : '') + '</div><div style="padding:12px;background:#080d18;text-align:center;font:12px Arial;color:#7f8aa0">Hecho por Poseidón</div></div>';
   }
   $('c-prev-btn').addEventListener('click', function () {
     var ps = parseList(), nm = (ps[0] && ps[0].name) || 'Laura', first = nm.split(' ')[0];
