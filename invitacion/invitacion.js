@@ -338,11 +338,10 @@
   }
   function cardDeco(k) {
     var el = $('cdeco'), eb = $('cdeco-b'); el.innerHTML = ''; eb.innerHTML = '';
+    var ha = $('hero-art'); ha.className = 'hero-art' + (k === 'navidad' || k === 'fin' ? ' ha-' + k : '');
     if (k !== 'navidad' && k !== 'fin') return;
     var defs = '<defs><radialGradient id="rd" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#ff7a82"/><stop offset="1" stop-color="#b3202f"/></radialGradient><radialGradient id="gd" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#fff0b8"/><stop offset="1" stop-color="#b8862b"/></radialGradient><radialGradient id="sl" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#8fa4b8"/></radialGradient><linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff0b8"/><stop offset="1" stop-color="#c9992f"/></linearGradient></defs>';
-    var orns = k === 'navidad'
-      ? orn(322, 38, 15, 'rd', '#ffd9a0', 0) + orn(358, 66, 11, 'gd', '#fff', .6) + orn(286, 22, 8, 'sl', '#fff', 1.1) + orn(60, 30, 20, 'star', '', .3, 'star') + orn(30, 20, 10, 'gd', '#fff', .9) + orn(344, 14, 14, 'star', '', .2, 'star')
-      : orn(330, 34, 17, 'gd', '#fff', 0) + orn(364, 60, 11, 'sl', '#fff', .7) + orn(60, 26, 18, 'star', '', .4, 'star') + orn(300, 20, 8, 'gd', '#fff', 1.2);
+    var orns = '';
     el.innerHTML = '<svg viewBox="0 0 400 190" preserveAspectRatio="xMidYMin meet">' + defs + '<path id="wire" d="M-6 6Q50 56 100 24T200 30T300 24T406 8" fill="none" stroke="#6b6046" stroke-width="1.6"/><g id="bulbs"></g>' + orns + '</svg>';
     var wire = el.querySelector('#wire'), bulbs = el.querySelector('#bulbs'), L = wire.getTotalLength(), N = 15, cols = k === 'navidad' ? ['#ffd86b', '#ff5a5f', '#4fd8ff', '#fff4d6', '#7dff9a'] : ['#ffe9a8', '#fff', '#ffd86b', '#fff4d6'];
     for (var i = 0; i <= N; i++) {

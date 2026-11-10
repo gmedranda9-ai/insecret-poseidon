@@ -67,3 +67,7 @@ Sorteador de amigo secreto navideño de **Poseidón**. Sitio estático (HTML/CSS
 ## v14 · Correo oscuro, ejemplos en dos columnas
 - Correo de Paquete Empresa: banner navideño/fin de año, botones dorados, pie con Poseidón (Edge Function `send-company` v5). La vista previa del admin refleja el mismo diseño.
 - Invitaciones: modo paso a paso (botones), luces, adornos y gorro; estilo corporativo oscuro (`?corp=1`). `/invitaciones/` muestra individuales (izquierda) y empresariales (derecha).
+
+## v15 · Arte vectorial
+- `assets/deco/*.webp` y `assets/mail/*.jpg` salen de los SVG que aportó Alejandro (tipo Freepik). Revisar la licencia de cada archivo (algunas piden atribución) antes de uso comercial.
+- Cabecera ilustrada en la tarjeta de Navidad y Fin de año, fondo en el sobre y banners del correo.

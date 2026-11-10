@@ -440,3 +440,14 @@ body.corp-dark .done{color:#f6f1e4}
 body.corp-dark .story-all{color:#c9b98d}
 
 body.corp-demo .themes,body.corp-demo .back{display:none}
+
+/* arte vectorial en cabecera de la tarjeta */
+.hero-art{position:absolute;left:0;right:0;top:0;height:0;pointer-events:none;z-index:0;overflow:hidden;background-repeat:no-repeat;background-position:center top;background-size:cover;-webkit-mask-image:linear-gradient(#000 62%,transparent);mask-image:linear-gradient(#000 62%,transparent)}
+.card:has(.ha-navidad),.card:has(.ha-fin){padding-top:150px}
+.ha-navidad{height:230px;background-image:url(../assets/deco/nav-hero.webp)}
+.ha-fin{height:230px;background-image:url(../assets/deco/fin-hero.webp);background-position:center 30%}
+body[data-theme=navidad] .scene#scene-env::before,body[data-theme=fin] .scene#scene-env::before{content:"";position:fixed;inset:0;z-index:-1;background:center/cover no-repeat;opacity:.5;pointer-events:none}
+body[data-theme=navidad] .scene#scene-env::before{background-image:url(../assets/deco/bg-pine.webp)}
+body[data-theme=fin] .scene#scene-env::before{background-image:url(../assets/deco/fin-hero.webp);opacity:.35;background-position:center 30%}
+.card>div.hero-art.hero-art{position:absolute;z-index:0}
+body .card:has(.ha-navidad),body .card:has(.ha-fin){padding-top:210px!important}
