@@ -285,19 +285,34 @@
     var pl = '<div class="mapv"><svg viewBox="0 0 300 150" role="img" aria-label="Mapa ilustrado"><rect width="300" height="150" class="mb"/><g class="mr"><path d="M0 40h300M0 100h300M60 0v150M170 0v150M250 0v150"/></g><path class="mp" d="M30 128H60V100H170V40H250" /><circle cx="30" cy="128" r="5" class="ms"/><g class="pin" transform="translate(250 40)"><circle r="16" class="ring"/><path d="M0 0c-9-12-12-17-12-23a12 12 0 0124 0c0 6-3 11-12 23z" transform="translate(0 -2)" class="pb"/><circle cy="-25" r="4.5" fill="#fff"/></g></svg></div><p><b>' + esc(t.place) + '</b></p><p><a class="btn-map" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&query=' + q2 + '">Cómo llegar · Google Maps</a></p><small>Hay parqueadero cerca. Si vienes en taxi, llega 10 minutos antes.</small>';
     var ex = '<button type="button" class="gift" aria-label="Abrir sorpresa"><svg viewBox="0 0 100 90" width="110"><g class="lid"><rect x="8" y="24" width="84" height="18" rx="3" fill="var(--accent)"/><rect x="45" y="24" width="10" height="18" fill="rgba(255,255,255,.55)"/><path d="M50 24c-14-18-30-6-18 0M50 24c14-18 30-6 18 0" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="4" stroke-linecap="round"/></g><rect x="14" y="42" width="72" height="42" rx="3" fill="var(--accent)" opacity=".85"/><rect x="45" y="42" width="10" height="42" fill="rgba(255,255,255,.55)"/></svg><span>Toca para abrir</span></button><p class="gtx">' + esc(t.extra[2]) + '</p>';
     var has = { it: t.it && t.it.length, dr: t.dress && t.dress[0], me: t.menu && t.menu.length, pl: t.place, ex: t.extra && t.extra[1] };
-    $('tiles').innerHTML = (has.it ? tile('it', 'it', 'Itinerario', it) : '') + (has.dr ? tile('dr', 'dr', 'Vestimenta', dr) : '') + (has.me ? tile('me', 'me', 'Menú', me) : '') + (has.pl ? tile('pl', 'pl', 'Lugar', pl) : '') + (has.ex ? tile('ex', t.extra[0] || 'gi', t.extra[1], ex) : '');
+    $('tiles').innerHTML = (has.it ? tile('it', 'it', 'Itinerario', it) : '') + (has.dr ? tile('dr', 'dr', 'Vestimenta', dr) : '') + (has.me ? tile('me', 'me', 'Menú', me) : '') + (has.pl ? tile('pl', 'pl', 'Lugar', pl + mapEmbed(t)) : '') + (has.ex ? tile('ex', t.extra[0] || 'gi', t.extra[1], ex) : '');
+  }
+
+  /* decoración de la portada */
+  function treeSvg() {
+    var bulbs = [[150, 60], [128, 84], [172, 90], [108, 118], [150, 112], [190, 124], [84, 160], [124, 150], [172, 156], [214, 166], [62, 196], [104, 192], [150, 190], [198, 200], [240, 198]], cols = ['#ffd86b', '#ff5a5f', '#4fd8ff', '#fff4d6', '#ff9f43'];
+    return '<svg viewBox="0 0 300 250"><defs><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f8a55"/><stop offset="1" stop-color="#0f5a36"/></linearGradient></defs>' +
+      '<path d="M150 32L96 100h108z" fill="url(#tg)"/><path d="M150 72L68 156h164z" fill="url(#tg)"/><path d="M150 112L44 214h212z" fill="url(#tg)"/><rect x="136" y="214" width="28" height="36" fill="#5a3a22"/>' +
+      '<path class="star" d="M150 6l5 11 12 1-9 8 3 12-11-7-11 7 3-12-9-8 12-1z" fill="#ffd86b"/>' +
+      bulbs.map(function (b, i) { return '<circle class="bl" cx="' + b[0] + '" cy="' + b[1] + '" r="5" fill="' + cols[i % 5] + '" style="color:' + cols[i % 5] + ';--d:' + ((i * 37 % 10) / 10).toFixed(1) + '"/>'; }).join('') + '</svg>';
+  }
+  var DECO = { navidad: treeSvg };
+  function mapHref(t) { return /^https:\/\/(www\.google\.[a-z.]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps|maps\.google\.[a-z.]+)/i.test(t.maplink || '') ? t.maplink : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(t.place + ', ' + (t.mapq || '')); }
+  function mapEmbed(t) {
+    var m = (t.maplink || '').match(/@(-?\d+\.\d+),(-?\d+\.\d+)/), q = m ? m[1] + ',' + m[2] : t.place + ', ' + (t.mapq || '');
+    return '<iframe class="mapframe" loading="lazy" referrerpolicy="no-referrer" title="Mapa del lugar" src="https://www.google.com/maps?q=' + encodeURIComponent(q) + '&output=embed"></iframe>';
   }
   function setTheme(k) {
     cur = k; var t = T[k], d = parse(t.date);
     document.body.setAttribute('data-theme', k);
     document.querySelector('meta[name=theme-color]').content = getComputedStyle(document.body).getPropertyValue('--table').trim() || '#08190f';
     document.querySelectorAll('#themes button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.t === k)); });
-    $('glyph-a').textContent = $('glyph-b').textContent = t.glyph;
+    $('glyph-a').textContent = $('glyph-b').textContent = t.glyph; $('deco').innerHTML = DECO[k] ? DECO[k]() : '';
     $('lead-big').textContent = t.lead; $('to-line').textContent = t.to;
     $('c-host').textContent = t.host; $('c-title').innerHTML = titleChars(t.title); $('c-title').setAttribute('aria-label', t.title); $('c-msg').textContent = t.msg;
     $('c-dow').textContent = DOW[d.getDay()]; $('c-num').textContent = d.getDate(); $('c-mon').textContent = MON[d.getMonth()];
     $('c-time').textContent = d.getHours() + ':' + pad(d.getMinutes()) + ' h'; $('c-year').textContent = d.getFullYear();
-    $('map').href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(t.place + ', ' + t.mapq);
+    $('map').href = mapHref(t);
     $('wa').href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent('Hola Poseidón 👋 Vi la invitación interactiva de «' + t.title + '» y quiero una para mi evento.');
     $('r-title').textContent = t.rsvp[0]; $('yes').textContent = t.rsvp[1]; $('no').textContent = t.rsvp[2];
     drawOrn(k); buildTiles(t); buildToy(k); resetRsvp(); closeEnvelope(); startCount(); if (gestured) startMusic(k);
@@ -373,7 +388,7 @@
   }
   function pick(a) {
     rsvp.ans = a; $('yes').setAttribute('aria-pressed', String(a === 'si')); $('no').setAttribute('aria-pressed', String(a === 'no'));
-    $('guests').hidden = a !== 'si'; $('who-in').hidden = false; $('note-in').hidden = false; $('send').disabled = false;
+    $('guests').hidden = a !== 'si' || !!T[cur].noguests; $('who-in').hidden = false; $('note-in').hidden = false; $('send').disabled = false;
     if (a === 'si') { burst($('yes')); chime(); }
   }
   $('yes').addEventListener('click', function () { pick('si'); });
@@ -420,7 +435,7 @@
       .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) { var e = new Error(j && j.message || 'ERROR'); throw e; } return j; }); },
         function () { throw new Error('NETWORK'); });
   }
-  var EDIT = ['lead', 'to', 'host', 'title', 'msg', 'date', 'target', 'place', 'mapq', 'it', 'dress', 'menu', 'extra', 'rsvp'];
+  var EDIT = ['lead', 'to', 'host', 'title', 'msg', 'date', 'target', 'place', 'mapq', 'maplink', 'noguests', 'it', 'dress', 'menu', 'extra', 'rsvp'];
   function applyReal(theme, cfg) {
     var t = T[theme];
     EDIT.forEach(function (f) { if (cfg[f] !== undefined && cfg[f] !== null) t[f] = cfg[f]; });

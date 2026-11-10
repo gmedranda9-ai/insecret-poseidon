@@ -317,3 +317,19 @@ body.loading main{visibility:hidden}
 .brand-logo{display:block;max-width:150px;max-height:70px;margin:0 auto 10px;object-fit:contain}
 .sign{font-style:italic;color:var(--ink-soft);margin-top:10px}
 .dodge.err{color:#ff9b8a}
+
+/* v8 portada con árbol, pie con logo, mapa real */
+.stage{position:relative}.env-wrap{position:relative;z-index:2}
+.deco{position:absolute;left:50%;top:0;width:min(66vw,270px);transform:translateX(-50%);pointer-events:none;z-index:1}
+.deco svg{display:block;width:100%;height:auto;overflow:visible}
+body[data-theme=navidad] .stage{padding-top:150px}
+.deco .bl{animation:tw 1.7s ease-in-out infinite alternate;animation-delay:calc(var(--d)*1s);filter:drop-shadow(0 0 5px currentColor)}
+.deco .star{animation:starp 2.6s ease-in-out infinite;transform-origin:150px 22px;filter:drop-shadow(0 0 10px #ffd86b)}
+@keyframes tw{0%{opacity:.25;transform:scale(.8)}100%{opacity:1;transform:scale(1.15)}}
+@keyframes starp{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.14) rotate(8deg)}}
+@media(prefers-reduced-motion:reduce){.deco .bl,.deco .star{animation:none}}
+.sell a.by,a.by{display:flex;align-items:center;justify-content:center;gap:10px;margin:18px auto 4px;color:inherit;text-decoration:none;opacity:.9}
+a.by img{border-radius:50%;box-shadow:0 0 14px rgba(0,158,231,.55)}
+a.by span{display:grid;text-align:left;line-height:1.2;font-size:.85rem}a.by b{font-weight:700}a.by small{opacity:.65;font-size:.74rem}
+.mapframe{width:100%;height:200px;border:0;border-radius:14px;margin-top:10px;background:#0b1a2e}
+[hidden]{display:none!important}

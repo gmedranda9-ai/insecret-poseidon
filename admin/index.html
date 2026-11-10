@@ -63,6 +63,7 @@
         <label class="f"><span>Fecha y hora del evento *</span><input id="date" type="datetime-local"></label>
         <label class="f"><span>Cuenta regresiva hasta <em>(opcional)</em></span><input id="target" type="datetime-local"><small>Déjalo vacío para contar hasta la hora del evento. En fin de año suele ser la medianoche.</small></label>
         <label class="f"><span>Nombre del lugar</span><input id="place" maxlength="120" placeholder="Ej. Casa de los Andrade, Pedernales"></label>
+        <label class="f"><span>Enlace de Google Maps del lugar <em>(opcional)</em></span><input id="maplink" maxlength="300" placeholder="https://maps.app.goo.gl/..."><small>En Google Maps toca «Compartir» y pega aquí el enlace. Así «Cómo llegar» abre exactamente ese lugar.</small></label>
         <label class="f"><span>Ciudad y país (para el mapa)</span><input id="mapq" maxlength="80" placeholder="Ej. Pedernales, Manabí, Ecuador"></label>
       </fieldset>
 
@@ -88,6 +89,7 @@
         <label class="f"><span>Pregunta</span><input id="r-q" maxlength="60"></label>
         <label class="f"><span>Botón «sí»</span><input id="r-y" maxlength="30"></label>
         <label class="f"><span>Botón «no»</span><input id="r-n" maxlength="30"></label>
+      <label class="chk"><input type="checkbox" id="allow-g" checked> Preguntar con cuántas personas va cada invitado</label>
       </fieldset>
 
       <fieldset class="card"><legend>10 · Versión empresa <em>(opcional)</em></legend>
@@ -118,6 +120,8 @@
         <label class="f"><span>Título de la invitación *</span><input id="c-title" maxlength="60"></label>
         <label class="f"><span>Fecha y hora del evento *</span><input id="c-when" type="datetime-local"></label>
         <label class="f"><span>Lugar</span><input id="c-place" maxlength="80" placeholder="Salón, hotel o restaurante"></label>
+        <label class="f"><span>Ciudad y país</span><input id="c-city" maxlength="60" placeholder="Quito, Ecuador"></label>
+        <label class="f"><span>Enlace de Google Maps del lugar <em>(opcional)</em></span><input id="c-maplink" maxlength="300" placeholder="https://maps.app.goo.gl/..."><small>En Google Maps toca «Compartir» y pega el enlace. Aparece el mapa en la invitación.</small></label>
         <label class="f"><span>Mensaje para los invitados <em>(opcional)</em></span><textarea id="c-imsg" maxlength="300" rows="3"></textarea></label>
       </div>
     </fieldset>
@@ -158,6 +162,6 @@
 <div class="toast" id="toast" hidden></div>
 <script src="../config.js?v=1"></script>
 <script src="../invitacion/defaults.js?v=1"></script>
-<script src="../js/admin.js?v=4"></script>
+<script src="../js/admin.js?v=5"></script>
 </body>
 </html>

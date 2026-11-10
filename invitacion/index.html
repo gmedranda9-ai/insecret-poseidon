@@ -6,7 +6,7 @@
 <title>Invitaciones interactivas · Poseidón</title>
 <meta name="description" content="Un sobre con sello que se rompe, cuenta regresiva, confirmación de asistencia y calendario. Ejemplo de invitación interactiva hecha por Poseidón.">
 <meta name="theme-color" content="#08190f">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src https://*.supabase.co; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; frame-src https://www.google.com; connect-src https://*.supabase.co; base-uri 'none'; form-action 'none'">
 <link rel="canonical" href="https://insecret.poseidonmk.com/invitacion/">
 <meta property="og:site_name" content="Poseidón">
 <meta property="og:locale" content="es_EC">
@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;1,500;1,700&family=Playfair+Display:ital,wght@1,600&family=Bricolage+Grotesque:wght@800&family=Fraunces:ital,opsz,wght@1,9..144,600&family=Italiana&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="invitacion.css?v=7">
+<link rel="stylesheet" href="invitacion.css?v=9">
 </head>
 <body data-theme="navidad">
 
@@ -48,6 +48,7 @@
     <h2 class="lead-big" id="lead-big">Tienes una invitación</h2>
     <p class="lead-in" id="to-line">Para ti</p>
     <div class="stage" id="stage">
+      <div class="deco" id="deco" aria-hidden="true"></div>
       <div class="env-wrap">
         <div class="env" id="env">
           <div class="env-back"></div>
@@ -122,12 +123,12 @@
     <p>Cada invitación se diseña con tu evento: tus nombres, tus colores, tu fecha y la confirmación de asistencia directo a tu WhatsApp.</p>
     <a class="cta" id="wa" target="_blank" rel="noopener noreferrer" href="#">Quiero mi invitación</a>
     <button type="button" class="again" id="again" hidden>Volver a cerrar el sobre</button>
-    <p class="by">Hecho por <a href="https://poseidonmk.com" target="_blank" rel="noopener">Poseidón</a></p>
+    <a class="by" href="https://poseidonmk.com" target="_blank" rel="noopener"><img src="../assets/logo.png" alt="" width="30" height="30"><span>Hecho por <b>Poseidón</b><small>poseidonmk.com</small></span></a>
   </section>
 </main>
 
 <script src="../config.js?v=1"></script>
 <script src="defaults.js?v=1"></script>
-<script src="invitacion.js?v=8"></script>
+<script src="invitacion.js?v=9"></script>
 </body>
 </html>
