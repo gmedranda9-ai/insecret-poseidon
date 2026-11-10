@@ -150,7 +150,7 @@
   });
 
   /* ---------- paquete empresa ---------- */
-  var CERR = { BAD_KEY: 'Clave incorrecta.', LOCKED: ERR.LOCKED, NO_BREVO_KEY: 'Falta guardar BREVO_API_KEY en los secretos de Supabase.', BAD_COUNT: 'Se necesitan entre 3 y 100 personas para el amigo secreto (1 a 100 si es solo invitación).', BAD_EMAIL: 'Revisa el correo de ', DUP_NAME: 'Hay un nombre repetido: ', BAD_NAME: 'Un nombre es muy largo o está vacío.', BAD_INPUT: 'Revisa la fecha del intercambio (no puede ser pasada) y el nombre de la empresa.', INVITE_NOT_FOUND: 'No se encontró esa invitación.', NO_SOLUTION: 'No se pudo hacer el sorteo con esos datos.' };
+  var CERR = { BAD_KEY: 'Clave incorrecta.', LOCKED: ERR.LOCKED, NO_BREVO_KEY: 'Falta guardar BREVO_API_KEY en los secretos de Supabase.', BAD_COUNT: 'Se necesitan entre 3 y 100 personas para el amigo secreto (1 a 100 si es solo invitación).', BAD_EMAIL: 'Revisa el correo de ', DUP_NAME: 'Hay un nombre repetido: ', BAD_NAME: 'Un nombre es muy largo o está vacío.', BREVO_KEY_FORMAT: 'La clave guardada en Supabase no es una clave API de Brevo (debe empezar con xkeysib-). Revisa que copiaste la de la pestaña «Claves API», no la de SMTP.', BAD_INPUT: 'Revisa la fecha del intercambio (no puede ser pasada) y el nombre de la empresa.', INVITE_NOT_FOUND: 'No se encontró esa invitación.', NO_SOLUTION: 'No se pudo hacer el sorteo con esos datos.' };
   function parseList() {
     return $('c-list').value.split('\n').map(function (l) { return l.trim(); }).filter(Boolean).map(function (l) {
       var m = l.match(/^(.*?)[\t,;]\s*([^\s,;\t]+@[^\s,;\t]+)\s*$/) || l.match(/^(.*?)\s+([^\s]+@[^\s]+)$/); return m ? { name: m[1].trim(), email: m[2].trim() } : { name: l, email: '' };
@@ -167,7 +167,10 @@
   function setCLogo(u) { CLOGO = u || ''; $('c-logo-prev').hidden = !CLOGO; if (CLOGO) $('c-logo-img').src = CLOGO; }
   $('c-logo').addEventListener('change', function () { var f = this.files && this.files[0]; if (f) readLogo(f, setCLogo); });
   $('c-logo-del').addEventListener('click', function () { setCLogo(''); $('c-logo').value = ''; });
-  function fillOcc() { var k = $('c-occ').value; $('c-invbox').hidden = !k; if (k) { var d = DEF[k] || {}; $('c-title').value = d.title || ''; $('c-place').value = ''; $('c-imsg').value = d.msg || ''; } }
+  function exDate() { return ($('c-same').checked && $('c-occ').value && $('c-when').value) ? $('c-when').value.slice(0, 10) : $('c-date').value; }
+  function syncSame() { var can = !!$('c-occ').value; $('c-same-w').hidden = !can; $('c-date-w').hidden = can && $('c-same').checked; }
+  $('c-same').addEventListener('change', syncSame);
+  function fillOcc() { var k = $('c-occ').value; $('c-invbox').hidden = !k; syncSame(); if (k) { var d = DEF[k] || {}; $('c-title').value = d.title || ''; $('c-place').value = ''; $('c-imsg').value = d.msg || ''; } }
   $('c-occ').addEventListener('change', fillOcc);
   function ensureInvite() {
     var k = $('c-occ').value; if (!k) return Promise.resolve({ slug: '' });
@@ -177,12 +180,29 @@
     var slug = CINV ? CINV.slug : slugify($('c-co').value) + '-' + k;
     return rpc('admin_save', { p_key: KEY, p_id: CINV ? CINV.id : null, p_slug: slug, p_theme: k, p_client: $('c-co').value.trim(), p_contact: '', p_notes: 'Paquete Empresa', p_config: cfg, p_active: true }).then(function (r) { if (r.error || r.message) { cerr(msg(r)); return null; } CINV = { id: r.id, slug: r.slug, host: r.host_token }; return CINV; });
   }
+  function fmtWhen() { try { return new Date($('c-when').value + ':00-05:00').toLocaleString('es-EC', { timeZone: 'America/Guayaquil', dateStyle: 'full', timeStyle: 'short' }); } catch (e) { return ''; } }
+  function previewHtml(name) {
+    var ac = $('c-accent').value, inv = !!$('c-occ').value, ss = $('c-ss').checked, first = esc(name.split(' ')[0]), sign = $('c-sign').value.trim(), intro = $('c-intro').value.trim();
+    var btn = function (l, solid) { return '<span style="display:block;text-align:center;font:600 16px Arial,sans-serif;padding:14px 18px;border-radius:999px;margin:10px 0;' + (solid ? 'background:' + ac + ';color:#fff;' : 'border:2px solid ' + ac + ';color:' + ac + ';background:#fff;') + '">' + l + '</span>'; };
+    var text = intro ? esc(intro).replace(/\n/g, '<br>') : (inv ? 'Te invitamos a <b>' + esc($('c-title').value) + '</b>' + (fmtWhen() ? ' — ' + esc(fmtWhen()) : '') + '.' : '') + (ss ? (inv ? ' Además, este año hay' : ' Este año hay') + ' <b>amigo secreto</b>.' : '');
+    return '<div style="max-width:480px;margin:0 auto;background:#fff;color:#1b2430;border-radius:16px;overflow:hidden;font-family:Arial,sans-serif"><div style="height:6px;background:' + ac + '"></div><div style="padding:24px 22px">' +
+      (CLOGO ? '<img src="' + CLOGO + '" alt="" style="max-height:40px;max-width:140px;display:block;margin-bottom:8px">' : '') +
+      '<div style="font:700 15px Arial;color:' + ac + ';margin-bottom:10px">' + esc($('c-co').value || 'Tu empresa') + '</div><h2 style="margin:0 0 10px;font-size:22px">Hola, ' + first + ' 👋</h2><p style="line-height:1.55;font-size:16px;margin:0 0 8px">' + text + '</p>' +
+      (inv ? btn('Ver mi invitación y confirmar', true) : '') + (ss ? btn('🎁 Descubrir mi amigo secreto', !inv) : '') +
+      '<p style="font-size:13px;color:#7b8794;margin:10px 0 0">' + (ss ? 'El enlace del amigo secreto es solo tuyo. No lo compartas.' : '') + '</p>' +
+      (sign ? '<p style="border-top:1px solid #e4e9ef;margin-top:16px;padding-top:12px;font-size:14px;color:#3a4654">' + esc(sign).replace(/\n/g, '<br>') + '</p>' : '') + '</div></div>';
+  }
+  $('c-prev-btn').addEventListener('click', function () {
+    var ps = parseList(), nm = (ps[0] && ps[0].name) || 'Laura', first = nm.split(' ')[0];
+    $('c-prev-sub').textContent = 'Asunto: ' + first + ', ' + ($('c-occ').value ? 'te invitamos a ' + ($('c-title').value || 'nuestro evento') : 'tu amigo secreto está listo') + ' · De: ' + ($('c-co').value || 'Tu empresa') + ' · Poseidón';
+    $('c-prev-mail').innerHTML = previewHtml(nm); $('c-prev').hidden = false; $('c-prev').scrollIntoView({ behavior: 'smooth' });
+  });
   function sendComp(people, resend) {
     var btn = $('c-send'); btn.disabled = true; btn.textContent = 'Enviando…'; $('c-err').hidden = true;
     return ensureInvite().then(function (inv) { if (!inv) { btn.disabled = false; btn.textContent = 'Enviar correos'; return; } return doSend(people, resend, inv, btn); });
   }
   function doSend(people, resend, inv, btn) {
-    var body = { key: KEY, company: $('c-co').value.trim(), slug: inv.slug, withSecret: $('c-ss').checked, eventDate: $('c-date').value, budget: $('c-budget').value, message: $('c-msg').value, accent: $('c-accent').value, sign: $('c-sign').value, organizer: $('c-co').value.trim(), people: people };
+    var body = { key: KEY, company: $('c-co').value.trim(), slug: inv.slug, withSecret: $('c-ss').checked, eventDate: exDate(), budget: $('c-budget').value, message: $('c-msg').value, accent: $('c-accent').value, sign: $('c-sign').value, intro: $('c-intro').value, organizer: $('c-co').value.trim(), people: people };
     return fetch(C.supabaseUrl + '/functions/v1/send-company', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
       .then(function (r) { return r.json().catch(function () { return { error: 'NETWORK' }; }); }, function () { return { error: 'NETWORK' }; })
       .then(function (r) {
@@ -198,7 +218,7 @@
     if (!ps.length) return cerr('Pega la lista de colaboradores.');
     var bad = ps.filter(function (p) { return !p.name || !p.email; }); if (bad.length) return cerr('Revisa esta línea: ' + (bad[0].name || '(vacía)') + ' — falta el correo o el nombre.');
     if ($('c-ss').checked && ps.length < 3) return cerr('El amigo secreto necesita al menos 3 personas.');
-    if ($('c-ss').checked && !$('c-date').value) return cerr('Elige la fecha del intercambio.');
+    if ($('c-ss').checked && !exDate()) return cerr('Elige la fecha del intercambio.');
     if (!$('c-ss').checked && !$('c-occ').value) return cerr('Elige un tipo de invitación o activa el amigo secreto.');
     if ($('c-occ').value && (!$('c-title').value.trim() || !$('c-when').value)) return cerr('Escribe el título y la fecha y hora del evento.');
     if (!confirm('Se enviarán ' + ps.length + ' correos' + ($('c-ss').checked ? ' y se hará el sorteo (no se puede repetir)' : '') + '. ¿Continuar?')) return;

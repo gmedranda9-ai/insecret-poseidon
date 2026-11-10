@@ -33,3 +33,4 @@ input[type=checkbox]{width:auto;accent-color:var(--azul)}
 .cp{display:flex;gap:8px}.cp input{flex:1}
 .sticky{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(transparent,#040a14 40%);z-index:5;max-width:860px;margin:0 auto}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:90px;background:#0b2036;border:1px solid var(--cian);padding:.6rem 1rem;border-radius:999px;z-index:20}
+[hidden]{display:none!important}
