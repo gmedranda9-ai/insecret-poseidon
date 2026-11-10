@@ -19,21 +19,24 @@ async function rpc(fn: string, body: unknown) {
   return await r.json().catch(() => ({}));
 }
 
-function mail(o: { company: string; name: string; title: string; accent: string; sign: string; intro?: string; inv?: string; ss?: string; when?: string }) {
-  const first = esc(o.name.split(" ")[0]);
+const nice = (n: string) => { const w = n.replace(/\s+/g, " ").trim(); return w === w.toUpperCase() || w === w.toLowerCase() ? w.toLowerCase().replace(/(^|\s)\S/g, (c) => c.toUpperCase()) : w; };
+
+function mail(o: { company: string; name: string; title: string; accent: string; sign: string; intro?: string; inv?: string; ss?: string; when?: string; banner: string }) {
+  const first = esc(nice(o.name).split(" ")[0]);
+  const gold = "#e3c27a";
   const btn = (href: string, label: string, solid: boolean) =>
-    `<a href="${esc(href)}" style="display:block;text-align:center;text-decoration:none;font:600 16px Arial,sans-serif;padding:14px 18px;border-radius:999px;margin:10px 0;${solid ? `background:${o.accent};color:#fff;` : `border:2px solid ${o.accent};color:${o.accent};background:#fff;`}">${label}</a>`;
+    `<a href="${esc(href)}" style="display:block;text-align:center;text-decoration:none;font:700 16px Arial,sans-serif;padding:15px 18px;border-radius:999px;margin:12px 0;${solid ? `background:${gold};color:#1a1405;` : `border:2px solid ${gold};color:${gold};`}">${label}</a>`;
   const text = o.intro
     ? esc(o.intro).replace(/\n/g, "<br>")
-    : `${o.inv ? `Te invitamos a <b>${esc(o.title)}</b>${o.when ? ` — ${esc(o.when)}` : ""}.` : ""}${o.ss ? ` ${o.inv ? "Además, este año hay" : "Este año hay"} <b>amigo secreto</b>.` : ""}`;
-  return `<!doctype html><html><body style="margin:0;background:#f1f4f8;padding:24px 12px;font-family:Arial,sans-serif;color:#1b2430"><table role="presentation" width="100%" style="max-width:480px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden"><tr><td style="padding:6px;background:${o.accent}"></td></tr><tr><td style="padding:24px 22px">
-<div style="font:700 15px Arial;color:${o.accent};margin-bottom:10px">${esc(o.company)}</div>
-<h2 style="margin:0 0 10px;font-size:22px">Hola, ${first} 👋</h2>
-<p style="line-height:1.55;font-size:16px;margin:0 0 8px">${text}</p>
+    : `${o.inv ? `Te invitamos a <b style="color:#fff">${esc(o.title)}</b>${o.when ? `<br><span style="color:${gold}">${esc(o.when)}</span>` : ""}.` : ""}${o.ss ? `<br>${o.inv ? "Además, este año hay" : "Este año hay"} <b style="color:#fff">amigo secreto</b>.` : ""}`;
+  return `<!doctype html><html><body style="margin:0;background:#060b16;padding:22px 10px;font-family:Arial,sans-serif"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;background:#0b1220;border-radius:18px;overflow:hidden;border:1px solid rgba(227,194,122,.35)"><tr><td style="padding:0;line-height:0"><img src="${o.banner}" width="560" alt="" style="display:block;width:100%;height:auto;border:0"></td></tr><tr><td style="padding:6px 0;background:${o.accent}"></td></tr><tr><td style="padding:30px 28px 26px;color:#f6f1e4">
+<div style="font:700 12px Arial;letter-spacing:.3em;text-transform:uppercase;color:${gold};text-align:center">${esc(o.company)}</div>
+<h2 style="margin:14px 0 12px;font:700 28px Georgia,serif;text-align:center;color:#f3dfae">Hola, ${first}</h2>
+<p style="line-height:1.7;font-size:16px;margin:0 0 14px;text-align:center;color:#e9e4d6">${text}</p>
 ${o.inv ? btn(o.inv, "Ver mi invitación y confirmar", true) : ""}${o.ss ? btn(o.ss, "🎁 Descubrir mi amigo secreto", !o.inv) : ""}
-<p style="font-size:13px;color:#7b8794;margin:10px 0 0">${o.ss ? "El enlace del amigo secreto es solo tuyo. No lo compartas." : ""}</p>
-${o.sign ? `<p style="border-top:1px solid #e4e9ef;margin-top:16px;padding-top:12px;font-size:14px;color:#3a4654">${esc(o.sign).replace(/\n/g, "<br>")}</p>` : ""}
-</td></tr></table></body></html>`;
+<p style="font-size:12px;color:#8f99ab;margin:12px 0 0;text-align:center">${o.ss ? "El enlace del amigo secreto es solo tuyo. No lo compartas." : ""}</p>
+${o.sign ? `<p style="border-top:1px solid rgba(227,194,122,.25);margin-top:22px;padding-top:16px;font:italic 15px Georgia,serif;color:${gold};text-align:center">${esc(o.sign).replace(/\n/g, "<br>")}</p>` : ""}
+</td></tr><tr><td style="padding:14px 20px;background:#080d18;text-align:center;font:12px Arial;color:#7f8aa0"><img src="https://insecret.poseidonmk.com/assets/logo.png" width="22" height="22" alt="" style="vertical-align:middle;border-radius:50%"> &nbsp;Hecho por <a href="https://poseidonmk.com" style="color:#9fb4c9;text-decoration:none">Poseidón</a></td></tr></table></body></html>`;
 }
 
 async function send(key: string, to: { email: string; name: string }, subject: string, html: string, company: string) {
@@ -70,11 +73,11 @@ Deno.serve(async (req) => {
   const slug = String(b.slug || "").toLowerCase().replace(/[^a-z0-9-]/g, "");
   const withSS = !!b.withSecret;
 
-  let title = "nuestro evento", when = "";
+  let title = "nuestro evento", when = "", theme = "navidad";
   if (slug) {
     const inv = await rpc("invite_get", { p_slug: slug });
     if (inv.message || inv.error) return json(req, { error: "INVITE_NOT_FOUND" });
-    title = inv.config?.title || title;
+    title = inv.config?.title || title; theme = inv.theme === "fin" ? "fin" : "navidad";
     try { when = new Date(inv.config?.date + "-05:00").toLocaleString("es-EC", { timeZone: "America/Guayaquil", dateStyle: "full", timeStyle: "short" }); } catch { /* */ }
   }
 
@@ -93,8 +96,8 @@ Deno.serve(async (req) => {
       const p = clean[i++]; const tk = tokens[p.name.toLowerCase()] || "";
       const inv = slug ? `${SITE}/invitacion/?i=${slug}&para=${encodeURIComponent(p.name)}` : undefined;
       const ss = withSS && tk ? `${SITE}/amigo-secreto/?t=${tk}&e=1` : undefined;
-      const subj = `${p.name.split(" ")[0]}, ${slug ? `te invitamos a ${title}` : "tu amigo secreto está listo"}`;
-      const err = await send(BREVO, { email: p.email, name: p.name }, subj, mail({ company, name: p.name, title, accent, sign, intro, inv, ss, when }), company);
+      const subj = `${nice(p.name).split(" ")[0]}, ${slug ? `te invitamos a ${title}` : "tu amigo secreto está listo"}`;
+      const err = await send(BREVO, { email: p.email, name: p.name }, subj, mail({ company, name: p.name, title, accent, sign, intro, inv, ss, when, banner: `${SITE}/assets/mail/${theme}.jpg` }), company);
       results.push({ name: p.name, email: p.email, token: tk, ok: !err, error: err });
     }
   }
