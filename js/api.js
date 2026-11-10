@@ -98,6 +98,7 @@
     },
     organizerStatus: function (t) { return rpc('organizer_status', { p_token: t }); },
     resetParticipant: function (t, ref) { return rpc('reset_participant', { p_org_token: t, p_ref: ref }); },
+    deleteDraw: function (t) { return rpc('org_delete', { p_org_token: t }); },
     groupInfo: function (g) { return rpc('group_info', { p_group_token: g }); },
     groupEnter: function (g, ref, pin) {
       return rpc('group_enter', { p_group_token: g, p_ref: ref, p_pin: pin }).then(function (r) {
@@ -143,9 +144,12 @@
     organizerStatus: function (t) {
       return new Promise(function (resolve, reject) {
         var g = load()[t]; if (!g) return reject(fail('NOT_FOUND'));
-        resolve({ group_token: g.group_token, group_name: g.group_name, organizer: g.organizer, event_date: g.event_date, budget: g.budget,
+        resolve({ group_token: g.group_token, group_name: g.group_name, organizer: g.organizer, event_date: g.event_date, budget: g.budget, message: g.message || '',
           participants: g.people.map(function (x, i) { return { ref: i, name: x.name, opened: x.opened, claimed: !!x.pin }; }) });
       });
+    },
+    deleteDraw: function (t) {
+      return new Promise(function (resolve, reject) { var d = load(); if (!d[t]) return reject(fail('NOT_FOUND')); delete d[t]; save(d); resolve({ ok: true }); });
     },
     resetParticipant: function (t, ref) {
       return new Promise(function (resolve, reject) {
@@ -199,7 +203,7 @@
   };
 
   var api = { normPhone: normPhone, mode: DEMO ? 'demo' : (CONFIGURED ? 'live' : 'off'), ready: DEMO || CONFIGURED, feasible: feasible };
-  ['createDraw', 'organizerStatus', 'resetParticipant', 'groupInfo', 'groupEnter', 'reveal', 'saveWish', 'orgRecover'].forEach(function (k) {
+  ['createDraw', 'organizerStatus', 'resetParticipant', 'deleteDraw', 'groupInfo', 'groupEnter', 'reveal', 'saveWish', 'orgRecover'].forEach(function (k) {
     api[k] = function () { var t = DEMO ? demo : remote; return t[k].apply(t, arguments); };
   });
   window.InSecretAPI = api;

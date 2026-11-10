@@ -413,3 +413,16 @@ textarea{resize:vertical}
 .how-toggle[hidden]{display:none}
 .how-toggle i{font-style:normal;transition:transform .3s}
 .how-toggle[aria-expanded=true] i{transform:rotate(180deg)}
+/* v15: rehacer / eliminar */
+.manage .muted{margin:.2rem 0 .8rem}
+.mg-grid{display:grid;gap:12px}
+@media(min-width:640px){.mg-grid{grid-template-columns:1fr 1fr}}
+.mg-card{display:flex;flex-direction:column;gap:.6rem;padding:14px;border-radius:16px;border:1px solid rgba(254,212,5,.4);background:rgba(254,212,5,.05)}
+.mg-danger{border-color:rgba(230,104,43,.6);background:rgba(230,104,43,.07)}
+.mg-card h3{font-size:1.05rem}
+.mg-card p{font-size:.9rem;color:#cfe0f3;margin:0;flex:1}
+.mg-card .btn{align-self:flex-start}
+.mg-danger .btn{border-color:#e6682b;color:#ffb48a}
+.cf-acts{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.warn{background:rgba(230,104,43,.14);border:1px solid rgba(230,104,43,.5);border-radius:12px;padding:.6rem .8rem;color:#ffd2b8}
+.redo-note{margin-bottom:.8rem}

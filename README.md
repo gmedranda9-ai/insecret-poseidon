@@ -47,3 +47,8 @@ Sorteador de amigo secreto navideño de **Poseidón**. Sitio estático (HTML/CSS
 - `/amigo-secreto/` solo el sorteo (sin invitaciones, con botón "‹ Inicio").
 - `/invitaciones/` página de venta: qué puede llevar, 5 ocasiones + "otra ocasión", botón de WhatsApp.
 - `/invitacion/?t=navidad|fin|boda|cumple|cita` el ejemplo interactivo de cada ocasión.
+
+## v11 · Rehacer y eliminar sorteo
+
+- Panel del organizador: «Rehacer el sorteo» (prellena el formulario con los nombres; el sorteo viejo sigue vivo hasta crear el nuevo y entonces se borra) y «Eliminar este sorteo» (borra todo, sin deshacer).
+- RPC `org_delete(p_org_token)` y `organizer_status` ahora devuelve `message`.

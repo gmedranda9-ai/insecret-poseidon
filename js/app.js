@@ -199,6 +199,7 @@
       phone: phone, org_pin: opin
     }).then(function (r) {
       S.phone = phone;
+      if (S.replace) { var old = S.replace; S.replace = null; $('redo-note').hidden = true; removeSaved(old); API.deleteDraw(old).catch(function () {}); }
       return loadOrganizer(r.organizer_token);
     }).catch(function (e) {
       btn.disabled = false; btn.textContent = '🔗 Crear el enlace del sorteo';
@@ -242,7 +243,7 @@
   }
   function refresh(silent) {
     if (!S.orgToken) return;
-    API.organizerStatus(S.orgToken).then(function (st) { renderStatus(st); if (!silent) toast('Estado actualizado'); }, function () { if (!silent) toast('No se pudo actualizar'); });
+    API.organizerStatus(S.orgToken).then(function (st) { S.st = st; renderStatus(st); if (!silent) toast('Estado actualizado'); }, function () { if (!silent) toast('No se pudo actualizar'); });
   }
   $('refresh').addEventListener('click', function () { refresh(false); });
   $('copy-grp').addEventListener('click', function () { copy($('grp-link').value, 'Enlace del grupo copiado. ¡Pégalo en tu WhatsApp!'); });
@@ -251,6 +252,50 @@
   $('new-draw').addEventListener('click', function () {
     clearInterval(S.poll);
     location.href = BASE + (API.mode === 'demo' ? '?demo=1' : '');
+  });
+
+  /* ---------- Rehacer o eliminar el sorteo ---------- */
+  var ask_cb = null;
+  function ask(title, html, okLabel, cb) {
+    $('cf-title').textContent = title; $('cf-body').innerHTML = html; $('cf-yes').textContent = okLabel; ask_cb = cb;
+    $('confirm-modal').hidden = false; document.body.style.overflow = 'hidden'; $('cf-no').focus();
+  }
+  function askClose() { $('confirm-modal').hidden = true; document.body.style.overflow = ''; ask_cb = null; }
+  $('cf-no').addEventListener('click', askClose);
+  $('confirm-modal').addEventListener('click', function (e) { if (e.target === this) askClose(); });
+  $('cf-yes').addEventListener('click', function () { var f = ask_cb; askClose(); if (f) f(); });
+  function openedList() { return (S.st ? S.st.participants : []).filter(function (p) { return p.opened; }); }
+  $('btn-redo').addEventListener('click', function () {
+    var n = openedList().length;
+    ask('¿Rehacer el sorteo?',
+      '<p>Vas a poder <b>agregar o quitar personas</b> y corregir datos. Los nombres actuales ya estarán escritos.</p>' +
+      '<p>Al terminar se crea un sorteo nuevo con un <b>enlace nuevo</b>. El enlace de ahora, con los PIN ya creados, <b>dejará de servir</b> y todos tendrán que entrar otra vez.</p>' +
+      (n ? '<p class="warn">⚠️ ' + n + (n === 1 ? ' persona ya abrió su regalo' : ' personas ya abrieron su regalo') + '. Al rehacer, a todos les puede tocar alguien distinto.</p>' : '') +
+      '<p>El sorteo actual sigue funcionando hasta que crees el nuevo. Si te arrepientes, simplemente no lo termines.</p>',
+      'Sí, rehacer', function () {
+        var st = S.st; if (!st) return;
+        clearInterval(S.poll); S.replace = S.orgToken; S.uid = 0; S.ex = [];
+        S.people = st.participants.map(function (p) { return { id: ++S.uid, name: p.name }; });
+        S.g = { organizer: st.organizer, name: st.group_name, date: st.event_date, budget: st.budget, message: st.message || '' };
+        $('f-organizer').value = st.organizer; $('f-group').value = st.group_name; $('f-date').value = st.event_date; $('f-budget').value = st.budget || ''; $('f-message').value = st.message || '';
+        if (S.phone) $('f-phone').value = S.phone; $('f-orgpin').value = '';
+        $('do-draw').disabled = false; $('do-draw').textContent = '🔗 Crear el enlace del sorteo';
+        $('redo-note').textContent = 'Estás rehaciendo «' + st.group_name + '». Cambia lo que necesites. El sorteo anterior sigue vivo hasta que crees el nuevo. Si había exclusiones, vuelve a ponerlas en el paso 3.';
+        $('redo-note').hidden = false; renderPeople(); show('wizard'); go(1, true);
+      });
+  });
+  $('btn-del').addEventListener('click', function () {
+    var st = S.st; if (!st) return;
+    ask('¿Eliminar «' + st.group_name + '»?',
+      '<p>Se borrará <b>todo</b>: el grupo, los nombres, los PIN y las listas de deseos.</p>' +
+      '<p class="warn">⚠️ No se puede deshacer. Nadie podrá volver a entrar con los enlaces que ya compartiste.</p>' +
+      '<p>Si solo quieres agregar o quitar a alguien, usa «Rehacer el sorteo».</p>',
+      'Sí, eliminar', function () {
+        API.deleteDraw(S.orgToken).then(function () {
+          clearInterval(S.poll); removeSaved(S.orgToken); S.orgToken = null; S.st = null;
+          location.href = BASE + '?' + (API.mode === 'demo' ? 'demo=1&' : '') + 'r=1&borrado=1';
+        }, function () { toast('No se pudo eliminar. Inténtalo otra vez.'); });
+      });
   });
 
   /* ---------- Entrada por enlace de grupo ---------- */
@@ -433,7 +478,7 @@
         fail('Enlace de organizador no válido', 'No encontramos ese grupo. Puede que ya se haya borrado después del intercambio.');
       });
     }
-    if (qs.get('r')) { renderMine(); return showRecover(); }
+    if (qs.get('r')) { renderMine(); showRecover(); if (qs.get('borrado')) toast('Sorteo eliminado'); return; }
     renderMine();
     show('wizard'); go(1, true); window.scrollTo({ top: 0 });
   }
