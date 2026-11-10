@@ -58,3 +58,8 @@ Sorteador de amigo secreto navideño de **Poseidón**. Sitio estático (HTML/CSS
 - Clave: se crea una sola vez en el SQL Editor de Supabase con `select insecret.set_admin_key('...');` (mín. 10 caracteres). Nunca se pega en el chat ni en el código.
 - `/invitacion/?i=slug[&para=Nombre]`: invitación real. `/anfitrion/?h=TOKEN`: panel con respuestas, resumen para WhatsApp y enlaces personalizados.
 - Las invitaciones y respuestas se borran 7 días después del evento (pg_cron).
+
+## v13 · Paquete Empresa (correos con Brevo)
+- Admin → «📧 Paquete Empresa»: se pega nombre y correo de cada colaborador; se hace el sorteo en el servidor (`public.admin_company_draw`, requiere la clave de administrador) y la Edge Function `send-company` envía a cada persona un correo con dos botones (invitación con `?para=` y amigo secreto con su enlace privado `?t=`).
+- Los correos no se guardan. Remitente `no-reply@poseidonmk.com`, respuestas a `soporte@poseidonmk.com`. Requiere el secreto `BREVO_API_KEY` en Supabase.
+- Los envíos fallidos se pueden reintentar sin repetir el sorteo.

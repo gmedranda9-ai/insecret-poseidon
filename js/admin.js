@@ -3,12 +3,12 @@
   'use strict';
   var $ = function (id) { return document.getElementById(id); };
   var C = window.INSECRET_CONFIG || {}, DEF = window.INV_DEF || {};
-  var KEY = '', CUR = null, LAST = null, LOGO = '';
+  var KEY = '', CUR = null, LAST = null, LOGO = '', ITEMS = [], CRES = [];
   var ORIGIN = location.origin;
 
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function toast(m) { var t = $('toast'); t.textContent = m; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { t.hidden = true; }, 2200); }
-  function view(v) { ['login', 'list', 'form', 'done'].forEach(function (n) { $('v-' + n).hidden = n !== v; }); $('logout').hidden = v === 'login'; window.scrollTo({ top: 0 }); }
+  function view(v) { ['login', 'list', 'form', 'done', 'comp'].forEach(function (n) { $('v-' + n).hidden = n !== v; }); $('logout').hidden = v === 'login'; window.scrollTo({ top: 0 }); }
   function rpc(fn, body) {
     return fetch(C.supabaseUrl + '/rest/v1/rpc/' + fn, { method: 'POST', headers: { apikey: C.supabaseKey, Authorization: 'Bearer ' + C.supabaseKey, 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
       .then(function (r) { return r.json().catch(function () { return {}; }); }, function () { return { error: 'NETWORK' }; });
@@ -42,7 +42,7 @@
   /* ---------- lista ---------- */
   function loadList() { return rpc('admin_list', { p_key: KEY }).then(function (r) { if (r.error) { toast(msg(r)); if (r.error === 'BAD_KEY') view('login'); return; } showList(r.items); }); }
   function showList(items) {
-    view('list'); var box = $('items'); box.innerHTML = ''; $('list-empty').hidden = !!items.length;
+    ITEMS = items; view('list'); var box = $('items'); box.innerHTML = ''; $('list-empty').hidden = !!items.length;
     items.forEach(function (i) {
       var d = document.createElement('div'); d.className = 'it';
       d.innerHTML = '<h3>' + esc(i.client_name) + ' <span class="pill' + (i.active ? '' : ' off') + '">' + (i.active ? 'Activa' : 'Desactivada') + '</span></h3>' +
@@ -147,6 +147,50 @@
       LAST = { id: r.id, slug: r.slug, host: r.host_token, client: $('client').value.trim(), title: cfg.title, contact: $('contact').value };
       CUR = r.id; $('slug').value = r.slug; showDone();
     });
+  });
+
+  /* ---------- paquete empresa ---------- */
+  var CERR = { BAD_KEY: 'Clave incorrecta.', LOCKED: ERR.LOCKED, NO_BREVO_KEY: 'Falta guardar BREVO_API_KEY en los secretos de Supabase.', BAD_COUNT: 'Se necesitan entre 3 y 100 personas para el amigo secreto (1 a 100 si es solo invitación).', BAD_EMAIL: 'Revisa el correo de ', DUP_NAME: 'Hay un nombre repetido: ', BAD_NAME: 'Un nombre es muy largo o está vacío.', BAD_INPUT: 'Revisa la fecha del intercambio (no puede ser pasada) y el nombre de la empresa.', INVITE_NOT_FOUND: 'No se encontró esa invitación.', NO_SOLUTION: 'No se pudo hacer el sorteo con esos datos.' };
+  function parseList() {
+    return $('c-list').value.split('\n').map(function (l) { return l.trim(); }).filter(Boolean).map(function (l) {
+      var m = l.match(/^(.*?)[\t,;]\s*([^\s,;\t]+@[^\s,;\t]+)\s*$/) || l.match(/^(.*?)\s+([^\s]+@[^\s]+)$/); return m ? { name: m[1].trim(), email: m[2].trim() } : { name: l, email: '' };
+    });
+  }
+  $('c-list').addEventListener('input', function () { var n = parseList().length; $('c-count').textContent = n + (n === 1 ? ' persona' : ' personas'); });
+  $('c-ss').addEventListener('change', function () { $('c-ssbox').hidden = !this.checked; });
+  $('new-comp').addEventListener('click', function () {
+    var sel = $('c-slug'); sel.innerHTML = '<option value="">Sin invitación (solo amigo secreto)</option>';
+    ITEMS.forEach(function (i) { var o = document.createElement('option'); o.value = i.slug; o.textContent = i.client_name + ' · ' + (i.title || i.slug); sel.appendChild(o); });
+    $('c-res').hidden = true; $('c-err').hidden = true; view('comp');
+  });
+  $('comp-back').addEventListener('click', loadList);
+  function cerr(t) { $('c-err').textContent = t; $('c-err').hidden = false; $('c-err').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+  function sendComp(people, resend) {
+    var btn = $('c-send'); btn.disabled = true; btn.textContent = 'Enviando…'; $('c-err').hidden = true;
+    var body = { key: KEY, company: $('c-co').value.trim(), slug: $('c-slug').value, withSecret: $('c-ss').checked, eventDate: $('c-date').value, budget: $('c-budget').value, message: $('c-msg').value, accent: $('c-accent').value, sign: $('c-sign').value, organizer: $('c-co').value.trim(), people: people };
+    return fetch(C.supabaseUrl + '/functions/v1/send-company', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().catch(function () { return { error: 'NETWORK' }; }); }, function () { return { error: 'NETWORK' }; })
+      .then(function (r) {
+        btn.disabled = false; btn.textContent = 'Enviar correos';
+        if (!r.ok) { var m = CERR[r.error] || ERR[r.error] || 'No se pudo enviar. Inténtalo otra vez.'; if (r.error === 'BAD_EMAIL' || r.error === 'DUP_NAME') m += (r.who || r.detail || ''); return cerr(m); }
+        var keep = resend ? CRES.filter(function (x) { return x.ok; }) : []; CRES = keep.concat(r.results); r.sent += keep.length; r.failed = CRES.filter(function (x) { return !x.ok; }).length; r.results = CRES; var box = $('c-rows'); box.innerHTML = '';
+        r.results.forEach(function (x) { var d = document.createElement('div'); d.className = 'rw'; d.style.gridTemplateColumns = '1fr auto'; d.innerHTML = '<span>' + esc(x.name) + ' <small class="muted">' + esc(x.email) + '</small></span><span class="pill' + (x.ok ? '' : ' off') + '">' + (x.ok ? 'Enviado' : 'Falló') + '</span>'; box.appendChild(d); });
+        $('c-res-h').textContent = r.sent + ' enviados' + (r.failed ? ' · ' + r.failed + ' fallaron' : ''); $('c-retry').hidden = !r.failed; $('c-res').hidden = false; $('c-res').scrollIntoView({ behavior: 'smooth' });
+      });
+  }
+  $('c-send').addEventListener('click', function () {
+    var ps = parseList(); if (!$('c-co').value.trim()) return cerr('Escribe el nombre de la empresa.');
+    if (!ps.length) return cerr('Pega la lista de colaboradores.');
+    var bad = ps.filter(function (p) { return !p.name || !p.email; }); if (bad.length) return cerr('Revisa esta línea: ' + (bad[0].name || '(vacía)') + ' — falta el correo o el nombre.');
+    if ($('c-ss').checked && ps.length < 3) return cerr('El amigo secreto necesita al menos 3 personas.');
+    if ($('c-ss').checked && !$('c-date').value) return cerr('Elige la fecha del intercambio.');
+    if (!$('c-ss').checked && !$('c-slug').value) return cerr('Elige una invitación o activa el amigo secreto.');
+    if (!confirm('Se enviarán ' + ps.length + ' correos' + ($('c-ss').checked ? ' y se hará el sorteo (no se puede repetir)' : '') + '. ¿Continuar?')) return;
+    sendComp(ps);
+  });
+  $('c-retry').addEventListener('click', function () {
+    var f = CRES.filter(function (x) { return !x.ok; }).map(function (x) { return { name: x.name, email: x.email, token: x.token }; });
+    if (f.length) sendComp(f, true);
   });
 
   /* ---------- resultado ---------- */

@@ -28,7 +28,7 @@
 
   <!-- Lista -->
   <section id="v-list" hidden>
-    <div class="row-head"><h1>Mis invitaciones</h1><button type="button" class="btn gold" id="new">+ Nueva invitación</button></div>
+    <div class="row-head"><h1>Mis invitaciones</h1><div class="btns"><button type="button" class="btn ghost" id="new-comp">📧 Paquete Empresa</button><button type="button" class="btn gold" id="new">+ Nueva invitación</button></div></div>
     <p class="muted" id="list-empty" hidden>Todavía no hay ninguna. Toca «Nueva invitación» para crear la primera.</p>
     <div id="items" class="items"></div>
   </section>
@@ -108,6 +108,30 @@
   </section>
 
   <!-- Resultado -->
+  <section id="v-comp" hidden>
+    <div class="row-head"><h1>Paquete Empresa</h1><button type="button" class="btn ghost" id="comp-back">‹ Volver a la lista</button></div>
+    <p class="muted">Envía a cada colaborador un correo con su invitación y su amigo secreto. Los correos no se guardan: se usan solo para enviar.</p>
+    <fieldset class="card"><legend>Evento</legend>
+      <label class="f"><span>Empresa</span><input id="c-co" maxlength="50" placeholder="Empresa Ejemplo S.A."></label>
+      <label class="f"><span>Invitación <em>(opcional)</em></span><select id="c-slug"><option value="">Sin invitación (solo amigo secreto)</option></select></label>
+      <label class="chk"><input type="checkbox" id="c-ss" checked> Incluir amigo secreto (sorteo automático)</label>
+      <div id="c-ssbox" class="card" style="margin:0">
+        <label class="f"><span>Fecha del intercambio</span><input type="date" id="c-date"></label>
+        <label class="f"><span>Presupuesto sugerido (USD) <em>(opcional)</em></span><input type="number" id="c-budget" min="0" max="10000" step="1"></label>
+        <label class="f"><span>Mensaje para los participantes <em>(opcional)</em></span><textarea id="c-msg" maxlength="280" rows="2"></textarea></label>
+      </div>
+    </fieldset>
+    <fieldset class="card"><legend>Aspecto del correo</legend>
+      <label class="f"><span>Color de la empresa</span><input type="color" id="c-accent" value="#0b5d3b"></label>
+      <label class="f"><span>Firma <em>(opcional)</em></span><textarea id="c-sign" maxlength="160" rows="2" placeholder="Con cariño, Recursos Humanos"></textarea></label>
+    </fieldset>
+    <fieldset class="card"><legend>Colaboradores</legend>
+      <label class="f"><span>Uno por línea: nombre y correo <em>(sirve pegar desde Excel)</em></span><textarea id="c-list" rows="8" placeholder="Laura Pérez, laura@empresa.com&#10;Juan Mora, juan@empresa.com"></textarea><small id="c-count">0 personas</small></label>
+    </fieldset>
+    <p class="err" id="c-err" hidden></p>
+    <button type="button" class="btn gold big" id="c-send">Enviar correos</button>
+    <section class="card" id="c-res" hidden><h2 id="c-res-h"></h2><div id="c-rows" class="rows"></div><div class="btns"><button type="button" class="btn ghost" id="c-retry" hidden>Reintentar los fallidos</button></div></section>
+  </section>
   <section class="card" id="v-done" hidden>
     <h1>¡Invitación lista!</h1>
     <p class="muted">Estos son los enlaces. Cópialos o envíale el mensaje al cliente.</p>
@@ -121,6 +145,6 @@
 <div class="toast" id="toast" hidden></div>
 <script src="../config.js?v=1"></script>
 <script src="../invitacion/defaults.js?v=1"></script>
-<script src="../js/admin.js?v=1"></script>
+<script src="../js/admin.js?v=2"></script>
 </body>
 </html>
