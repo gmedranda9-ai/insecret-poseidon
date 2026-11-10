@@ -71,7 +71,7 @@
   function fillText(k) {
     var d = DEF[k] || {};
     $('lead').value = d.lead || ''; $('to').value = d.to || ''; $('host').value = d.host || ''; $('title').value = d.title || ''; $('msg').value = d.msg || '';
-    $('date').value = d.date || ''; $('target').value = d.target || ''; $('place').value = d.place || ''; $('mapq').value = d.mapq || ''; $('maplink').value = ''; $('allow-g').checked = true;
+    $('date').value = d.date || ''; $('target').value = d.target || ''; $('place').value = d.place || ''; $('mapq').value = d.mapq || ''; $('maplink').value = ''; $('allow-g').checked = true; $('corp').checked = false;
     $('it-rows').innerHTML = ''; (d.it || []).forEach(function (r) { rowIt(r[0], r[1]); });
     $('me-rows').innerHTML = ''; (d.menu || []).forEach(function (r) { rowMe(r[0], r[1]); });
     $('dress').value = (d.dress && d.dress[0]) || ''; var cs = (d.dress && d.dress[1]) || []; $('c1').value = cs[0] || '#888888'; $('c2').value = cs[1] || '#aaaaaa'; $('c3').value = cs[2] || '#cccccc';
@@ -86,7 +86,7 @@
     $('client').value = rec ? rec.client_name : ''; $('contact').value = rec ? (rec.client_contact || '') : ''; $('notes').value = rec ? (rec.notes || '') : ''; $('active').checked = rec ? !!rec.active : true; $('slug').value = rec ? rec.slug : '';
     if (rec) {
       var c = rec.config || {}; $('lead').value = c.lead || ''; $('to').value = c.to || ''; $('host').value = c.host || ''; $('title').value = c.title || ''; $('msg').value = c.msg || '';
-      $('date').value = c.date || ''; $('target').value = c.target || ''; $('place').value = c.place || ''; $('mapq').value = c.mapq || ''; $('maplink').value = c.maplink || ''; $('allow-g').checked = !c.noguests;
+      $('date').value = c.date || ''; $('target').value = c.target || ''; $('place').value = c.place || ''; $('mapq').value = c.mapq || ''; $('maplink').value = c.maplink || ''; $('allow-g').checked = !c.noguests; $('corp').checked = !!c.corp;
       $('it-rows').innerHTML = ''; (c.it || []).forEach(function (r) { rowIt(r[0], r[1]); }); $('me-rows').innerHTML = ''; (c.menu || []).forEach(function (r) { rowMe(r[0], r[1]); });
       $('dress').value = (c.dress && c.dress[0]) || ''; var cs = (c.dress && c.dress[1]) || []; $('c1').value = cs[0] || '#888888'; $('c2').value = cs[1] || '#aaaaaa'; $('c3').value = cs[2] || '#cccccc';
       $('x-t').value = (c.extra && c.extra[1]) || ''; $('x-x').value = (c.extra && c.extra[2]) || '';
@@ -123,7 +123,7 @@
     var me = [].map.call($('me-rows').children, function (r) { var i = r.querySelectorAll('input'); return [i[0].value.trim(), i[1].value.trim()]; }).filter(function (r) { return r[1]; });
     var cfg = {
       lead: $('lead').value.trim(), to: $('to').value.trim(), host: $('host').value.trim(), title: $('title').value.trim(), msg: $('msg').value.trim(),
-      date: $('date').value, place: $('place').value.trim(), mapq: $('mapq').value.trim(), maplink: $('maplink').value.trim(), noguests: !$('allow-g').checked, it: it, menu: me,
+      date: $('date').value, place: $('place').value.trim(), mapq: $('mapq').value.trim(), maplink: $('maplink').value.trim(), noguests: !$('allow-g').checked, corp: $('corp').checked, it: it, menu: me,
       dress: [$('dress').value.trim(), [$('c1').value, $('c2').value, $('c3').value]], extra: ['gi', $('x-t').value.trim(), $('x-x').value.trim()],
       rsvp: [$('r-q').value.trim() || '¿Nos acompañas?', $('r-y').value.trim() || 'Sí, voy', $('r-n').value.trim() || 'No puedo']
     };
@@ -179,7 +179,7 @@
   function ensureInvite() {
     var k = $('c-occ').value; if (!k) return Promise.resolve({ slug: '' });
     var d = DEF[k] || {}, cfg = JSON.parse(JSON.stringify(d));
-    cfg.title = $('c-title').value.trim(); cfg.date = $('c-when').value; cfg.place = $('c-place').value.trim(); cfg.msg = $('c-imsg').value.trim(); cfg.host = $('c-co').value.trim(); cfg.mapq = $('c-city').value.trim(); cfg.maplink = $('c-maplink').value.trim(); cfg.noguests = true; cfg.it = rows($('c-it-rows')); cfg.menu = rows($('c-me-rows')); cfg.dress = [$('c-dress').value.trim(), [$('c-c1').value, $('c-c2').value, $('c-c3').value]]; cfg.extra = ['gi', $('c-x-t').value.trim(), $('c-x-x').value.trim()];
+    cfg.title = $('c-title').value.trim(); cfg.date = $('c-when').value; cfg.place = $('c-place').value.trim(); cfg.msg = $('c-imsg').value.trim(); cfg.host = $('c-co').value.trim(); cfg.mapq = $('c-city').value.trim(); cfg.maplink = $('c-maplink').value.trim(); cfg.noguests = true; cfg.corp = $('c-corp').checked; cfg.to = 'Para el equipo de ' + $('c-co').value.trim(); cfg.lead = 'Estás cordialmente invitado'; cfg.it = rows($('c-it-rows')); cfg.menu = rows($('c-me-rows')); cfg.dress = [$('c-dress').value.trim(), [$('c-c1').value, $('c-c2').value, $('c-c3').value]]; cfg.extra = ['gi', $('c-x-t').value.trim(), $('c-x-x').value.trim()];
     delete cfg.target; var br = { accent: $('c-accent').value }; if (CLOGO) br.logo = CLOGO; if ($('c-sign').value.trim()) br.sign = $('c-sign').value.trim(); cfg.brand = br;
     var slug = CINV ? CINV.slug : slugify($('c-co').value) + '-' + k;
     return rpc('admin_save', { p_key: KEY, p_id: CINV ? CINV.id : null, p_slug: slug, p_theme: k, p_client: $('c-co').value.trim(), p_contact: '', p_notes: 'Paquete Empresa', p_config: cfg, p_active: true }).then(function (r) { if (r.error || r.message) { cerr(msg(r)); return null; } CINV = { id: r.id, slug: r.slug, host: r.host_token }; return CINV; });

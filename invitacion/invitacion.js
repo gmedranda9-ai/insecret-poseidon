@@ -282,7 +282,7 @@
     var me = '<div class="dishes">' + t.menu.map(function (m, i) { return '<button type="button" class="dish" data-d="' + i + '" style="--i:' + i + '"><span class="di">' + dishIc + '</span><span><small>' + esc(m[0]) + '</small><b>' + esc(m[1]) + '</b></span><span class="hrt" aria-label="Me encanta">♡</span></button>'; }).join('') + '</div>' +
       '<p class="diet-t">¿Alguna dieta o alergia?</p><div class="chips">' + ['Vegetariano', 'Sin gluten', 'Sin lácteos', 'Sin mariscos'].map(function (c) { return '<button type="button" class="chip" aria-pressed="false">' + c + '</button>'; }).join('') + '</div><small>Lo que marques se agrega a tu confirmación.</small>';
     var q2 = encodeURIComponent(t.place + ', ' + t.mapq);
-    var pl = '<div class="mapv"><svg viewBox="0 0 300 150" role="img" aria-label="Mapa ilustrado"><rect width="300" height="150" class="mb"/><g class="mr"><path d="M0 40h300M0 100h300M60 0v150M170 0v150M250 0v150"/></g><path class="mp" d="M30 128H60V100H170V40H250" /><circle cx="30" cy="128" r="5" class="ms"/><g class="pin" transform="translate(250 40)"><circle r="16" class="ring"/><path d="M0 0c-9-12-12-17-12-23a12 12 0 0124 0c0 6-3 11-12 23z" transform="translate(0 -2)" class="pb"/><circle cy="-25" r="4.5" fill="#fff"/></g></svg></div><p><b>' + esc(t.place) + '</b></p><p><a class="btn-map" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&query=' + q2 + '">Cómo llegar · Google Maps</a></p><small>Hay parqueadero cerca. Si vienes en taxi, llega 10 minutos antes.</small>';
+    var pl = '<div class="mapv"><svg viewBox="0 0 300 150" role="img" aria-label="Mapa ilustrado"><rect width="300" height="150" class="mb"/><g class="mr"><path d="M0 40h300M0 100h300M60 0v150M170 0v150M250 0v150"/></g><path class="mp" d="M30 128H60V100H170V40H250" /><circle cx="30" cy="128" r="5" class="ms"/><g class="pin" transform="translate(250 40)"><circle r="16" class="ring"/><path d="M0 0c-9-12-12-17-12-23a12 12 0 0124 0c0 6-3 11-12 23z" transform="translate(0 -2)" class="pb"/><circle cy="-25" r="4.5" fill="#fff"/></g></svg></div><p><b>' + esc(t.place) + '</b></p><p><a class="btn-map" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&query=' + q2 + '">Cómo llegar · Google Maps</a></p>' + (REAL ? '' : '<small>Hay parqueadero cerca. Si vienes en taxi, llega 10 minutos antes.</small>') + '';
     var ex = '<button type="button" class="gift" aria-label="Abrir sorpresa"><svg viewBox="0 0 100 90" width="110"><g class="lid"><rect x="8" y="24" width="84" height="18" rx="3" fill="var(--accent)"/><rect x="45" y="24" width="10" height="18" fill="rgba(255,255,255,.55)"/><path d="M50 24c-14-18-30-6-18 0M50 24c14-18 30-6 18 0" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="4" stroke-linecap="round"/></g><rect x="14" y="42" width="72" height="42" rx="3" fill="var(--accent)" opacity=".85"/><rect x="45" y="42" width="10" height="42" fill="rgba(255,255,255,.55)"/></svg><span>Toca para abrir</span></button><p class="gtx">' + esc(t.extra[2]) + '</p>';
     var has = { it: t.it && t.it.length, dr: t.dress && t.dress[0], me: t.menu && t.menu.length, pl: t.place, ex: t.extra && t.extra[1] };
     $('tiles').innerHTML = (has.it ? tile('it', 'it', 'Itinerario', it) : '') + (has.dr ? tile('dr', 'dr', 'Vestimenta', dr) : '') + (has.me ? tile('me', 'me', 'Menú', me) : '') + (has.pl ? tile('pl', 'pl', 'Lugar', pl + mapEmbed(t)) : '') + (has.ex ? tile('ex', t.extra[0] || 'gi', t.extra[1], ex) : '');
@@ -457,13 +457,25 @@
       .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) { var e = new Error(j && j.message || 'ERROR'); throw e; } return j; }); },
         function () { throw new Error('NETWORK'); });
   }
-  var EDIT = ['lead', 'to', 'host', 'title', 'msg', 'date', 'target', 'place', 'mapq', 'maplink', 'noguests', 'it', 'dress', 'menu', 'extra', 'rsvp'];
+  var EDIT = ['corp', 'lead', 'to', 'host', 'title', 'msg', 'date', 'target', 'place', 'mapq', 'maplink', 'noguests', 'it', 'dress', 'menu', 'extra', 'rsvp'];
+  function hexRGB(h) { return [1, 3, 5].map(function (i) { return parseInt(h.slice(i, i + 2), 16); }); }
+  function lum(h) { var c = hexRGB(h).map(function (v) { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }); return .2126 * c[0] + .7152 * c[1] + .0722 * c[2]; }
+  function mix(h, k) { return '#' + hexRGB(h).map(function (v) { return ('0' + Math.round(v * k).toString(16)).slice(-2); }).join(''); }
+  function enableCorp(acc) {
+    var a = /^#[0-9a-fA-F]{6}$/.test(acc || '') ? acc : '#1f3a5f', L = lum(a), s = document.body.style;
+    document.body.classList.add('corp');
+    s.setProperty('--c-acc', a); s.setProperty('--c-on', L > .45 ? '#14161d' : '#ffffff');
+    s.setProperty('--c-title', L < .3 ? a : (L < .6 ? mix(a, .6) : '#1d2433'));
+    s.setProperty('--c-bg1', L < .06 ? '#141b30' : mix(a, .55)); s.setProperty('--c-bg2', L < .06 ? '#080b14' : mix(a, .22));
+    s.setProperty('--accent', L < .3 ? a : '#8a6d2b');
+  }
   function applyReal(theme, cfg) {
     var t = T[theme];
     EDIT.forEach(function (f) { if (cfg[f] !== undefined && cfg[f] !== null) t[f] = cfg[f]; });
     if (!cfg.target) delete t.target;
     var b = cfg.brand || {};
     if (b.accent && /^#[0-9a-fA-F]{6}$/.test(b.accent)) document.body.style.setProperty('--accent', b.accent);
+    if (cfg.corp) enableCorp(b.accent);
     if (b.logo && /^data:image\/(png|jpeg|webp);base64,/.test(b.logo)) { $('brand-logo').src = b.logo; $('brand-logo').hidden = false; }
     if (b.sign) { $('sign').textContent = b.sign; $('sign').hidden = false; }
     document.title = (t.title || 'Invitación') + ' · Invitación';
