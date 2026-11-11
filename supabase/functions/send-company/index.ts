@@ -19,9 +19,10 @@ async function rpc(fn: string, body: unknown) {
   return await r.json().catch(() => ({}));
 }
 
+const BANNERS: Record<string, [string, string]> = { navidad: ["#031a16", "Merry Christmas"], fin: ["#0a0720", "Happy New Year 2027"], boda: ["#06142f", "Happy Anniversary"], cumple: ["#ffe3a0", "Happy Birthday"], cita: ["#2b0916", "Love Date"] };
 const nice = (n: string) => { const w = n.replace(/\s+/g, " ").trim(); return w === w.toUpperCase() || w === w.toLowerCase() ? w.toLowerCase().replace(/(^|\s)\S/g, (c) => c.toUpperCase()) : w; };
 
-function mail(o: { company: string; name: string; title: string; accent: string; sign: string; intro?: string; inv?: string; ss?: string; when?: string; banner: string }) {
+function mail(o: { company: string; name: string; title: string; accent: string; sign: string; intro?: string; inv?: string; ss?: string; when?: string; banner: string; bbg: string; balt: string }) {
   const first = esc(nice(o.name).split(" ")[0]);
   const gold = "#e3c27a";
   const btn = (href: string, label: string, solid: boolean) =>
@@ -29,14 +30,14 @@ function mail(o: { company: string; name: string; title: string; accent: string;
   const text = o.intro
     ? esc(o.intro).replace(/\n/g, "<br>")
     : `${o.inv ? `Te invitamos a <b style="color:#fff">${esc(o.title)}</b>${o.when ? `<br><span style="color:${gold}">${esc(o.when)}</span>` : ""}.` : ""}${o.ss ? `<br>${o.inv ? "Además, este año hay" : "Este año hay"} <b style="color:#fff">amigo secreto</b>.` : ""}`;
-  return `<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark"></head><body bgcolor="#060b16" style="margin:0;background:#060b16;padding:22px 10px;font-family:Arial,sans-serif"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#0b1220" style="max-width:560px;margin:0 auto;background:#0b1220;border-radius:18px;overflow:hidden;border:1px solid rgba(227,194,122,.35)"><tr><td style="padding:0;line-height:0"><img src="${o.banner}" width="560" alt="" style="display:block;width:100%;height:auto;border:0"></td></tr><tr><td bgcolor="${o.accent}" style="padding:6px 0;background:${o.accent}"></td></tr><tr><td bgcolor="#0b1220" style="padding:30px 28px 26px;color:#f6f1e4;background:#0b1220">
+  return `<!doctype html><html><head><meta charset="utf-8"></head><body bgcolor="#060b16" style="margin:0;background:#060b16;padding:22px 10px;font-family:Arial,sans-serif"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#0b1220" style="max-width:560px;margin:0 auto;background:#0b1220;border-radius:18px;overflow:hidden;border:1px solid rgba(227,194,122,.35)"><tr><td bgcolor="${o.bbg}" align="center" style="padding:0;background:${o.bbg}"><img src="${o.banner}" width="560" height="224" alt="${esc(o.balt)}" style="display:block;width:100%;max-width:560px;height:auto;border:0;font:italic 700 30px Georgia,serif;color:#f3dfae;text-align:center;line-height:224px"></td></tr><tr><td bgcolor="${o.accent}" style="padding:6px 0;background:${o.accent}"></td></tr><tr><td bgcolor="#0b1220" style="padding:30px 28px 26px;color:#f6f1e4;background:#0b1220">
 <div style="font:700 12px Arial;letter-spacing:.3em;text-transform:uppercase;color:${gold};text-align:center">${esc(o.company)}</div>
 <h2 style="margin:14px 0 12px;font:700 28px Georgia,serif;text-align:center;color:#f3dfae">Hola, ${first}</h2>
 <p style="line-height:1.7;font-size:16px;margin:0 0 14px;text-align:center;color:#e9e4d6">${text}</p>
 ${o.inv ? btn(o.inv, "Ver mi invitación y confirmar", true) : ""}${o.ss ? btn(o.ss, "🎁 Descubrir mi amigo secreto", !o.inv) : ""}
 <p style="font-size:12px;color:#8f99ab;margin:12px 0 0;text-align:center">${o.ss ? "El enlace del amigo secreto es solo tuyo. No lo compartas." : ""}</p>
 ${o.sign ? `<p style="border-top:1px solid rgba(227,194,122,.25);margin-top:22px;padding-top:16px;font:italic 15px Georgia,serif;color:${gold};text-align:center">${esc(o.sign).replace(/\n/g, "<br>")}</p>` : ""}
-</td></tr><tr><td bgcolor="#080d18" style="padding:14px 20px;background:#080d18;text-align:center;font:12px Arial;color:#7f8aa0"><img src="https://insecret.poseidonmk.com/assets/logo.png" width="22" height="22" alt="" style="vertical-align:middle;border-radius:50%"> &nbsp;Hecho por <a href="https://poseidonmk.com" style="color:#9fb4c9;text-decoration:none">Poseidón</a></td></tr></table></body></html>`;
+</td></tr><tr><td bgcolor="#080d18" style="padding:14px 20px;background:#080d18;text-align:center;font:12px Arial;color:#7f8aa0"><img src="https://insecret.poseidonmk.com/assets/logo.png" width="22" height="22" alt="" style="vertical-align:middle;border-radius:50%"> &nbsp;Hecho por <a href="https://poseidonmk.com" style="color:#9fb4c9;text-decoration:none">Poseidón</a><br><span style="font-size:11px;color:#6b7690">Si no ves las imágenes, pulsa «Mostrar contenido» en tu correo.</span></td></tr></table></body></html>`;
 }
 
 function plain(o: { name: string; title: string; inv?: string; ss?: string; sign: string; company: string; intro?: string }) {
@@ -102,7 +103,7 @@ Deno.serve(async (req) => {
       const inv = slug ? `${SITE}/invitacion/?i=${slug}&para=${encodeURIComponent(nice(p.name))}` : undefined;
       const ss = withSS && tk ? `${SITE}/amigo-secreto/?t=${tk}&e=1` : undefined;
       const subj = `${nice(p.name).split(" ")[0]}, ${slug ? `te invitamos a ${title}` : "tu amigo secreto está listo"}`;
-      const err = await send(BREVO, { email: p.email, name: p.name }, subj, mail({ company, name: p.name, title, accent, sign, intro, inv, ss, when, banner: `${SITE}/assets/mail/${theme}.jpg` }), company, plain({ name: p.name, title, inv, ss, sign, company, intro }));
+      const err = await send(BREVO, { email: p.email, name: p.name }, subj, mail({ company, name: p.name, title, accent, sign, intro, inv, ss, when, banner: `${SITE}/assets/mail/${theme}.jpg`, bbg: BANNERS[theme][0], balt: BANNERS[theme][1] }), company, plain({ name: p.name, title, inv, ss, sign, company, intro }));
       results.push({ name: p.name, email: p.email, token: tk, ok: !err, error: err });
     }
   }
