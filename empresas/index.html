@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="../assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/landing.css?v=15">
+<link rel="stylesheet" href="../css/landing.css?v=17">
 </head>
 <body class="sub">
 <canvas id="fx" aria-hidden="true"></canvas>
@@ -32,50 +32,47 @@
     <h1>Tu evento de empresa, <em>con distinción</em></h1>
     <p class="lead">Invitación con el logo y los colores de tu empresa, más el amigo secreto de tus colaboradores. Cena navideña, fin de año y otras ocasiones especiales. Tú nos envías la lista y nosotros nos encargamos de todo.</p>
   </section>
-  <section class="block flow" id="flow">
-    <h2 class="h2c">Así lo vive <em>tu equipo</em></h2>
-    <p class="sub-l">Tú nos pasas la lista. Esto es lo que recibe y ve cada colaborador, y lo que ves tú.</p>
-    <div class="flow-wrap">
-      <div class="flow-steps" role="tablist">
-        <button type="button" class="fs on" role="tab" data-i="0"><i>1</i><span><b>Les llega por correo</b><small>Con el logo de tu empresa: un botón para su invitación y otro, solo suyo, para su amigo secreto.</small></span></button>
-        <button type="button" class="fs" role="tab" data-i="1"><i>2</i><span><b>Abren su invitación</b><small>Un sobre que se abre con luces, cuenta regresiva, itinerario y confirmación de asistencia.</small></span></button>
-        <button type="button" class="fs" role="tab" data-i="2"><i>3</i><span><b>Descubren su amigo secreto</b><small>Cada quien ve a quién le regala. Nadie más lo sabe, ni tú.</small></span></button>
-        <button type="button" class="fs" role="tab" data-i="3"><i>4</i><span><b>Tú sigues quién ya entró</b><small>Ves quién abrió su regalo y quién falta, sin ver los cruces.</small></span></button>
+  <section class="block pkg" id="paquetes">
+    <h2 class="h2c">Elige tu <em>celebración</em></h2>
+    <p class="sub-l">Toca una y mira cómo la recibe cada colaborador: del correo a la invitación.</p>
+    <div class="pk-list">
+      <div class="pk on" data-k="0">
+        <button type="button" class="pk-h" aria-expanded="true"><span class="pk-ic"><img src="../assets/deco/santa-head.webp" alt=""></span><span class="pk-t"><b>Cena navideña + Amigo secreto</b><small>Invitación y sorteo en un solo paquete</small></span><em class="pk-badge">Más pedido</em><i class="pk-ch">⌄</i></button>
+        <div class="pk-b"><div class="pk-in">
+          <div class="pk-steps">
+            <button type="button" class="fs on" data-i="0"><i>1</i><span><b>Les llega por correo</b><small>Con tu logo: un botón para su invitación y otro, solo suyo, para su amigo secreto.</small></span></button>
+            <button type="button" class="fs" data-i="1"><i>2</i><span><b>Abren su invitación</b><small>Un sobre que se abre con luces, cuenta regresiva, itinerario y confirmación de asistencia.</small></span></button>
+            <button type="button" class="fs" data-i="2"><i>3</i><span><b>Descubren su amigo secreto</b><small>Cada quien ve a quién le regala. Nadie más lo sabe, ni tú.</small></span></button>
+            <div class="pk-cta"><a class="btn-l" href="../invitacion/?t=navidad&corp=1">✉ Abrir la invitación</a><a class="btn-l btn-l2" href="../amigo-secreto/?demo=1">🎁 Probar el amigo secreto</a></div>
+          </div>
+          <div class="flow-phone"><img class="on" src="../assets/show/mail-navidad.webp" alt="Correo de la cena navideña" width="324" height="639"><img data-src="../assets/show/inv-navidad.webp" alt="Invitación de la cena navideña" width="360" height="740"><img data-src="../assets/show/amigo.webp" alt="Pantalla del amigo secreto" width="360" height="740"></div>
+        </div></div>
       </div>
-      <div class="flow-phone" aria-live="polite">
-        <img class="on" src="../assets/show/mail.webp" alt="Correo que recibe cada colaborador" width="324" height="639">
-        <img src="../assets/show/invitacion.webp" alt="Invitación corporativa abierta" width="360" height="740" loading="lazy">
-        <img src="../assets/show/amigo.webp" alt="Pantalla del amigo secreto" width="360" height="740" loading="lazy">
-        <img src="../assets/show/panel.webp" alt="Panel de seguimiento" width="360" height="740" loading="lazy">
+      <div class="pk" data-k="1">
+        <button type="button" class="pk-h" aria-expanded="false"><span class="pk-ic"><img src="../assets/deco/toast.webp" alt=""></span><span class="pk-t"><b>Fin de año corporativo</b><small>Invitación con tu logo y tus colores</small></span><i class="pk-ch">⌄</i></button>
+        <div class="pk-b"><div class="pk-in">
+          <div class="pk-steps">
+            <button type="button" class="fs on" data-i="0"><i>1</i><span><b>Les llega por correo</b><small>Con tu logo y un botón para ver su invitación y confirmar.</small></span></button>
+            <button type="button" class="fs" data-i="1"><i>2</i><span><b>Abren su invitación</b><small>Brindis, cuenta regresiva al 2027, itinerario y confirmación de asistencia.</small></span></button>
+            <div class="pk-cta"><a class="btn-l" href="../invitacion/?t=fin&corp=1">✉ Abrir la invitación</a></div>
+          </div>
+          <div class="flow-phone"><img class="on" data-src="../assets/show/mail-fin.webp" alt="Correo de fin de año" width="324" height="639"><img data-src="../assets/show/inv-fin.webp" alt="Invitación de fin de año" width="360" height="740"></div>
+        </div></div>
       </div>
-    </div>
-    <div class="flow-cta"><a class="btn-l" href="../invitacion/?t=navidad&corp=1">✉ Abrir la invitación en vivo</a><a class="btn-l btn-l2" href="../amigo-secreto/?demo=1">🎁 Probar el amigo secreto (demo)</a></div>
-  </section>
-  <section class="block">
-    <h2 class="h2c">Míralas en vivo</h2>
-    <p class="sub-l">Toca una para abrirla. Así la recibirá cada colaborador.</p>
-    <div class="col col-e col-w"><div class="exgrid"><a class="ex" href="../invitacion/?t=navidad&corp=1" style="--ac:#e3c27a"><span class="oi"><img src="../assets/deco/santa-head.webp" alt=""></span><span><b>Cena navideña corporativa</b><small>Elegante, con luces y copos</small></span><i>→</i></a><a class="ex" href="../invitacion/?t=fin&corp=1" style="--ac:#e3c27a"><span class="oi">🥂</span><span><b>Fin de año corporativo</b><small>Brindis y fuegos artificiales</small></span><i>→</i></a><a class="ex" href="../invitacion/?t=boda&corp=1" style="--ac:#e3c27a"><span class="oi">🏆</span><span><b>Aniversario o evento de la empresa</b><small>Con tu logo y tus colores</small></span><i>→</i></a><a class="ex ex-more" href="https://wa.me/593982354338?text=Hola%20Poseid%C3%B3n%20%F0%9F%91%8B%20quiero%20una%20invitaci%C3%B3n%20empresarial%20para%20otra%20ocasi%C3%B3n." target="_blank" rel="noopener" style="--ac:#009ee7"><span class="oi">✨</span><span><b>Otra ocasión</b><small>Lanzamientos, premiaciones… la creamos</small></span><i>→</i></a></div></div>
-  </section>
-  <section class="block mailsec">        <div class="col-mail emp-mail">
-    <details class="mail-open"><summary class="mail-btn">✉ Ver cómo le llega a cada colaborador</summary>
-    <div class="mail mail-d" role="img" aria-label="Ejemplo del correo que recibe cada colaborador">
-      <div class="m-bar"><span></span><span></span><span></span></div>
-      <div class="m-meta"><div><small>De</small> Empresa Ejemplo · Poseidón <b>&lt;no-reply@poseidonmk.com&gt;</b></div><div><small>Asunto</small> <b>Laura, te invitamos a la cena navideña</b></div></div>
-      <div class="m-body">
-        <img class="m-ban" src="../assets/mail/navidad.jpg" alt="" loading="lazy">
-        <div class="m-pad">
-        <div class="m-co">Empresa Ejemplo S.A.</div>
-        <h3>Hola, Laura</h3>
-        <p>Te invitamos a <b>nuestra cena navideña</b><br><span class="m-g">viernes 19 de diciembre</span><br>Además, este año hay <b>amigo secreto</b>.</p>
-        <span class="m-btn m-b1">Ver mi invitación y confirmar</span>
-        <span class="m-btn m-b2">🎁 Descubrir mi amigo secreto</span>
-        <small>El enlace del amigo secreto es solo tuyo. No lo compartas.</small>
-        <div class="m-sign">Con cariño, Recursos Humanos</div>
-        </div>
+      <div class="pk" data-k="2">
+        <button type="button" class="pk-h" aria-expanded="false"><span class="pk-ic pk-tr">🏆</span><span class="pk-t"><b>Aniversario o evento de la empresa</b><small>Invitación con tu logo y tus colores</small></span><i class="pk-ch">⌄</i></button>
+        <div class="pk-b"><div class="pk-in">
+          <div class="pk-steps">
+            <button type="button" class="fs on" data-i="0"><i>1</i><span><b>Les llega por correo</b><small>Con tu logo y un botón para ver su invitación y confirmar.</small></span></button>
+            <button type="button" class="fs" data-i="1"><i>2</i><span><b>Abren su invitación</b><small>Sobre elegante con tu marca, programa del evento y confirmación de asistencia.</small></span></button>
+            <div class="pk-cta"><a class="btn-l" href="../invitacion/?t=boda&corp=1">✉ Abrir la invitación</a></div>
+          </div>
+          <div class="flow-phone"><img class="on" data-src="../assets/show/mail-aniv.webp" alt="Correo de aniversario" width="324" height="639"><img data-src="../assets/show/inv-aniv.webp" alt="Invitación de aniversario" width="360" height="740"></div>
+        </div></div>
       </div>
     </div>
-    </details>
-        </div></section>
+    <p class="pk-note">Todo lleva el logo y los colores de tu empresa. Tú nos envías la lista; nosotros nos encargamos del resto.</p>
+  </section>
   <section class="block emp" id="empresas">
     <h2 class="h2c">Así funciona el <em>Paquete Empresa</em></h2>
     
@@ -95,6 +92,6 @@
 </main>
 <footer><a href="https://poseidonmk.com" target="_blank" rel="noopener">poseidonmk.com</a> · <a href="mailto:soporte@poseidonmk.com">soporte@poseidonmk.com</a><p class="slogan">El futuro no espera. Nosotros tampoco. Activa el poder.</p></footer>
 <script src="../js/landing.js?v=2"></script>
-<script src="../js/flow.js?v=1"></script>
+<script src="../js/flow.js?v=3"></script>
 </body>
 </html>

@@ -375,7 +375,7 @@
   function resetStory() {
     if (!SG.sg2) return; lights(false); document.body.classList.remove('story-end');
     ['sg2', 'sg3', 'sg4'].forEach(function (k) { SG[k].classList.remove('show'); }); [2, 3].forEach(function (n) { $('sn' + n).hidden = true; }); $('sn1').hidden = false;
-    var lb = LAB[cur] || LAB.navidad; [1, 2, 3].forEach(function (n) { $('sn' + n).querySelector('.story-btn').textContent = lb[n - 1]; });
+    var lb = LAB[cur] || LAB.navidad; if (cur === 'boda' && document.body.classList.contains('corp')) lb = ['🎉 Continuar', 'Ver más detalles', 'Confirmar mi asistencia']; [1, 2, 3].forEach(function (n) { $('sn' + n).querySelector('.story-btn').textContent = lb[n - 1]; });
   }
   function setTheme(k) {
     cur = k; var t = T[k], d = parse(t.date);
@@ -520,7 +520,7 @@
     s.setProperty('--c-acc', a); s.setProperty('--c-on', L > .45 ? '#14161d' : '#ffffff');
     s.setProperty('--c-title', L < .3 ? a : (L < .6 ? mix(a, .6) : '#1d2433'));
     s.setProperty('--c-bg1', L < .06 ? '#141b30' : mix(a, .55)); s.setProperty('--c-bg2', L < .06 ? '#080b14' : mix(a, .22));
-    s.setProperty('--accent', L < .3 ? a : '#8a6d2b'); s.setProperty('--c-card1', mix(L < .06 ? '#2a3a66' : a, .78)); s.setProperty('--c-card2', mix(L < .06 ? '#2a3a66' : a, .34));
+    s.setProperty('--accent', L < .3 ? a : '#8a6d2b'); s.setProperty('--c-card1', mix(L < .06 ? '#2a3a66' : a, .78)); s.setProperty('--c-card2', mix(L < .06 ? '#2a3a66' : a, .34)); resetStory();
   }
   function applyReal(theme, cfg) {
     var t = T[theme];
@@ -540,12 +540,13 @@
   initStory();
   function corpDemo(k) {
     var t = T[k]; t.corp = true; t.host = 'Empresa Ejemplo S.A.'; t.to = 'Para el equipo de Empresa Ejemplo'; t.lead = 'Estás cordialmente invitado'; t.noguests = true;
-    t.title = k === 'fin' ? 'Cena de Fin de Año 2026' : 'Cena Navideña 2026'; t.msg = 'Gracias por un año de trabajo y compromiso. Celebremos juntos.'; t.place = 'Salón Principal'; t.mapq = 'Quito, Ecuador';
+    t.title = k === 'fin' ? 'Cena de Fin de Año 2026' : (k === 'boda' ? 'Aniversario 15 años' : 'Cena Navideña 2026');
+    if (k === 'boda') { t.msg0 = 1; t.date = '2027-03-12T19:00'; t.host = 'Empresa Ejemplo S.A.'; t.it = [['19:00', 'Bienvenida y brindis'], ['19:45', 'Reconocimientos al equipo'], ['20:30', 'Cena'], ['22:00', 'Música y celebración']]; t.dress = ['Formal o cóctel.', ['#0b2a5b', '#e3c27a', '#ffffff']]; t.menu = [['Entrada', 'Tabla de quesos y canapés'], ['Fuerte', 'Filete con risotto o corvina al coco'], ['Postre', 'Torta de aniversario']]; t.rsvp = ['¿Nos acompañas a celebrar?', 'Con gusto', 'No podré ir']; } t.msg = k === 'boda' ? 'Quince años construyendo juntos. Gracias por ser parte de nuestra historia.' : 'Gracias por un año de trabajo y compromiso. Celebremos juntos.'; t.place = 'Salón Principal'; t.mapq = 'Quito, Ecuador';
     document.body.classList.add('corp-demo'); $('brand-logo').src = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="140" height="64" viewBox="0 0 140 64"><rect x="6" y="8" width="48" height="48" rx="10" fill="#0b2a5b"/><text x="30" y="43" font-size="30" text-anchor="middle" fill="#e3c27a" font-family="Georgia,serif" font-weight="700">E</text><text x="64" y="30" font-size="15" fill="#0b2a5b" font-family="Georgia,serif" font-weight="700">EMPRESA</text><text x="64" y="47" font-size="11" fill="#6a7080" font-family="Arial,sans-serif" letter-spacing="3">EJEMPLO S.A.</text></svg>');
     $('brand-logo').hidden = false; $('logo-wrap').hidden = false; $('sign').textContent = 'Con aprecio, Recursos Humanos'; $('sign').hidden = false;
   }
   function start(k) {
-    if (!REAL && QS.get('corp') && (k === 'navidad' || k === 'fin')) { corpDemo(k); setTheme(k); enableCorp('#0b2a5b', k); return; }
+    if (!REAL && QS.get('corp') && (k === 'navidad' || k === 'fin' || k === 'boda')) { corpDemo(k); setTheme(k); enableCorp('#0b2a5b', k); return; }
     setTheme(k);
     if (GUEST) { $('to-line').textContent = 'Para ' + GUEST; $('who').value = GUEST; }
   }

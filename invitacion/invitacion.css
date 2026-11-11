@@ -496,3 +496,6 @@ body.corp .sell{display:none}
 body.corp #again{display:none}
 
 body:not(.story-end) .sell{display:none}
+
+body.corp .hero-art.ha-boda{background-image:url(../assets/deco/aniv-seal.webp)!important;height:216px;background-size:contain;background-position:center top;opacity:1;-webkit-mask-image:none;mask-image:none}
+body.corp .card:has(.ha-boda){padding-top:226px!important}
