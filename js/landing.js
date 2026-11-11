@@ -13,7 +13,7 @@
 
   /* inclinación 3D de las tarjetas */
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!reduce) document.querySelectorAll('.door').forEach(function (d) {
+  if (!reduce) document.querySelectorAll('.door, .sol').forEach(function (d) {
     d.addEventListener('pointermove', function (e) {
       var r = d.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
       d.style.setProperty('--ry', (x * 8).toFixed(2) + 'deg'); d.style.setProperty('--rx', (-y * 8).toFixed(2) + 'deg');
