@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/landing.css?v=18">
-<link rel="stylesheet" href="../css/crear.css?v=8">
+<link rel="stylesheet" href="../css/crear.css?v=9">
 <link rel="stylesheet" href="../css/afro.css?v=2">
 </head>
 <body class="sub" data-mode="order">
@@ -44,6 +44,13 @@
     <div class="lnk"><b>💌 Para tus invitados</b><small>Compártela por WhatsApp o donde quieras.</small><div class="in"><input id="l-inv" readonly><button type="button" data-cp="l-inv">Copiar</button></div></div>
     <div class="lnk"><b>📋 Tu panel privado</b><small>Aquí ves quién confirmó, con cuántas personas y sus mensajes. No lo compartas.</small><div class="in"><input id="l-host" readonly><button type="button" data-cp="l-host">Copiar</button></div></div>
     <div class="lnk"><b>✏️ Editar</b><small>Hasta 5 cambios, hasta el día del evento.</small><div class="in"><input id="l-edit" readonly><button type="button" data-cp="l-edit">Copiar</button></div></div>
+    <div class="share" id="share" hidden>
+      <b class="sh-t">📣 Para enviar a tus invitados</b>
+      <small>Ya te dejamos todo listo: una imagen bonita y un mensaje para pegar en tu grupo de WhatsApp.</small>
+      <canvas id="card" width="1080" height="1350" aria-label="Imagen de tu invitación para compartir"></canvas>
+      <textarea id="msg" readonly rows="8" aria-label="Mensaje para tus invitados"></textarea>
+      <div class="sh-b"><button type="button" class="btn btn-gold" id="dl-img">⬇️ Descargar imagen</button><button type="button" class="btn btn-line" id="cp-msg">📋 Copiar mensaje</button><button type="button" class="btn btn-gold" id="sh-img" hidden>📲 Compartir imagen + mensaje</button></div>
+    </div>
     <div class="nav"><a class="btn btn-line" id="ok-view" target="_blank" rel="noopener" href="#">Ver mi invitación</a><a class="btn btn-gold" id="ok-wa" target="_blank" rel="noopener noreferrer" href="#">Compartir por WhatsApp</a></div>
     <p class="safe">Te enviamos estos mismos enlaces a tu correo. Guárdalo.</p>
   </section>
@@ -57,7 +64,7 @@
 <footer><a href="https://poseidonmk.com" target="_blank" rel="noopener">poseidonmk.com</a> · <a href="mailto:soporte@poseidonmk.com">soporte@poseidonmk.com</a></footer>
 <div class="toast" id="toast" hidden></div>
 <script src="../config.js?v=1"></script>
-<script src="../js/pedido.js?v=1"></script>
+<script src="../js/pedido.js?v=6"></script>
 <script src="../js/afrodita.js?v=1"></script>
 </body>
 </html>

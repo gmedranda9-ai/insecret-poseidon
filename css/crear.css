@@ -90,3 +90,12 @@
 .qt h3{font:600 .9rem 'Outfit',sans-serif;color:var(--soft);text-align:center;margin-bottom:8px;letter-spacing:.04em}
 .qt{display:block}
 @media(min-width:900px){.qt{position:sticky;top:16px;align-self:start}}
+
+/* entregable para invitados */
+.share{margin:20px 0 6px;padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:rgba(255,255,255,.04);text-align:left}
+.share .sh-t{display:block;font-size:1.05rem;margin-bottom:4px}
+.share small{display:block;opacity:.8;margin-bottom:12px;line-height:1.45}
+.share canvas{display:block;width:100%;max-width:420px;height:auto;margin:0 auto 12px;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.share textarea{width:100%;box-sizing:border-box;background:rgba(0,0,0,.35);color:inherit;border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:12px;font:inherit;font-size:.92rem;line-height:1.5;resize:vertical}
+.share .sh-b{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.share .sh-b .btn{flex:1 1 180px}
