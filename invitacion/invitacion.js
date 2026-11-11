@@ -64,7 +64,7 @@
   };
   var FOIL = { navidad: ['#b8862b', '#fff0c0', '#d9ab4a'], fin: ['#b99b62', '#fff9e6', '#d3b87c'], boda: ['#9c7a2c', '#fff2c4', '#b8913a'], cumple: ['#14185c', '#14185c', '#14185c'], cita: ['#c88a95', '#fff1ee', '#d9959f'] };
   function drawOrn(k) {
-    var f = FOIL[k];
+    var f = (window.INS_PAL && !(T[k] && T[k].corp) && window.INS_PAL.foil(k, T[k] && T[k].pal)) || FOIL[k];
     $('orn').innerHTML = '<defs><linearGradient id="fg" x1="0" x2="1"><stop offset="0" stop-color="' + f[0] + '"/><stop offset=".5" stop-color="' + f[1] + '"/><stop offset="1" stop-color="' + f[2] + '"/></linearGradient></defs>' + ORN[T[k].orn]();
   }
 

@@ -15,15 +15,15 @@
     ],
     fin: [
       { n: 'Medianoche', d: ['#0a0f2a', '#d8bd82', '#161f4d'] },
-      { n: 'Champaña', tb: '#2b1d12', env: '#e9d4a5', bg: '#f7ecd2', ink: '#2b1d12', ac: '#9c6b2f', se: '#9c6b2f', si: '#fff8e7', bi: '#fff8e7' },
-      { n: 'Plata y azul', tb: '#0c0e17', env: '#262c45', bg: '#1a1d29', ink: '#eef1f8', ac: '#7fa1ff', se: '#4c7dff', si: '#ffffff' },
+      { n: 'Champaña', tb: '#2b1d12', env: '#e9d4a5', bg: '#f7ecd2', ink: '#2b1d12', ac: '#7a4e1c', se: '#7a4e1c', si: '#fff8e7', bi: '#fff8e7' },
+      { n: 'Plata y azul', tb: '#0c0e17', env: '#262c45', bg: '#1a1d29', ink: '#eef1f8', ac: '#7fa1ff', se: '#3a62d8', si: '#ffffff' },
       { n: 'Rosa dorado', tb: '#1a0b1c', env: '#4a2450', bg: '#2e1530', ink: '#fff1ec', ac: '#e8a598', se: '#e8a598', si: '#2e1530' }
     ],
     cumple: [
       { n: 'Confeti', d: ['#ff6b35', '#ffd23f', '#14185c'] },
-      { n: 'Atardecer', tb: '#3a1457', env: '#d6336c', bg: '#ffb38a', ink: '#3b1450', ac: '#8a2a8c', se: '#5b2a86', si: '#ffe3cf', btn: '#5b2a86', bi: '#fff1e6', solid: 1 },
+      { n: 'Atardecer', tb: '#3a1457', env: '#d6336c', bg: '#ffb38a', ink: '#3b1450', ac: '#7a2480', se: '#5b2a86', si: '#ffe3cf', btn: '#5b2a86', bi: '#fff1e6', solid: 1 },
       { n: 'Fiesta neón', tb: '#120826', env: '#3a1c78', bg: '#22103d', ink: '#f6eaff', ac: '#ff4da6', se: '#ff4da6', si: '#22103d', btn: '#3de8f5', bi: '#22103d', solid: 1 },
-      { n: 'Pastel', tb: '#4a3d6b', env: '#cdb8f0', bg: '#fdf1f5', ink: '#3a2f4b', ac: '#d6709a', se: '#7fcfae', si: '#1f3a2e', btn: '#3a2f4b', bi: '#fdf1f5', solid: 1 }
+      { n: 'Pastel', tb: '#4a3d6b', env: '#cdb8f0', bg: '#fdf1f5', ink: '#3a2f4b', ac: '#a8467a', se: '#7fcfae', si: '#1f3a2e', btn: '#3a2f4b', bi: '#fdf1f5', solid: 1 }
     ],
     cita: [
       { n: 'Rosa y vino', d: ['#27092b', '#ff8fa8', '#6b1c46'] },
@@ -34,6 +34,14 @@
   };
   function get(theme, i) { var l = P[theme]; i = +i; return l && i > 0 && i < l.length ? l[i] : null; }
   /* variables CSS de la invitación (null = la paleta original, sin tocar nada) */
+  function lumOf(h) { var c = rgb(h).map(function (v) { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }); return .2126 * c[0] + .7152 * c[1] + .0722 * c[2]; }
+  /* tres colores del dorado/ornamento: en papel claro se oscurecen para que nunca se pierda el texto */
+  function foil(theme, i) {
+    var p = get(theme, i); if (!p) return null;
+    if (p.solid) return [p.ink, p.ink, p.ink];
+    if (lumOf(p.bg) > .35) return [mix(p.ac, '#000000', .35), p.ac, mix(p.ac, '#000000', .35)];
+    return [mix(p.ac, '#000000', .3), mix(p.ac, '#ffffff', .6), p.ac];
+  }
   function vars(theme, i) {
     var p = get(theme, i); if (!p) return null;
     var env = p.env, o = {
@@ -41,7 +49,7 @@
       '--ink': p.ink, '--ink-soft': mix(p.ink, p.bg, .3), '--accent': p.ac, '--rule': rgba(p.ac, .42), '--seal': p.se, '--seal-d': mix(p.se, '#000000', .35), '--seal-ink': p.si,
       '--btn': p.btn || p.ac, '--btn-ink': p.bi || p.tb
     };
-    var f = p.solid ? 'linear-gradient(' + p.ink + ',' + p.ink + ')' : 'linear-gradient(100deg,' + mix(p.ac, '#000000', .3) + ' 0%,' + mix(p.ac, '#ffffff', .35) + ' 28%,' + mix(p.ac, '#ffffff', .7) + ' 50%,' + p.ac + ' 72%,' + mix(p.ac, '#000000', .3) + ' 100%)';
+    var q = foil(theme, i), f = q[0] === q[2] && q[0] === q[1] ? 'linear-gradient(' + q[0] + ',' + q[0] + ')' : 'linear-gradient(100deg,' + q[0] + ' 0%,' + q[1] + ' 50%,' + q[2] + ' 100%)';
     o['--foil'] = f; o['--titlebg'] = f; return o;
   }
   /* colores para la imagen de WhatsApp */
@@ -51,5 +59,5 @@
     return { bg: [p.bg, dark ? mix(p.bg, p.tb, .55) : mix(p.bg, '#000000', .1)], acc: dark ? p.ac : mix(p.ac, '#000000', .3), ink: p.ink, mut: mix(p.ink, p.bg, .32), btn: p.btn || (dark ? p.ac : p.ink), btnInk: p.bi || (dark ? p.tb : p.bg), tint: p.env };
   }
   function dots(theme, i) { var l = P[theme] || [], p = l[+i] || l[0]; if (!p) return []; return p.d || [p.env, p.bg, p.ac]; }
-  window.INS_PAL = { list: P, get: get, vars: vars, card: card, dots: dots, count: 4, keys: ['--table', '--table2', '--env', '--env-d', '--env-dd', '--paper', '--ink', '--ink-soft', '--accent', '--rule', '--seal', '--seal-d', '--seal-ink', '--btn', '--btn-ink', '--foil', '--titlebg'] };
+  window.INS_PAL = { foil: foil, list: P, get: get, vars: vars, card: card, dots: dots, count: 4, keys: ['--table', '--table2', '--env', '--env-d', '--env-dd', '--paper', '--ink', '--ink-soft', '--accent', '--rule', '--seal', '--seal-d', '--seal-ink', '--btn', '--btn-ink', '--foil', '--titlebg'] };
 })();
