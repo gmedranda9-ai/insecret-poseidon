@@ -270,3 +270,7 @@ body{background:radial-gradient(110% 70% at 50% -5%,#06223d 0%,#040f1d 40%,#040a
 .sol-a .go{background:var(--azul)}.sol-b .go{background:var(--oro);color:var(--neg)}
 .sol .gift .n{fill:#00369f}.sol .gift .q{fill:#fff}
 .biz .bl{animation:blk 1.6s ease-in-out infinite alternate}@keyframes blk{to{opacity:.3}}
+.mail-d .m-body{display:block;justify-items:stretch}
+.mail-d .m-pad{width:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:stretch;gap:10px}
+.mail-d .m-pad>*{text-align:center}
+.mail-d .m-sign{width:100%}
