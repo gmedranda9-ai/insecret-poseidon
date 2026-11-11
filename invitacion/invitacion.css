@@ -491,3 +491,6 @@ body[data-theme=fin] .scene#scene-env::before{background-image:url(../assets/dec
 .fa-cita img{-webkit-mask-image:linear-gradient(#000 72%,transparent);mask-image:linear-gradient(#000 72%,transparent)}
 .ha-fin{height:300px;background-position:center bottom;-webkit-mask-image:linear-gradient(#000 86%,transparent);mask-image:linear-gradient(#000 86%,transparent)}
 body .card:has(.ha-fin){padding-top:290px!important}
+
+body.corp .sell{display:none}
+body.corp #again{display:none}
