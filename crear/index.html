@@ -14,6 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/landing.css?v=18">
 <link rel="stylesheet" href="../css/crear.css?v=8">
+<link rel="stylesheet" href="../css/afro.css?v=2">
 </head>
 <body class="sub" data-mode="buy">
 <div class="aurora" aria-hidden="true"><i></i><i></i></div>
@@ -25,10 +26,10 @@
     <p class="lead">Llena tus datos, míralo en el celular mientras escribes y paga cuando estés conforme. Sin esperas: te llega el enlace al instante.</p>
   </section>
   <div class="occ" id="occ" role="group" aria-label="Elige la ocasión">
-    <button type="button" data-t="navidad" aria-pressed="true"><b>Cena navideña</b><small>Luces y nieve</small><span class="pr">$12,90</span></button>
-    <button type="button" data-t="fin" aria-pressed="false"><b>Fin de año</b><small>Brindis y fuegos</small><span class="pr">$12,90</span></button>
-    <button type="button" data-t="cumple" aria-pressed="false"><b>Cumpleaños</b><small>Velas y confeti</small><span class="pr">$12,90</span></button>
-    <button type="button" data-t="cita" aria-pressed="false"><b>Cita romántica</b><small>Corazón que se llena</small><span class="pr">$12,90</span></button>
+    <button type="button" data-t="navidad" aria-pressed="true"><b>Cena navideña</b><small>Luces y nieve</small><span class="pr">$12,90 + IVA</span></button>
+    <button type="button" data-t="fin" aria-pressed="false"><b>Fin de año</b><small>Brindis y fuegos</small><span class="pr">$12,90 + IVA</span></button>
+    <button type="button" data-t="cumple" aria-pressed="false"><b>Cumpleaños</b><small>Velas y confeti</small><span class="pr">$12,90 + IVA</span></button>
+    <button type="button" data-t="cita" aria-pressed="false"><b>Cita romántica</b><small>Corazón que se llena</small><span class="pr">$12,90 + IVA</span></button>
   </div>
   <p class="occ-note">¿Boda o quince años? Esas las diseñamos a mano con tus fotos. <a href="https://wa.me/593968520688?text=Hola%20Afrodita%20%F0%9F%91%8B%20quiero%20una%20invitaci%C3%B3n%20de%20boda%20o%20quince%20a%C3%B1os." target="_blank" rel="noopener" style="color:var(--oro)">Escríbenos</a>.</p>
   <div class="cr">
@@ -74,7 +75,7 @@
       <section class="panel" id="p4" data-step="4" hidden>
         <h2>4 · Tus datos y pago</h2>
         <p class="why">Te enviaremos al correo tus tres enlaces: el de la invitación, el de tu panel de confirmaciones y el de edición.</p>
-        <div class="sum"><div class="tot"><span id="sum-name">Invitación</span><b id="sum-price">$12,90</b></div>
+        <div class="sum"><div class="tot"><span id="sum-name">Invitación</span><b id="sum-price">$12,90 + IVA</b></div><p class="safe" id="sum-iva" style="text-align:left;margin:4px 0 8px"></p>
           <ul><li>Sobre con sello, música, cuenta regresiva, itinerario, mapa y confirmación</li><li>Panel privado para ver quién confirma y con cuántas personas</li><li>Hasta 5 ediciones, hasta el día del evento</li><li>El enlace funciona hasta 7 días después del evento</li></ul></div>
         <label class="fld"><span>Tu nombre</span><input type="text" id="b-name" maxlength="80" autocomplete="name"></label>
         <label class="fld"><span>Tu correo</span><input type="email" id="b-email" maxlength="120" autocomplete="email"><small>Aquí llegan tus enlaces. Revísalo bien.</small></label>
@@ -101,6 +102,7 @@
 <div class="toast" id="toast" hidden></div>
 <script src="../config.js?v=1"></script>
 <script src="../invitacion/defaults.js?v=1"></script>
-<script src="../js/crear.js?v=4"></script>
+<script src="../js/crear.js?v=5"></script>
+<script src="../js/afrodita.js?v=1"></script>
 </body>
 </html>

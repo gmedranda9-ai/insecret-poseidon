@@ -12,7 +12,8 @@ const SERVICE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 let SECRET = "", LINK_URL = "";
 const BREVO = (Deno.env.get("BREVO_API_KEY") || "").trim();
 
-const PRICES: Record<string, number> = { navidad: 1290, fin: 1290, cumple: 1290, cita: 1290 }; // centavos de USD
+const PRICES: Record<string, number> = { navidad: 1290, fin: 1290, cumple: 1290, cita: 1290 }; // subtotal en centavos de USD (+ IVA)
+const IVA_PCT = 15; const ivaOf = (base: number) => Math.round(base * IVA_PCT / 100);
 const NAMES: Record<string, string> = { navidad: "Cena navideña", fin: "Fin de año", cumple: "Cumpleaños", cita: "Cita romántica" };
 
 function cors(req: Request) {
@@ -80,19 +81,24 @@ ${btn(ed, "Editar mi invitación", false)}
 }
 
 const ALPHA = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-function newCode() { const b = crypto.getRandomValues(new Uint8Array(11)); return "INS-" + Array.from(b, (x) => ALPHA[x % ALPHA.length]).join(""); } // 15 caracteres
+function newCode(pre = "INS") { const b = crypto.getRandomValues(new Uint8Array(11)); return pre + "-" + Array.from(b, (x) => ALPHA[x % ALPHA.length]).join(""); } // 15 caracteres
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(req) });
   if (req.method !== "POST") return json(req, { error: "METHOD" }, 405);
   let b: any; try { b = await req.json(); } catch { return json(req, { error: "BAD_INPUT" }, 400); }
   const a = String(b.action || "");
-  if (a === "pagado" || a === "crear") await loadCfg();
+  if (a === "pagado" || a === "crear" || a === "proforma_crear") await loadCfg();
 
   /* --- n8n: pago ya verificado con PayPhone --- */
   if (a === "pagado") {
     if (!SECRET || !same(req.headers.get("x-ins-secret") || "", SECRET)) return json(req, { error: "FORBIDDEN" }, 403);
     const code = String(b.code || ""), cents = Math.round(Number(b.amount_cents));
+    if (/^INP-[A-Z0-9]{11}$/.test(code) && Number.isFinite(cents)) {
+      const pr = await rpc("pf_paid", { p_code: code, p_tx: String(b.transaction_id || "").slice(0, 60), p_amount: cents });
+      if (pr.error) return json(req, pr, pr.error === "NOT_FOUND" ? 404 : 409);
+      return json(req, { ...pr, kind_proforma: true });
+    }
     if (!/^INS-[A-Z0-9]{11}$/.test(code) || !Number.isFinite(cents)) return json(req, { error: "BAD_INPUT" }, 400);
     const r = await rpc("ord_paid", { p_code: code, p_tx: String(b.transaction_id || "").slice(0, 60), p_amount: cents });
     if (r.error) return json(req, r, r.error === "NOT_FOUND" ? 404 : 409);
@@ -100,24 +106,56 @@ Deno.serve(async (req) => {
     return json(req, { ok: true, already: !!r.already });
   }
 
+  /* --- empresas: proforma con link de pago (precio SIEMPRE calculado aquí) --- */
+  if (a === "proforma_crear") {
+    if (b.web) return json(req, { ok: true });
+    const kind = String(b.kind || ""); const people = Math.round(Number(b.people));
+    if (!["inv", "ami", "combo"].includes(kind) || !(people >= 1 && people < 100)) return json(req, { error: "BAD_INPUT" }, 400);
+    const company = S(b.company, 80), contact = S(b.contact, 80), phone = S(b.phone, 20).replace(/\D/g, ""), ruc = S(b.ruc, 13).replace(/\D/g, ""), email = S(b.email, 120).toLowerCase(), note = S(b.note, 300);
+    if (company.length < 2 || contact.length < 2) return json(req, { error: "BAD_NAME" }, 400);
+    if (!/^(09|08)\d{8}$/.test(phone)) return json(req, { error: "BAD_PHONE" }, 400);
+    if (ruc && !/^(\d{10}|\d{13})$/.test(ruc)) return json(req, { error: "BAD_DOC" }, 400);
+    if (email && !/^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,}$/.test(email)) return json(req, { error: "BAD_EMAIL" }, 400);
+    if (!LINK_URL || !SECRET) return json(req, { error: "NOT_READY" }, 503);
+    const BASEP: Record<string, number> = { inv: 4900, ami: 3900, combo: 7900 };
+    const base = BASEP[kind] + (kind !== "ami" && people > 25 ? (people - 25) * 150 : 0);
+    const iva = ivaOf(base), total = base + iva, code = newCode("INP");
+    const o = await rpc("pf_create", { p_code: code, p_kind: kind, p_people: people, p_base: base, p_iva: iva, p_company: company, p_contact: contact, p_phone: phone, p_ruc: ruc, p_email: email, p_note: note });
+    if (o.error) return json(req, { error: o.error === "RATE" ? "RATE" : "SERVER" }, o.error === "RATE" ? 429 : 500);
+    let url = "";
+    try {
+      const r = await fetch(LINK_URL, { method: "POST", headers: { "Content-Type": "application/json", "x-ins-secret": SECRET },
+        body: JSON.stringify({ code, amount_cents: total, base_cents: base, iva_cents: iva, reference: `InSecret empresa ${code}`.slice(0, 60), description: `InSecret ${kind === "inv" ? "Invitación" : kind === "ami" ? "Amigo secreto" : "Combo"} empresa` }), signal: AbortSignal.timeout(20000) });
+      const j = await r.json().catch(() => ({})); url = typeof j.url === "string" ? j.url : "";
+    } catch { /* abajo */ }
+    if (!/^https:\/\//.test(url)) return json(req, { error: "LINK" }, 502);
+    await rpc("pf_set_url", { p_code: code, p_url: url });
+    return json(req, { ok: true, code, url, base_cents: base, iva_cents: iva, total_cents: total });
+  }
+  if (a === "proforma_estado") {
+    const code = String(b.code || ""); if (!/^INP-[A-Z0-9]{11}$/.test(code)) return json(req, { error: "BAD_INPUT" }, 400);
+    const r = await rpc("pf_get", { p_code: code }); return json(req, r.error ? r : { ok: true, status: r.status }, r.error ? 404 : 200);
+  }
+
   /* --- navegador --- */
   if (a === "crear") {
     if (b.web) return json(req, { ok: true }); // trampa para robots
-    const theme = String(b.theme || ""); const cents = PRICES[theme];
-    if (!cents) return json(req, { error: "BAD_THEME" }, 400);
+    const theme = String(b.theme || ""); const base = PRICES[theme];
+    if (!base) return json(req, { error: "BAD_THEME" }, 400);
     const name = S(b.name, 80), email = S(b.email, 120).toLowerCase(), phone = S(b.phone, 20).replace(/[^\d+]/g, ""), doc = S(b.doc, 13).replace(/\D/g, "");
     if (name.length < 2) return json(req, { error: "BAD_NAME" }, 400);
     if (!/^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,}$/.test(email)) return json(req, { error: "BAD_EMAIL" }, 400);
     if (doc && !/^(\d{10}|\d{13})$/.test(doc)) return json(req, { error: "BAD_DOC" }, 400);
     const cc = cleanConfig(b.config); if (cc.error) return json(req, { error: cc.error }, 400);
     if (!LINK_URL || !SECRET) return json(req, { error: "NOT_READY" }, 503);
+    const iva = ivaOf(base), cents = base + iva;
     const code = newCode();
     const o = await rpc("ord_create", { p_code: code, p_theme: theme, p_config: cc.cfg, p_name: name, p_email: email, p_phone: phone, p_doc: doc, p_amount: cents });
     if (o.error) return json(req, { error: o.error === "RATE" ? "RATE" : "SERVER" }, o.error === "RATE" ? 429 : 500);
     let url = "";
     try {
       const r = await fetch(LINK_URL, { method: "POST", headers: { "Content-Type": "application/json", "x-ins-secret": SECRET },
-        body: JSON.stringify({ code, amount_cents: cents, email, phone, reference: `InSecret ${NAMES[theme]} ${code}`.slice(0, 60), description: `Invitación interactiva · ${NAMES[theme]}` }), signal: AbortSignal.timeout(20000) });
+        body: JSON.stringify({ code, amount_cents: cents, base_cents: base, iva_cents: iva, email, phone, reference: `InSecret ${NAMES[theme]} ${code}`.slice(0, 60), description: `Invitación interactiva · ${NAMES[theme]}` }), signal: AbortSignal.timeout(20000) });
       const j = await r.json().catch(() => ({})); url = typeof j.url === "string" ? j.url : "";
     } catch { /* se reporta abajo */ }
     if (!/^https:\/\//.test(url)) return json(req, { error: "LINK" }, 502);

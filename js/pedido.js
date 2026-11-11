@@ -29,7 +29,7 @@
       if (r.status === 'paid') return done(r);
       if (r.status === 'pending') {
         if (!shown) {
-          shown = true; show('st-pay'); $('pay-title').textContent = '«' + (r.title || '') + '»'; $('pay-amt').textContent = money(r.amount_cents || 1290); $('pay-code').textContent = CODE;
+          shown = true; show('st-pay'); $('pay-title').textContent = '«' + (r.title || '') + '»'; $('pay-amt').textContent = money(r.amount_cents || 1484) + ' (IVA incluido)'; $('pay-code').textContent = CODE;
           if (/^https:\/\//.test(r.pay_url || '')) $('pay-go').href = r.pay_url; else { $('pay-go').removeAttribute('href'); $('pay-go').textContent = 'No se pudo preparar el pago'; }
         }
         if (Date.now() - t0 > 90e3) $('pay-late').hidden = false;

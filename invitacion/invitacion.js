@@ -388,7 +388,7 @@
     $('c-dow').textContent = DOW[d.getDay()]; $('c-num').textContent = d.getDate(); $('c-mon').textContent = MON[d.getMonth()];
     $('c-time').textContent = d.getHours() + ':' + pad(d.getMinutes()) + ' h'; $('c-year').textContent = d.getFullYear();
     $('map').href = mapHref(t);
-    var cta = t.corp ? ['../empresas/cotizar/', 'Cotizar para mi empresa', false] : (k === 'boda' ? ['https://wa.me/' + WA + '?text=' + encodeURIComponent('Hola Afrodita 👋 vi la invitación de boda y quiero una a medida (boda o 15 años).'), 'Boda o 15 años: a medida', true] : ['../crear/?t=' + k, 'Crear la mía · $12,90', false]);
+    var cta = t.corp ? ['../empresas/cotizar/', 'Cotizar para mi empresa', false] : (k === 'boda' ? ['https://wa.me/' + WA + '?text=' + encodeURIComponent('Hola Afrodita 👋 vi la invitación de boda y quiero una a medida (boda o 15 años).'), 'Boda o 15 años: a medida', true] : ['../crear/?t=' + k, 'Crear la mía · $12,90 + IVA', false]);
     $('wa').href = cta[0]; $('wa').textContent = cta[2] ? 'Pedir la mía con Afrodita' : cta[1]; if (cta[2]) { $('wa').target = '_blank'; $('wa').rel = 'noopener noreferrer'; } else { $('wa').removeAttribute('target'); }
     if ($('topcta')) { $('topcta').href = cta[0]; $('topcta').textContent = cta[1]; if (cta[2]) { $('topcta').target = '_blank'; $('topcta').rel = 'noopener noreferrer'; } else { $('topcta').removeAttribute('target'); } }
     $('r-title').textContent = t.rsvp[0]; $('yes').textContent = t.rsvp[1]; $('no').textContent = t.rsvp[2];

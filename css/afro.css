@@ -1,0 +1,20 @@
+.afro-ov{position:fixed;inset:0;z-index:200;background:rgba(2,6,14,.78);display:flex;align-items:flex-end;justify-content:center;padding:14px;backdrop-filter:blur(4px)}
+.afro-ov[hidden]{display:none}
+@media(min-width:600px){.afro-ov{align-items:center}}
+.afro-bx{width:100%;max-width:460px;background:#0c1626;border:1.5px solid #009ee7;border-radius:22px;padding:22px 20px;color:#fff;font-family:'Outfit',system-ui,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.afro-bx h3{font:700 1.3rem 'Playfair Display',Georgia,serif;margin:0 0 6px}
+.afro-p{font-size:.92rem;color:#b9c6d6;line-height:1.5;margin:0 0 12px}
+.afro-chip{display:inline-block;font-size:.78rem;font-weight:600;padding:.25rem .7rem;border-radius:999px;background:rgba(255,214,0,.16);color:#ffd600;border:1px solid rgba(255,214,0,.4);margin-bottom:10px}
+.afro-ta{width:100%;box-sizing:border-box;padding:12px 14px;border-radius:14px;border:1.5px solid rgba(255,255,255,.22);background:#050b16;color:#fff;font:400 1rem 'Outfit',system-ui,sans-serif;resize:vertical;min-height:110px}
+.afro-ta:focus{outline:none;border-color:#02d4fc;box-shadow:0 0 0 3px rgba(2,212,252,.2)}
+.afro-h{display:block;color:#8ea0b6;font-size:.78rem;margin:6px 0 14px}
+.afro-go{display:block;text-align:center;text-decoration:none;background:#25d366;color:#06210f;font:700 1.02rem 'Outfit',system-ui,sans-serif;padding:14px 18px;border-radius:999px}
+.afro-x{display:block;margin:10px auto 0;background:none;border:none;color:#9fb3c8;font:500 .9rem 'Outfit',system-ui,sans-serif;cursor:pointer;padding:6px 12px}
+.ctabar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:center;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(6,20,42,.96),#04122a);border-top:2px solid #ffd600;box-shadow:0 -8px 30px rgba(0,0,0,.5);font-family:'Outfit',system-ui,sans-serif;color:#fff}
+.ctabar p{margin:0;font-size:.92rem;line-height:1.35;text-align:center;flex:1 1 100%}
+.ctabar p b{color:#ffd600}
+.ctabar .cb{flex:1 1 150px;max-width:260px;text-align:center;text-decoration:none;font-weight:700;font-size:.95rem;padding:.7rem 1rem;border-radius:999px}
+.ctabar .cb1{background:#ffd600;color:#10213a}.ctabar .cb2{background:#25d366;color:#06210f}
+@media(min-width:760px){.ctabar p{flex:0 1 auto;text-align:left}}
+body.has-ctabar{padding-bottom:128px}@media(min-width:760px){body.has-ctabar{padding-bottom:84px}}
+body.afro-open .ctabar{display:none}

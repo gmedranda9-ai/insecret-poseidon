@@ -131,7 +131,7 @@
   [].forEach.call(document.querySelectorAll('[data-go]'), function (b) {
     b.addEventListener('click', function () { var to = +b.dataset.go; if (to > step) { for (var i = step; i < to; i++) if (!check(i)) { go(i); return; } } go(to); if (to === 4 && !EDIT) summary(); });
   });
-  function summary() { $('sum-name').textContent = 'Invitación · ' + NAMES[theme]; $('sum-price').textContent = money(PRICE[theme]); $('pay-price').textContent = money(PRICE[theme]); }
+  function summary() { var b = PRICE[theme], iva = Math.round(b * 15) / 100, t = Math.round((b + iva) * 100) / 100; $('sum-name').textContent = 'Invitación · ' + NAMES[theme]; $('sum-price').textContent = money(b) + ' + IVA'; $('sum-iva').textContent = 'Subtotal ' + money(b) + ' · IVA 15% ' + money(iva) + ' · Total a pagar ' + money(t); $('pay-price').textContent = money(t); }
 
   /* ---------- ocasión ---------- */
   function setTheme(k) {

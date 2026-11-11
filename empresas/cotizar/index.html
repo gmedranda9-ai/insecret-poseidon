@@ -7,15 +7,16 @@
 <meta name="description" content="Calcula al instante el valor de la invitación interactiva y el amigo secreto para tu empresa y descarga tu proforma.">
 <meta name="theme-color" content="#040a14">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://qhzswvfdnjnftjuyxcnn.supabase.co; base-uri 'none'; form-action 'none'">
 <link rel="canonical" href="https://insecret.poseidonmk.com/empresas/cotizar/">
 <link rel="icon" type="image/png" href="../../assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../css/landing.css?v=18">
 <link rel="stylesheet" href="../../css/crear.css?v=8">
+<link rel="stylesheet" href="../../css/afro.css?v=2">
 </head>
-<body class="sub" data-mode="buy">
+<body class="sub has-ctabar" data-mode="buy">
 <div class="aurora" aria-hidden="true"><i></i><i></i></div>
 <header class="top"><a class="pill pill-back" href="../"><span aria-hidden="true">‹</span> Empresas</a><a class="by" href="https://poseidonmk.com" target="_blank" rel="noopener"><img src="../../assets/logo.png" alt="" width="28" height="28"> Poseidón</a></header>
 <main class="cr-wrap">
@@ -41,6 +42,8 @@
         <label class="fld"><span>Tu nombre</span><input type="text" id="c-name" maxlength="80" autocomplete="name"></label>
         <div class="row2"><label class="fld"><span>WhatsApp</span><input type="tel" id="c-tel" maxlength="20" autocomplete="tel" placeholder="09…"></label><label class="fld"><span>RUC <i>(opcional)</i></span><input type="text" id="c-ruc" maxlength="13" inputmode="numeric"></label></div>
         <label class="fld"><span>Correo <i>(opcional)</i></span><input type="email" id="c-mail" maxlength="120" autocomplete="email"></label>
+        <label class="fld"><span>¿Algo que Afrodita deba saber? <i>(opcional)</i></span><textarea id="c-note" maxlength="300" placeholder="Ejemplo: es la cena de fin de año del 19 de diciembre, tenemos logo y colores."></textarea></label>
+        <div class="hp" aria-hidden="true"><label>No llenar<input type="text" id="c-web" tabindex="-1" autocomplete="off"></label></div>
         <p class="err" id="e" hidden></p>
       </section>
     </div>
@@ -55,12 +58,16 @@
   <section class="panel ok-card" id="out" hidden>
     <p class="eyebrow">Tu proforma está lista</p>
     <img id="img" alt="Proforma" style="width:100%;max-width:560px;border-radius:14px;margin:12px auto;display:block">
-    <a class="btn btn-gold btn-l" id="dl" download="proforma-poseidon.png" href="#">Descargar imagen</a>
-    <a class="btn btn-line btn-l" id="wa2" target="_blank" rel="noopener" href="#" style="margin-top:10px">Enviarla a un asesor por WhatsApp</a>
-    <p class="safe">Para contratar, escríbenos por WhatsApp con tu proforma. Te confirmamos los datos y te enviamos el enlace de pago.</p>
+    <a class="btn btn-gold btn-l" id="pay" target="_blank" rel="noopener noreferrer" href="#">Pagar ahora con PayPhone</a>
+    <a class="btn btn-line btn-l" id="dl" download="proforma-poseidon.png" href="#" style="margin-top:10px">Descargar imagen</a>
+    <a class="btn btn-line btn-l" id="wa2" target="_blank" rel="noopener" href="#" style="margin-top:10px">Hablar con Afrodita sobre mi proforma</a>
+    <div class="callout" role="note"><b>¿Y ahora qué?</b><span>1. Paga con el botón amarillo si ya estás decidido (IVA incluido en el total). 2. Escríbele a Afrodita con tu código: ella te pide el logo, los colores y la lista de personas, y nuestro equipo arma tu invitación. <u id="st-line">Esperando tu pago…</u></span></div>
   </section>
 </main>
 <footer><a href="https://poseidonmk.com" target="_blank" rel="noopener">poseidonmk.com</a> · <a href="mailto:soporte@poseidonmk.com">soporte@poseidonmk.com</a></footer>
-<script src="../../js/cotizar.js?v=3"></script>
+<div class="ctabar" role="region" aria-label="Cómo seguir"><p><b>Armamos la tuya contigo en minutos.</b> Calcula tu proforma, y si quieres ayuda o personalizarla, habla con Afrodita: ella te guía y coordina todo.</p><a class="cb cb1" href="#q">1 · Generar mi proforma</a><a class="cb cb2" href="https://wa.me/593968520688?text=Hola%20Afrodita%20%F0%9F%91%8B%20quiero%20cotizar%20una%20invitaci%C3%B3n%20para%20mi%20empresa.">Hablar con Afrodita</a></div>
+<script src="../../config.js?v=1"></script>
+<script src="../../js/cotizar.js?v=4"></script>
+<script src="../../js/afrodita.js?v=1"></script>
 </body>
 </html>
