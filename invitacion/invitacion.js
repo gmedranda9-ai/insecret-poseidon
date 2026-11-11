@@ -175,7 +175,7 @@
     try { ctx(); (notes || T[cur].chime).forEach(function (f, i) { var m = 69 + 12 * Math.log2(f / 440); note(m, AC.currentTime + i * .12, 1.6, .18, 'bell'); }); } catch (e) {}
   }
   $('snd').addEventListener('click', function () {
-    soundOn = !soundOn; this.setAttribute('aria-pressed', String(soundOn)); this.textContent = soundOn ? '🔔' : '🔕'; this.setAttribute('aria-label', soundOn ? 'Sonido activado' : 'Sonido apagado');
+    soundOn = !soundOn; this.setAttribute('aria-pressed', String(soundOn)); this.textContent = soundOn ? '🔔 Con sonido' : '🔕 Sin sonido'; this.setAttribute('aria-label', soundOn ? 'Sonido activado' : 'Sonido apagado');
     gestured = true; if (soundOn) startMusic(cur); else stopMusic();
   });
 
@@ -554,11 +554,20 @@
   if (QS.get('preview') === '1' && window.parent !== window) {
     document.body.classList.add('preview');
     var pm = document.createElement('meta'); pm.name = 'robots'; pm.content = 'noindex,nofollow'; document.head.appendChild(pm);
-    var ORIG = {}, FIRST = true;
+    var ORIG = {}, FIRST = true, curFocus = '';
+    function applyFocus(tg, smooth) {
+      $('seal').classList.add('broken'); $('hint').hidden = true; $('env').classList.add('open'); $('scene-env').classList.add('gone'); $('card').hidden = false; FIRST = false;
+      ['sg2', 'sg3', 'sg4'].forEach(function (g) { if (SG[g]) SG[g].classList.add('show'); }); [1, 2, 3].forEach(function (n) { $('sn' + n).hidden = true; }); document.body.classList.add('story-end');
+      var el = $('card');
+      if (tg === 'when') el = document.querySelector('.when'); else if (tg === 'rsvp') el = $('rsvp');
+      else if (/^(it|dr|me|pl|ex)$/.test(tg)) { var tl = document.querySelector('.tile[data-id="' + tg + '"]'); if (tl) { el = tl; if (!tl.classList.contains('open')) tl.querySelector('button').click(); } }
+      setTimeout(function () { var y = el === $('card') ? 0 : el.getBoundingClientRect().top + window.scrollY - 70; window.scrollTo({ top: Math.max(0, y), behavior: smooth ? 'smooth' : 'auto' }); }, smooth ? 350 : 60);
+    }
     Object.keys(T).forEach(function (k) { ORIG[k] = JSON.parse(JSON.stringify(T[k])); });
     window.addEventListener('message', function (e) {
       if (e.origin !== location.origin) return;
       var m = e.data; if (m && m.type === 'ins-close') { closeEnvelope(); window.scrollTo(0, 0); FIRST = false; return; }
+      if (m && m.type === 'ins-focus') { curFocus = String(m.target || 'top'); applyFocus(curFocus, true); return; }
       if (!m || m.type !== 'ins-preview' || !ORIG[m.theme] || !m.cfg || typeof m.cfg !== 'object') return;
       var y = window.scrollY, wasOpen = FIRST || !$('card').hidden, steps = ['sg2', 'sg3', 'sg4'].filter(function (g) { return SG[g] && SG[g].classList.contains('show'); }).length;
       T[m.theme] = JSON.parse(JSON.stringify(ORIG[m.theme])); applyReal(m.theme, m.cfg); setTheme(m.theme); FIRST = false;
@@ -566,7 +575,7 @@
         $('seal').classList.add('broken'); $('hint').hidden = true; $('env').classList.add('open'); $('scene-env').classList.add('gone'); $('card').hidden = false;
         for (var n = 1; n <= steps; n++) { SG['sg' + (n + 1)].classList.add('show'); $('sn' + n).hidden = true; if (n < 3) $('sn' + (n + 1)).hidden = false; }
         if (steps === 3) document.body.classList.add('story-end');
-        window.scrollTo(0, y);
+        if (curFocus) applyFocus(curFocus, false); else window.scrollTo(0, y);
       }
     });
     try { window.parent.postMessage({ type: 'ins-ready' }, location.origin); } catch (x) {}

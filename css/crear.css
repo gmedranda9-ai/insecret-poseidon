@@ -78,3 +78,9 @@
 .toast[hidden]{display:none}
 
 .pv-env{display:block;margin:10px auto 0}
+
+.callout{display:flex;flex-direction:column;gap:6px;margin:18px 0 6px;padding:16px 18px;border-radius:16px;background:linear-gradient(135deg,rgba(255,214,0,.2),rgba(0,158,231,.18));border:2px solid #ffd600;text-align:left;font-size:1rem;line-height:1.45;color:#fff;box-shadow:0 0 0 4px rgba(255,214,0,.12)}
+.callout b{font-size:1.1rem;color:#ffd600}
+.callout u{text-decoration-thickness:2px;text-underline-offset:3px;font-weight:700}
+.nav .btn-line{background:transparent;color:#fff;border:1.5px solid var(--azul,#009ee7)}
+.nav .btn-line:hover{background:rgba(0,158,231,.15)}

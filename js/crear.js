@@ -84,15 +84,33 @@
   var timer = null;
   function push() { clearTimeout(timer); timer = setTimeout(sendPreview, 450); }
   function sendPreview() { if (!ready || !frame.contentWindow) return; try { frame.contentWindow.postMessage({ type: 'ins-preview', theme: theme, cfg: config(true) }, location.origin); } catch (e) {} }
-  window.addEventListener('message', function (e) { if (e.origin === location.origin && e.data && e.data.type === 'ins-ready') { ready = true; sendPreview(); } });
+  window.addEventListener('message', function (e) { if (e.origin === location.origin && e.data && e.data.type === 'ins-ready') { ready = true; sendPreview(); setTimeout(function () { focusPv(lastT || 'top'); }, 600); } });
   function loadFrame() { ready = false; frame.src = '../invitacion/?preview=1&t=' + theme; }
   document.addEventListener('input', function (e) { if (e.target.closest('.panel')) push(); });
   document.addEventListener('change', function (e) { if (e.target.closest('.panel')) push(); });
+
+  /* ---------- la vista previa sigue lo que editas ---------- */
+  var lastT = '';
+  function focusPv(t) { lastT = t; if (!ready) return; try { frame.contentWindow.postMessage({ type: 'ins-focus', target: t }, location.origin); } catch (e) {} }
+  function targetOf(el) {
+    var id = el.id || '', r = el.closest('#it-rows') ? 'it' : el.closest('#me-rows') ? 'me' : '';
+    if (r) return r;
+    if (/^(f-title|f-host|f-to|f-lead|f-msg)$/.test(id)) return 'top';
+    if (id === 'f-date') return 'when';
+    if (/^(f-place|f-mapq|f-maplink)$/.test(id)) return 'pl';
+    if (/^(f-dress|c1|c2|c3)$/.test(id)) return 'dr';
+    if (/^(f-xt|f-xx)$/.test(id)) return 'ex';
+    if (/^(f-rq|f-ry|f-rn|f-guests)$/.test(id) || el.closest('#p3 .fld:last-of-type')) return 'rsvp';
+    return '';
+  }
+  document.addEventListener('focusin', function (e) { var t = e.target; if (!t.closest || !t.closest('.panel')) return; var g = targetOf(t); if (g && g !== lastT) { clearTimeout(ft); ft = setTimeout(function () { focusPv(g); }, 250); } });
+  var ft = null;
 
   /* ---------- pasos ---------- */
   function go(n) {
     step = n; [1, 2, 3, 4].forEach(function (i) { $('p' + i).hidden = i !== n; });
     [].forEach.call($('stepper').children, function (li, i) { li.className = i + 1 < n ? 'done' : (i + 1 === n ? 'on' : ''); });
+    focusPv(n === 1 ? 'top' : n === 2 ? 'when' : n === 3 ? 'it' : 'rsvp');
     window.scrollTo({ top: Math.max(0, $('stepper').getBoundingClientRect().top + scrollY - 70), behavior: 'smooth' });
   }
   function check(n) {
