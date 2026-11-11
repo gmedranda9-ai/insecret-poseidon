@@ -99,3 +99,14 @@
 .share textarea{width:100%;box-sizing:border-box;background:rgba(0,0,0,.35);color:inherit;border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:12px;font:inherit;font-size:.92rem;line-height:1.5;resize:vertical}
 .share .sh-b{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
 .share .sh-b .btn{flex:1 1 180px}
+
+/* selector de paletas */
+.pal{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:6px 0 4px}
+@media(min-width:520px){.pal{grid-template-columns:repeat(4,1fr)}}
+.pal button{display:flex;flex-direction:column;align-items:center;gap:7px;padding:10px 6px;border-radius:14px;border:1.5px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04);color:inherit;font:inherit;cursor:pointer}
+.pal button em{font-style:normal;font-size:.76rem;line-height:1.2;text-align:center;opacity:.9}
+.pal .dots{display:flex}
+.pal .dots i{width:24px;height:24px;border-radius:50%;border:2px solid rgba(255,255,255,.55);margin-left:-7px;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.pal .dots i:first-child{margin-left:0}
+.pal button[aria-pressed=true]{border-color:var(--oro);background:rgba(254,212,5,.1);box-shadow:0 0 0 3px rgba(254,212,5,.14)}
+.pal button:focus-visible{outline:2px solid var(--oro);outline-offset:2px}

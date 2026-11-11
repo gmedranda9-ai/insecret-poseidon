@@ -258,3 +258,13 @@
   /* entrada automática si ya había sesión en esta pestaña */
   try { var k0 = sessionStorage.getItem('inv_admin_k'); if (k0) { $('key').value = k0; login(); } } catch (e) {}
 })();
+
+/* colores sugeridos (los mismos tonos de las paletas) */
+(function () {
+  var base = ['#0b2a5b', '#0b5d3b', '#7a1220', '#1f3a5f', '#5b2a86', '#b8672a', '#8e0b22', '#111827'], P = window.INS_PAL;
+  var cols = base.slice(); if (P) Object.keys(P.list).forEach(function (t) { P.list[t].forEach(function (p) { if (p.ac && cols.indexOf(p.ac) < 0 && cols.length < 16) cols.push(p.ac); }); });
+  [].forEach.call(document.querySelectorAll('.swrow'), function (box) {
+    var inp = document.getElementById(box.dataset.for); if (!inp) return;
+    cols.forEach(function (c) { var b = document.createElement('button'); b.type = 'button'; b.title = c; b.setAttribute('aria-label', 'Color ' + c); b.style.cssText = 'width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.6);margin:2px 4px 2px 0;background:' + c + ';cursor:pointer;padding:0'; b.onclick = function () { inp.value = c; inp.dispatchEvent(new Event('input', { bubbles: true })); inp.dispatchEvent(new Event('change', { bubbles: true })); var u = document.getElementById('use-accent'); if (inp.id === 'accent' && u) u.checked = true; }; box.appendChild(b); });
+  });
+})();

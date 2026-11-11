@@ -39,14 +39,18 @@
   function wrap(c, t, maxW) { var words = t.split(/\s+/), lines = [], cur = ''; words.forEach(function (w) { var test = cur ? cur + ' ' + w : w; if (c.measureText(test).width > maxW && cur) { lines.push(cur); cur = w; } else cur = test; }); if (cur) lines.push(cur); return lines; }
   function rr(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
   function draw(theme, cfg) {
-    var T = TH[theme] || TH.navidad, W = 1080, H = 1350, cv = $('card'), c = cv.getContext('2d'); cv.width = W; cv.height = H;
+    var T0 = TH[theme] || TH.navidad, PC = window.INS_PAL ? window.INS_PAL.card(theme, cfg.pal) : null, T = PC ? Object.assign({}, T0, PC) : T0, W = 1080, H = 1350, cv = $('card'), c = cv.getContext('2d'); cv.width = W; cv.height = H;
     return Promise.all([loadImg(T.img), loadImg('../assets/logo.png'), document.fonts.load('700 80px "Playfair Display"'), document.fonts.load('600 36px "Outfit"'), document.fonts.load('400 30px "Outfit"')]).then(function (a) {
       var img = a[0], logo = a[1], f = fecha(cfg.date);
       var g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, T.bg[0]); g.addColorStop(1, T.bg[1]); c.fillStyle = g; c.fillRect(0, 0, W, H);
       var BH = 520;
-      if (img) { var k = Math.max(W / img.width, BH / img.height), w = img.width * k, h = img.height * k; c.drawImage(img, (W - w) / 2, (BH - h) / 2 + (T.dy || 0), w, h); }
+      if (img) { var k = Math.max(W / img.width, BH / img.height), w = img.width * k, h = img.height * k; c.drawImage(img, (W - w) / 2, (BH - h) / 2 + (T.dy || 0), w, h); if (PC) { c.globalCompositeOperation = 'color'; c.globalAlpha = .9; c.fillStyle = PC.tint; c.fillRect(0, 0, W, BH); c.globalCompositeOperation = 'source-over'; c.globalAlpha = 1;
+        /* si la foto y el fondo difieren mucho de claridad, se acercan para que no se note el corte */
+        var d0 = c.getImageData(8, BH - 6, 1, 1).data, l1 = d0[0] * .3 + d0[1] * .59 + d0[2] * .11, bb = parseInt(PC.bg[0].slice(1), 16), l2 = (bb >> 16) * .3 + ((bb >> 8) & 255) * .59 + (bb & 255) * .11;
+        if (l1 - l2 > 90) { c.globalCompositeOperation = 'multiply'; c.globalAlpha = .6; c.fillStyle = PC.tint; c.fillRect(0, 0, W, BH); c.globalCompositeOperation = 'source-over'; c.globalAlpha = 1; }
+        else if (l2 - l1 > 90) { c.globalCompositeOperation = 'screen'; c.globalAlpha = .5; c.fillStyle = PC.bg[0]; c.fillRect(0, 0, W, BH); c.globalCompositeOperation = 'source-over'; c.globalAlpha = 1; } } }
       var px = img ? c.getImageData(8, BH - 6, 1, 1).data : null, e0 = px ? 'rgb(' + px[0] + ',' + px[1] + ',' + px[2] + ')' : T.bg[0], e1 = px ? 'rgba(' + px[0] + ',' + px[1] + ',' + px[2] + ',0)' : T.bg[0] + '00';
-      var fade = c.createLinearGradient(0, BH - 110, 0, BH); fade.addColorStop(0, e1); fade.addColorStop(1, e0); c.fillStyle = fade; c.fillRect(0, BH - 110, W, 110);
+      var FH = PC ? 170 : 110, fade = c.createLinearGradient(0, BH - FH, 0, BH); fade.addColorStop(0, e1); fade.addColorStop(1, e0); c.fillStyle = fade; c.fillRect(0, BH - FH, W, FH);
       var lo = c.createLinearGradient(0, BH, 0, H); lo.addColorStop(0, e0); lo.addColorStop(.18, T.bg[0]); lo.addColorStop(1, T.bg[1]); c.fillStyle = lo; c.fillRect(0, BH, W, H - BH);
       c.strokeStyle = T.acc; c.globalAlpha = .55; c.lineWidth = 3; rr(c, 28, 28, W - 56, H - 56, 34); c.stroke(); c.globalAlpha = 1;
       c.textAlign = 'center'; c.textBaseline = 'alphabetic';

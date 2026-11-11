@@ -98,6 +98,7 @@
         <div class="logo-prev" id="logo-prev" hidden><img id="logo-img" alt=""><button type="button" class="btn ghost" id="logo-del">Quitar logo</button></div>
         <label class="chk"><input type="checkbox" id="use-accent"> Usar el color de la empresa en la invitación</label>
         <label class="f"><span>Color de la empresa</span><input type="color" id="accent" value="#009ee7"></label>
+        <div class="swrow" data-for="accent" aria-label="Colores sugeridos"></div>
         <label class="f"><span>Firma al pie de la tarjeta</span><input id="sign" maxlength="80" placeholder="Ej. Con cariño, Gerencia General"></label>
       </fieldset>
 
@@ -148,6 +149,7 @@
     <fieldset class="card"><legend>3 · Aspecto de la empresa</legend>
       <label class="chk"><input type="checkbox" id="c-corp" checked> Estilo corporativo sobrio y elegante (recomendado para empresas)</label>
       <label class="f"><span>Color de la empresa</span><input type="color" id="c-accent" value="#0b5d3b"></label>
+      <div class="swrow" data-for="c-accent" aria-label="Colores sugeridos"></div>
       <label class="f"><span>Logo <em>(opcional, se ve en la invitación)</em></span><input type="file" id="c-logo" accept="image/*"><div class="logo-prev" id="c-logo-prev" hidden><img id="c-logo-img" alt="Logo"><button type="button" class="btn ghost" id="c-logo-del">Quitar</button></div></label>
       <label class="f"><span>Texto del correo <em>(opcional: si lo dejas vacío se arma solo)</em></span><textarea id="c-intro" maxlength="300" rows="3" placeholder="Ej.: Te esperamos en nuestra cena de fin de año. ¡Confirma tu asistencia!"></textarea></label>
       <label class="f"><span>Firma <em>(opcional)</em></span><textarea id="c-sign" maxlength="160" rows="2" placeholder="Con cariño, Recursos Humanos"></textarea></label>
@@ -174,6 +176,7 @@
 <div class="toast" id="toast" hidden></div>
 <script src="../config.js?v=1"></script>
 <script src="../invitacion/defaults.js?v=1"></script>
-<script src="../js/admin.js?v=10"></script>
+<script src="../js/pal.js?v=1"></script>
+<script src="../js/admin.js?v=11"></script>
 </body>
 </html>

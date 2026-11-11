@@ -380,6 +380,12 @@
   function setTheme(k) {
     cur = k; var t = T[k], d = parse(t.date);
     document.body.setAttribute('data-theme', k);
+    (function () { /* paleta elegida (0 = la original; las invitaciones de empresa usan su propio color) */
+      var P = window.INS_PAL, st = document.body.style, v = P && !t.corp ? P.vars(k, t.pal) : null;
+      if (P && document.body.classList.contains('pal-alt')) P.keys.forEach(function (x) { st.removeProperty(x); });
+      if (v) Object.keys(v).forEach(function (x) { st.setProperty(x, v[x]); });
+      document.body.classList.toggle('pal-alt', !!v);
+    })();
     document.querySelector('meta[name=theme-color]').content = getComputedStyle(document.body).getPropertyValue('--table').trim() || '#08190f';
     document.querySelectorAll('#themes button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.t === k)); });
     $('glyph-a').textContent = $('glyph-b').textContent = t.glyph; $('deco').innerHTML = DECO[k] ? DECO[k]() : '';
@@ -512,7 +518,7 @@
       .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) { var e = new Error(j && j.message || 'ERROR'); throw e; } return j; }); },
         function () { throw new Error('NETWORK'); });
   }
-  var EDIT = ['corp', 'lead', 'to', 'host', 'title', 'msg', 'date', 'target', 'place', 'mapq', 'maplink', 'noguests', 'it', 'dress', 'menu', 'extra', 'rsvp'];
+  var EDIT = ['corp', 'lead', 'to', 'host', 'title', 'msg', 'date', 'target', 'place', 'mapq', 'maplink', 'noguests', 'it', 'dress', 'menu', 'extra', 'rsvp', 'pal'];
   function hexRGB(h) { return [1, 3, 5].map(function (i) { return parseInt(h.slice(i, i + 2), 16); }); }
   function lum(h) { var c = hexRGB(h).map(function (v) { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }); return .2126 * c[0] + .7152 * c[1] + .0722 * c[2]; }
   function mix(h, k) { return '#' + hexRGB(h).map(function (v) { return ('0' + Math.round(v * k).toString(16)).slice(-2); }).join(''); }

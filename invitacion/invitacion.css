@@ -510,3 +510,6 @@ body.real .topcta,body.preview .topcta{display:none}
 .bar-top .back{margin-right:auto}
 .bar-top{gap:8px}.back,.topcta,.snd{white-space:nowrap}
 @media(max-width:480px){.back{font-size:.8rem}.topcta{font-size:.78rem;padding:0 12px;margin-right:0}.snd{font-size:.78rem;padding:0 11px}}
+
+/* paletas: la foto de fondo toma el tono del sobre */
+body.pal-alt .scene#scene-env::before{background-color:var(--env);background-blend-mode:luminosity}

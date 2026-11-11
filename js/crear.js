@@ -10,7 +10,18 @@
   var THEMES = ['navidad', 'fin', 'cumple', 'cita'];
   var QS = new URLSearchParams(location.search);
   var theme = THEMES.indexOf(QS.get('t')) >= 0 ? QS.get('t') : 'navidad', TOKEN = (QS.get('e') || '').replace(/[^A-Za-z0-9_-]/g, ''), step = 1, ready = false, lastDef = null, busy = false;
-  var frame = $('pv-frame');
+  var frame = $('pv-frame'), pal = 0;
+  /* ---------- paletas de color ---------- */
+  function renderPal() {
+    var box = $('pal'), P = window.INS_PAL; if (!box || !P) return; box.innerHTML = '';
+    for (var i = 0; i < P.count; i++) {
+      var l = P.list[theme] && P.list[theme][i]; if (!l) continue;
+      var b = document.createElement('button'); b.type = 'button'; b.dataset.p = i; b.setAttribute('aria-pressed', String(i === pal)); b.setAttribute('aria-label', 'Paleta ' + l.n);
+      b.innerHTML = '<span class="dots">' + P.dots(theme, i).map(function (c) { return '<i style="background:' + c + '"></i>'; }).join('') + '</span><em>' + esc(l.n) + '</em>';
+      box.appendChild(b);
+    }
+  }
+  if ($('pal')) $('pal').addEventListener('click', function (e) { var b = e.target.closest('button[data-p]'); if (!b) return; pal = +b.dataset.p; renderPal(); sendPreview(); });
 
   function money(n) { return '$' + n.toFixed(2).replace('.', ','); }
   function toast(m) { var t = $('toast'); t.textContent = m; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { t.hidden = true; }, 2400); }
@@ -75,7 +86,7 @@
       it: rowsOf($('it-rows')), menu: rowsOf($('me-rows')),
       dress: [$('f-dress').value.trim(), [$('c1').value, $('c2').value, $('c3').value]],
       extra: ['gi', $('f-xt').value.trim(), $('f-xx').value.trim()],
-      rsvp: [$('f-rq').value.trim() || '¿Nos acompañas?', $('f-ry').value.trim() || 'Sí, voy', $('f-rn').value.trim() || 'No puedo']
+      rsvp: [$('f-rq').value.trim() || '¿Nos acompañas?', $('f-ry').value.trim() || 'Sí, voy', $('f-rn').value.trim() || 'No puedo'], pal: pal
     };
     /* fin de año: la cuenta regresiva llega a la medianoche solo si el evento es el 31 de diciembre */
     if (theme === 'fin' && /-12-31T/.test(date)) { var y = +date.slice(0, 4) + 1; cfg.target = y + '-01-01T00:00'; }
@@ -135,7 +146,7 @@
 
   /* ---------- ocasión ---------- */
   function setTheme(k) {
-    theme = k; [].forEach.call(document.querySelectorAll('#occ button'), function (b) { b.setAttribute('aria-pressed', String(b.dataset.t === k)); });
+    theme = k; pal = 0; renderPal(); [].forEach.call(document.querySelectorAll('#occ button'), function (b) { b.setAttribute('aria-pressed', String(b.dataset.t === k)); });
     seed(k); loadFrame(); if (!EDIT) summary();
     try { history.replaceState(null, '', '?t=' + k); } catch (e) {}
   }
@@ -181,7 +192,7 @@
     if (!TOKEN) { $('edit-title').textContent = ERR.NOT_FOUND; document.querySelector('.cr').hidden = true; return; }
     call({ action: 'editar_get', token: TOKEN }).then(function (r) {
       if (r.error || !r.config) { $('edit-title').textContent = ERR[r.error] || ERR.SERVER; document.querySelector('.cr').hidden = true; return; }
-      theme = THEMES.indexOf(r.theme) >= 0 ? r.theme : 'navidad'; fillFrom(r.config); lastDef = defOf(theme);
+      theme = THEMES.indexOf(r.theme) >= 0 ? r.theme : 'navidad'; fillFrom(r.config); pal = Math.max(0, Math.min(3, +r.config.pal || 0)); renderPal(); lastDef = defOf(theme);
       $('edit-title').textContent = NAMES[theme] + ' · ' + (r.config.title || ''); $('edits-left').textContent = r.edits_left;
       if (r.locked) { $('edit-title').textContent = ERR.LOCKED; document.querySelector('.cr').hidden = true; return; }
       if (r.edits_left <= 0) { $('save').disabled = true; showErr(4, ERR.NO_EDITS); }
@@ -201,5 +212,5 @@
 
   /* ---------- arranque ---------- */
   if (EDIT) { document.querySelector('.cr').hidden = false; initEdit(); }
-  else { seed(theme); [].forEach.call(document.querySelectorAll('#occ button'), function (b) { b.setAttribute('aria-pressed', String(b.dataset.t === theme)); }); loadFrame(); summary(); go(1); }
+  else { renderPal(); seed(theme); [].forEach.call(document.querySelectorAll('#occ button'), function (b) { b.setAttribute('aria-pressed', String(b.dataset.t === theme)); }); loadFrame(); summary(); go(1); }
 })();
