@@ -29,10 +29,10 @@
   var MES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'], DIA = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
   function fecha(d) { var m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(d || ''); if (!m) return ''; var dt = new Date(+m[1], +m[2] - 1, +m[3]); return { dia: DIA[dt.getDay()], txt: (+m[3]) + ' de ' + MES[+m[2] - 1], hora: m[4] + ':' + m[5], largo: DIA[dt.getDay()] + ' ' + (+m[3]) + ' de ' + MES[+m[2] - 1] + ' · ' + m[4] + ':' + m[5] }; }
   var TH = {
-    navidad: { img: '../assets/deco/nav-hero.webp', bg: ['#052a25', '#021613'], acc: '#e8c36a', ink: '#fff6e0', mut: '#bcd3c9', btn: '#e8c36a', btnInk: '#1a1405', emo: '🎄', eyebrow: 'Cena navideña' },
-    fin: { dy: -34, img: '../assets/deco/fin-hero.webp', bg: ['#0a0c1c', '#04050d'], acc: '#e3c27a', ink: '#fff7df', mut: '#b9bfd3', btn: '#e3c27a', btnInk: '#1a1405', emo: '🥂', eyebrow: 'Fin de año' },
-    cumple: { img: '../assets/mail/cumple.jpg', bg: ['#fff3d2', '#ffe6a8'], acc: '#b97a12', ink: '#14185c', mut: '#4a4f86', btn: '#14185c', btnInk: '#fff6dc', emo: '🎂', eyebrow: 'Cumpleaños' },
-    cita: { img: '../assets/mail/cita.jpg', bg: ['#3a0a18', '#1d0309'], acc: '#f3a9b6', ink: '#fff0f0', mut: '#e6b9c0', btn: '#f3a9b6', btnInk: '#2a0610', emo: '💘', eyebrow: 'Cita especial' }
+    navidad: { img: '../assets/deco/nav-hero.webp', bg: ['#052a25', '#021613'], acc: '#e8c36a', ink: '#fff6e0', mut: '#bcd3c9', btn: '#e8c36a', btnInk: '#1a1405', emo: '🎄', frase: 'Que esta Navidad nos encuentre juntos, entre luces, risas y buena mesa.', eyebrow: 'Cena navideña' },
+    fin: { dy: -34, img: '../assets/deco/fin-hero.webp', bg: ['#0a0c1c', '#04050d'], acc: '#e3c27a', ink: '#fff7df', mut: '#b9bfd3', btn: '#e3c27a', btnInk: '#1a1405', emo: '🥂', frase: 'Despidamos el año como se merece: juntos y con un brindis.', eyebrow: 'Fin de año' },
+    cumple: { img: '../assets/mail/cumple.jpg', bg: ['#fff3d2', '#ffe6a8'], acc: '#b97a12', ink: '#14185c', mut: '#4a4f86', btn: '#14185c', btnInk: '#fff6dc', emo: '🎂', frase: 'Celebremos otro año de vida… tu presencia es el mejor regalo.', eyebrow: 'Cumpleaños' },
+    cita: { img: '../assets/mail/cita.jpg', bg: ['#3a0a18', '#1d0309'], acc: '#f3a9b6', ink: '#fff0f0', mut: '#e6b9c0', btn: '#f3a9b6', btnInk: '#2a0610', emo: '💘', frase: 'Una noche pensada con cariño, hecha para compartir.', eyebrow: 'Cita especial' }
   };
   function loadImg(src) { return new Promise(function (ok) { var i = new Image(); i.onload = function () { ok(i); }; i.onerror = function () { ok(null); }; i.src = src; }); }
   function spaced(c, t, x, y, gap) { var w = 0, i; for (i = 0; i < t.length; i++) w += c.measureText(t[i]).width + gap; w -= gap; var cx = x - w / 2; c.textAlign = 'left'; for (i = 0; i < t.length; i++) { c.fillText(t[i], cx, y); cx += c.measureText(t[i]).width + gap; } c.textAlign = 'center'; }
@@ -71,7 +71,7 @@
   }
   function texto(theme, cfg, inv) {
     var T = TH[theme] || TH.navidad, f = fecha(cfg.date), host = (cfg.host || '').trim();
-    var L = [T.emo + ' ¡Estás invitado! ' + T.emo, '', '✨ ' + (cfg.title || '') + (host ? ' · de ' + host : '')];
+    var L = [T.emo + ' ¡Estás invitado! ' + T.emo, '', T.frase, '', '✨ ' + (cfg.title || '') + (host ? ' · de ' + host : '')];
     if (f) L.push('📅 ' + f.largo.charAt(0).toUpperCase() + f.largo.slice(1) + ' h');
     if (cfg.place) L.push('📍 ' + cfg.place);
     L.push('', 'Abre tu invitación aquí 👇', inv, '', 'Ahí podrás ver los detalles y confirmar tu asistencia 💌');

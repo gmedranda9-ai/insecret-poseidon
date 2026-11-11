@@ -45,10 +45,10 @@
       rr(g, 70, y, W - 140, 120, 24); var gg = g.createLinearGradient(70, y, W - 70, y); gg.addColorStop(0, '#ffd600'); gg.addColorStop(1, '#ffb800'); g.fillStyle = gg; g.fill();
       g.fillStyle = '#10213a'; g.font = '600 32px Outfit, sans-serif'; g.fillText('TOTAL A PAGAR (USD)', 106, y + 72); g.textAlign = 'right'; g.font = '700 56px Outfit, sans-serif'; g.fillText(money(c.tot), W - 106, y + 82); g.textAlign = 'left';
       y += 190; g.fillStyle = '#c9d6e4'; g.font = '400 25px Outfit, sans-serif';
-      ['Paga con tarjeta en: ' + d.url, 'Incluye: sobre con sello, música, cuenta regresiva, mapa, confirmación de asistencia y panel de respuestas.', 'Hasta 5 ediciones. Después de pagar, escríbele a Afrodita (WhatsApp 096 852 0688) con tu código para coordinar logo y colores.'].forEach(function (t) { y = wrap(g, t, 70, y, W - 140, 34) + 44; });
+      ['Paga con tarjeta en: ' + d.url, 'Incluye: sobre con sello, música, cuenta regresiva, mapa, confirmación de asistencia y panel de respuestas.', 'Hasta 5 ediciones. Después de pagar, un asesor de Poseidón te escribe por WhatsApp para coordinar logo, colores y lista de invitados.'].forEach(function (t) { y = wrap(g, t, 70, y, W - 140, 34) + 44; });
       g.fillStyle = '#6f87a3'; g.font = '400 22px Outfit, sans-serif'; g.fillText('El futuro no espera. Nosotros tampoco. Activa el poder.', 70, H - 50);
       var url = cv.toDataURL('image/png'); $('img').src = url; $('dl').href = url; $('dl').download = 'proforma-' + d.num + '.png';
-      $('pay').href = d.url; $('pay').hidden = false; $('wa2').href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent('Hola Afrodita 👋 tengo la proforma ' + d.num + ' (' + money(c.tot) + ') de ' + d.co + '.' + (d.note ? ' ' + d.note : ''));
+      $('pay').href = d.url; $('pay').hidden = false;;
       $('out').hidden = false; $('out').scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
     ok();
@@ -59,7 +59,7 @@
   function watch(code, co, total) {
     clearTimeout(poll); var t0 = Date.now();
     (function tick() { call({ action: 'proforma_estado', code: code }).then(function (r) {
-      if (r.status === 'paid') { $('st-line').textContent = '✅ ¡Pago recibido! Escríbele a Afrodita con tu código y seguimos.'; $('pay').hidden = true; return; }
+      if (r.status === 'paid') { $('st-line').textContent = '✅ ¡Pago recibido! Un asesor de Poseidón te escribe por WhatsApp en breve para armar tu invitación contigo.'; $('pay').hidden = true; return; }
       if (Date.now() - t0 < 1800e3) poll = setTimeout(tick, 4000);
     }); })();
   }
