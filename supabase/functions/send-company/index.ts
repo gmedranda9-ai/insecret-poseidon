@@ -77,7 +77,7 @@ Deno.serve(async (req) => {
   if (slug) {
     const inv = await rpc("invite_get", { p_slug: slug });
     if (inv.message || inv.error) return json(req, { error: "INVITE_NOT_FOUND" });
-    title = inv.config?.title || title; theme = inv.theme === "fin" ? "fin" : "navidad";
+    title = inv.config?.title || title; theme = ["navidad", "fin", "boda", "cumple", "cita"].includes(inv.theme) ? inv.theme : "navidad";
     try { when = new Date(inv.config?.date + "-05:00").toLocaleString("es-EC", { timeZone: "America/Guayaquil", dateStyle: "full", timeStyle: "short" }); } catch { /* */ }
   }
 
@@ -94,7 +94,7 @@ Deno.serve(async (req) => {
   async function worker() {
     while (i < clean.length) {
       const p = clean[i++]; const tk = tokens[p.name.toLowerCase()] || "";
-      const inv = slug ? `${SITE}/invitacion/?i=${slug}&para=${encodeURIComponent(p.name)}` : undefined;
+      const inv = slug ? `${SITE}/invitacion/?i=${slug}&para=${encodeURIComponent(nice(p.name))}` : undefined;
       const ss = withSS && tk ? `${SITE}/amigo-secreto/?t=${tk}&e=1` : undefined;
       const subj = `${nice(p.name).split(" ")[0]}, ${slug ? `te invitamos a ${title}` : "tu amigo secreto está listo"}`;
       const err = await send(BREVO, { email: p.email, name: p.name }, subj, mail({ company, name: p.name, title, accent, sign, intro, inv, ss, when, banner: `${SITE}/assets/mail/${theme}.jpg` }), company);

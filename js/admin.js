@@ -188,7 +188,7 @@
   function previewHtml(name) {
     var ac = $('c-accent').value, inv = !!$('c-occ').value, ss = $('c-ss').checked, sign = $('c-sign').value.trim(), intro = $('c-intro').value.trim(), gold = '#e3c27a';
     var nice = function (n) { n = n.replace(/\s+/g, ' ').trim(); return n === n.toUpperCase() || n === n.toLowerCase() ? n.toLowerCase().replace(/(^|\s)\S/g, function (c) { return c.toUpperCase(); }) : n; };
-    var first = esc(nice(name).split(' ')[0]), banner = '../assets/mail/' + ($('c-occ').value === 'fin' ? 'fin' : 'navidad') + '.jpg';
+    var first = esc(nice(name).split(' ')[0]), banner = '../assets/mail/' + (['navidad', 'fin', 'boda', 'cumple', 'cita'].indexOf($('c-occ').value) >= 0 ? $('c-occ').value : 'navidad') + '.jpg';
     var btn = function (l, solid) { return '<span style="display:block;text-align:center;font:700 16px Arial,sans-serif;padding:15px 18px;border-radius:999px;margin:12px 0;' + (solid ? 'background:' + gold + ';color:#1a1405;' : 'border:2px solid ' + gold + ';color:' + gold + ';') + '">' + l + '</span>'; };
     var text = intro ? esc(intro).replace(/\n/g, '<br>') : (inv ? 'Te invitamos a <b style="color:#fff">' + esc($('c-title').value) + '</b>' + (fmtWhen() ? '<br><span style="color:' + gold + '">' + esc(fmtWhen()) + '</span>' : '') + '.' : '') + (ss ? '<br>' + (inv ? 'Además, este año hay' : 'Este año hay') + ' <b style="color:#fff">amigo secreto</b>.' : '');
     return '<div style="max-width:480px;margin:0 auto;background:#0b1220;color:#f6f1e4;border-radius:16px;overflow:hidden;font-family:Arial,sans-serif;border:1px solid rgba(227,194,122,.35)"><img src="' + banner + '" alt="" style="display:block;width:100%;height:auto"><div style="height:6px;background:' + ac + '"></div><div style="padding:28px 26px 24px">' +
