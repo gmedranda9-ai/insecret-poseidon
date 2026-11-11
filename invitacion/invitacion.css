@@ -451,3 +451,43 @@ body[data-theme=navidad] .scene#scene-env::before{background-image:url(../assets
 body[data-theme=fin] .scene#scene-env::before{background-image:url(../assets/deco/fin-hero.webp);opacity:.35;background-position:center 30%}
 .card>div.hero-art.hero-art{position:absolute;z-index:0}
 body .card:has(.ha-navidad),body .card:has(.ha-fin){padding-top:210px!important}
+
+/* ====== v19 · ilustraciones por tema ====== */
+.ha-fin{background-image:url(../assets/deco/fin-ny.webp);background-position:center 20%;height:250px}
+.ha-boda,.ha-cumple,.ha-cita{-webkit-mask-image:none;mask-image:none;background-size:contain;background-position:center 12px;top:0}
+.ha-boda{height:236px;background-image:url(../assets/deco/couple-arch.webp)}
+.ha-cumple{height:170px;background-image:url(../assets/deco/cake.webp)}
+.ha-cita{height:150px;background-image:url(../assets/deco/heartglass.webp)}
+body .card:has(.ha-boda){padding-top:250px!important}
+body .card:has(.ha-cumple){padding-top:186px!important}
+body .card:has(.ha-cita){padding-top:166px!important}
+body .card:has(.ha-fin){padding-top:230px!important}
+body.corp-light .hero-art.ha-boda{background-image:url(../assets/deco/couple-arch.webp)}
+/* figuras de pie de tarjeta (solo invitaciones personales) */
+.foot-art{display:flex;justify-content:center;align-items:flex-end;gap:10px;margin-top:18px;pointer-events:none}
+body.corp .foot-art{display:none}
+.foot-art img{height:104px;width:auto;max-width:44%;object-fit:contain;animation:fbob 4s ease-in-out infinite;animation-delay:calc(var(--i)*-1.3s)}
+.fa-navidad img:first-child{height:92px}.fa-navidad img:last-child{height:118px;animation-name:fwave}
+.fa-boda img{height:84px}.fa-boda img:nth-child(2){height:78px;margin-bottom:2px}
+.fa-cumple img{height:80px;animation-name:fbob}
+.fa-cita img{height:130px;max-width:70%;border-radius:12px}
+@keyframes fbob{50%{transform:translateY(-8px)}}
+@keyframes fwave{0%,100%{transform:rotate(0)}25%{transform:rotate(-3deg) translateY(-4px)}75%{transform:rotate(3deg) translateY(-2px)}}
+/* personaje que se asoma al abrir cada botón */
+.tile{position:relative}
+.tile::after{content:"";position:absolute;right:46px;top:-30px;width:58px;height:58px;background:var(--tart,none) center/contain no-repeat;opacity:0;transform:translateY(16px) scale(.6) rotate(-10deg);transition:opacity .35s,transform .5s cubic-bezier(.3,1.6,.5,1);pointer-events:none;z-index:2;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35))}
+.tile.open::after{opacity:1;transform:none;animation:tfloat 3.2s ease-in-out .5s infinite}
+@keyframes tfloat{50%{transform:translateY(-6px) rotate(4deg)}}
+body[data-theme=navidad]{--tart:url(../assets/deco/santa-head.webp)}
+body[data-theme=boda]{--tart:url(../assets/deco/rings.webp)}
+body[data-theme=cumple]{--tart:url(../assets/deco/cake.webp)}
+body[data-theme=cita]{--tart:url(../assets/deco/heartglass.webp)}
+body[data-theme=fin] .tile.open::after{content:"🥂";background:none;font-size:2.1rem;line-height:1;width:auto;height:auto;right:50px;top:-26px}
+@media(prefers-reduced-motion:reduce){.foot-art img,.tile.open::after{animation:none}}
+body[data-theme=fin] .scene#scene-env::before{background-image:url(../assets/deco/fin-ny.webp);opacity:.45}
+.ha-fin{background-size:cover;background-position:center top;-webkit-mask-image:linear-gradient(#000 80%,transparent);mask-image:linear-gradient(#000 80%,transparent)}
+.tile::after{width:68px;height:68px;top:-38px}
+.fa-boda img{filter:brightness(.62) saturate(1.5)}
+.fa-cita img{-webkit-mask-image:linear-gradient(#000 72%,transparent);mask-image:linear-gradient(#000 72%,transparent)}
+.ha-fin{height:300px;background-position:center bottom;-webkit-mask-image:linear-gradient(#000 86%,transparent);mask-image:linear-gradient(#000 86%,transparent)}
+body .card:has(.ha-fin){padding-top:290px!important}

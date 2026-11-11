@@ -336,9 +336,10 @@
     if (kind === 'star') { var pts = [], R = r, rr = r * .45; for (var i = 0; i < 10; i++) { var ang = -Math.PI / 2 + i * Math.PI / 5, rad = i % 2 ? rr : R; pts.push((x + Math.cos(ang) * rad).toFixed(1) + ',' + (len + R + Math.sin(ang) * rad).toFixed(1)); } return g + '<polygon points="' + pts.join(' ') + '" fill="url(#gold)"/></g>'; }
     return g + '<rect x="' + (x - 4) + '" y="' + len + '" width="8" height="6" rx="1.5" fill="#caa24e"/><circle cx="' + x + '" cy="' + (len + 6 + r) + '" r="' + r + '" fill="url(#' + c1 + ')"/><ellipse cx="' + (x - r * .35) + '" cy="' + (len + 6 + r * .6) + '" rx="' + r * .22 + '" ry="' + r * .35 + '" fill="rgba(255,255,255,.55)"/><path d="M' + (x - r * .8) + ' ' + (len + 6 + r) + 'q' + r * .8 + ' ' + r * .5 + ' ' + r * 1.6 + ' 0" fill="none" stroke="' + c2 + '" stroke-width="1.6" opacity=".7"/></g>';
   }
+  var FOOT = { navidad: ['snowman', 'santa'], boda: ['jm-roses', 'jm-car', 'jm-carry'], cumple: ['feliz-cumple'], cita: ['love-date'], fin: [] };
   function cardDeco(k) {
     var el = $('cdeco'), eb = $('cdeco-b'); el.innerHTML = ''; eb.innerHTML = '';
-    var ha = $('hero-art'); ha.className = 'hero-art' + (k === 'navidad' || k === 'fin' ? ' ha-' + k : '');
+    var ha = $('hero-art'); ha.className = 'hero-art ha-' + k; var fa = $('foot-art'); fa.className = 'foot-art fa-' + k; fa.innerHTML = document.body.classList.contains('corp') ? '' : (FOOT[k] || []).map(function (s, i) { return '<img src="../assets/deco/' + s + '.webp" alt="" style="--i:' + i + '">'; }).join('');
     if (k !== 'navidad' && k !== 'fin') return;
     var defs = '<defs><radialGradient id="rd" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#ff7a82"/><stop offset="1" stop-color="#b3202f"/></radialGradient><radialGradient id="gd" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#fff0b8"/><stop offset="1" stop-color="#b8862b"/></radialGradient><radialGradient id="sl" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#8fa4b8"/></radialGradient><linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff0b8"/><stop offset="1" stop-color="#c9992f"/></linearGradient></defs>';
     var orns = '';
@@ -363,6 +364,7 @@
       SG['sg' + (n + 1)].parentNode.insertBefore(d, SG['sg' + (n + 1)]);
       d.querySelector('.story-btn').addEventListener('click', function () { revealStep(n); });
     });
+    SG.sg4.appendChild($('foot-art'));
   }
   function revealStep(n) {
     $('sn' + n).hidden = true; var g = SG['sg' + (n + 1)]; g.classList.add('show');

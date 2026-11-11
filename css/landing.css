@@ -274,3 +274,5 @@ body{background:radial-gradient(110% 70% at 50% -5%,#06223d 0%,#040f1d 40%,#040a
 .mail-d .m-pad{width:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:stretch;gap:10px}
 .mail-d .m-pad>*{text-align:center}
 .mail-d .m-sign{width:100%}
+
+.ex .oi img{width:34px;height:34px;object-fit:contain;display:block;filter:drop-shadow(0 2px 3px rgba(0,0,0,.4))}
