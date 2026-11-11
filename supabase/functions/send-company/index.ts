@@ -103,7 +103,7 @@ Deno.serve(async (req) => {
       const inv = slug ? `${SITE}/invitacion/?i=${slug}&para=${encodeURIComponent(nice(p.name))}` : undefined;
       const ss = withSS && tk ? `${SITE}/amigo-secreto/?t=${tk}&e=1` : undefined;
       const subj = `${nice(p.name).split(" ")[0]}, ${slug ? `te invitamos a ${title}` : "tu amigo secreto está listo"}`;
-      const err = await send(BREVO, { email: p.email, name: p.name }, subj, mail({ company, name: p.name, title, accent, sign, intro, inv, ss, when, banner: `${SITE}/assets/mail/${theme}.jpg`, bbg: BANNERS[theme][0], balt: BANNERS[theme][1] }), company, plain({ name: p.name, title, inv, ss, sign, company, intro }));
+      const err = await send(BREVO, { email: p.email, name: p.name }, subj, mail({ company, name: p.name, title, accent, sign, intro, inv, ss, when, banner: `${SITE}/assets/mail/${theme}-v2.jpg`, bbg: BANNERS[theme][0], balt: BANNERS[theme][1] }), company, plain({ name: p.name, title, inv, ss, sign, company, intro }));
       results.push({ name: p.name, email: p.email, token: tk, ok: !err, error: err });
     }
   }
