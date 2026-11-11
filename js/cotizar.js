@@ -3,13 +3,14 @@
   'use strict';
   var $ = function (id) { return document.getElementById(id); };
   var ADV = 'https://link.poseidonmk.com/Asesor-Poseidon-13', KIND = 'combo';
-  var P = { inv: 49, ami: 39, combo: 79, extra: 1.5, base: 100, maxami: 99, max: 500 };
+  var P = { maxami: 99, max: 500 }, TIERS = [15, 30, 60, 100], PR = { inv: [15, 25, 35, 45], ami: [12, 19, 25, 35], combo: [25, 39, 49, 69] }, EXTRA = 0.6;
   var NAMES = { inv: 'Invitación interactiva empresarial', ami: 'Amigo secreto por correo', combo: 'Combo: invitación + amigo secreto' };
   function money(v) { return '$' + v.toFixed(2).replace('.', ','); }
   function calc() {
     var n = Math.max(1, Math.min(500, parseInt($('n').value, 10) || 0)), rows = [], tot = 0, quote = KIND === 'ami' ? n > P.maxami : n > P.max;
-    var base = P[KIND]; rows.push([NAMES[KIND] + ' (hasta ' + P.base + ' personas)', base]); tot += base;
-    if (KIND !== 'ami' && n > P.base) { var x = (n - P.base) * P.extra; rows.push([(n - P.base) + ' persona' + (n - P.base > 1 ? 's' : '') + ' adicional' + (n - P.base > 1 ? 'es' : '') + ' × ' + money(P.extra), x]); tot += x; }
+    var ti = -1, i; for (i = 0; i < TIERS.length; i++) { if (n <= TIERS[i]) { ti = i; break; } }
+    var base = PR[KIND][ti >= 0 ? ti : 3]; rows.push([NAMES[KIND] + ' (hasta ' + (ti >= 0 ? TIERS[ti] : 100) + ' personas)', base]); tot += base;
+    if (ti < 0 && KIND !== 'ami') { var ex = n - 100, x = Math.round(ex * EXTRA * 100) / 100; rows.push([ex + ' persona' + (ex > 1 ? 's' : '') + ' adicional' + (ex > 1 ? 'es' : '') + ' × ' + money(EXTRA), x]); tot += x; }
     var iva = Math.round(tot * 15) / 100; return { n: n, rows: rows, sub: tot, iva: iva, tot: Math.round((tot + iva) * 100) / 100, quote: quote };
   }
   function render() {
@@ -18,7 +19,7 @@
     if (!c.quote) { [['Subtotal', c.sub], ['IVA 15%', c.iva]].forEach(function (r) { var li = document.createElement('li'); li.textContent = r[0] + ' · ' + money(r[1]); li.style.opacity = '.8'; $('q-rows').appendChild(li); }); }
     $('q-tot').textContent = c.quote ? 'A medida' : money(c.tot);
     $('q-note').textContent = c.quote ? (KIND === 'ami' ? 'Para más de 99 personas' : 'Para más de 500 personas') + ' armamos una cotización a tu medida. Habla con un asesor.' : 'Valores más IVA (15%). Incluye hasta 5 ediciones, panel de confirmaciones y enlace individual por invitado.';
-    $('make').hidden = c.quote; $('n-help').textContent = KIND === 'ami' ? 'El amigo secreto tiene un valor fijo hasta 99 personas.' : 'Hasta ' + P.base + ' personas el valor base ya está incluido; cada persona adicional suma ' + money(P.extra) + '.';
+    $('make').hidden = c.quote; $('n-help').textContent = KIND === 'ami' ? 'El precio sube por tramos: hasta 15, 30, 60 y 99 personas.' : 'El precio sube por tramos: hasta 15, 30, 60 y 100 personas. Desde la persona 101, cada una suma ' + money(EXTRA) + '.';
     $('wa').href = ADV;
     return c;
   }
