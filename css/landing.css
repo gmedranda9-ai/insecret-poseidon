@@ -313,3 +313,4 @@ body{background:radial-gradient(110% 70% at 50% -5%,#06223d 0%,#040f1d 40%,#040a
 .pk-cta .btn-l{padding:13px 20px;font-size:.95rem}
 .pk-note{text-align:center;color:#9fb8d6;max-width:620px;margin:20px auto 0;padding:0 16px;font-size:.95rem}
 @media(max-width:820px){.pk-b>.pk-in{grid-template-columns:1fr;gap:18px}.pk-in .flow-phone{order:-1;width:280px;height:560px}.pk-badge{display:none}}
+.pill-cta{background:#ffd600!important;color:#10213a!important;border-color:#ffd600!important;font-weight:700;margin-left:auto}.pill-cta+.by{margin-left:.6rem}

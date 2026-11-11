@@ -221,7 +221,7 @@
       $('org-link').value = link(orgToken, 'o');
       $('wa-grp').href = 'https://wa.me/?text=' + encodeURIComponent('🎄 ¡Amigo secreto «' + st.group_name + '»!\n' + st.organizer + ' organizó el sorteo. Entra aquí, toca tu nombre, crea tu PIN y descubre a quién le regalas (es un secreto 🤫). Después escribe tu lista de deseos para que tu amigo secreto sepa qué regalarte:\n' + gl + '\n\nHecho con InSecret Poseidón ✨');
       var selfMsg = '🔐 Mi acceso de organizador de «' + st.group_name + '» (InSecret Poseidón). Para volver desde cualquier teléfono: entra a ' + BASE + ' → «¿Ya organizaste un sorteo?» → mi WhatsApp + mi PIN de organizador. Enlace directo: ' + link(orgToken, 'o');
-      $('cross-inv').href = 'https://wa.me/593982354338?text=' + encodeURIComponent('Hola Poseidón 👋 Organicé el amigo secreto «' + st.group_name + '» y quiero una invitación personalizada para el intercambio.');
+      $('cross-inv').href = 'https://wa.me/593968520688?text=' + encodeURIComponent('Hola Afrodita 👋 Organicé el amigo secreto «' + st.group_name + '» y quiero una invitación personalizada para el intercambio.');
       $('wa-self').href = 'https://wa.me/' + (S.phone || '') + '?text=' + encodeURIComponent(selfMsg);
       renderStatus(st); noindex(); show('results');
       clearInterval(S.poll); S.poll = setInterval(function () { refresh(true); }, 30000);

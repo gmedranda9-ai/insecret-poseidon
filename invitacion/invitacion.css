@@ -505,3 +505,8 @@ body.preview .sell,body.preview #again,body.preview .back,body.preview .themes{d
 body.preview .bar{padding-top:8px}
 body.preview .bar-top{justify-content:flex-end}
 body.preview{padding-top:0}
+.topcta{margin-left:auto;margin-right:10px;padding:0 16px;height:40px;display:inline-flex;align-items:center;border-radius:20px;background:#ffd600;color:#10213a;font:700 .88rem/1 inherit;text-decoration:none;box-shadow:0 4px 14px rgba(255,214,0,.35)}
+body.real .topcta,body.preview .topcta{display:none}
+.bar-top .back{margin-right:auto}
+.bar-top{gap:8px}.back,.topcta,.snd{white-space:nowrap}
+@media(max-width:480px){.back{font-size:.8rem}.topcta{font-size:.78rem;padding:0 12px;margin-right:0}.snd{font-size:.78rem;padding:0 11px}}

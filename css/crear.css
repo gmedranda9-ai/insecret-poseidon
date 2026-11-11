@@ -87,3 +87,6 @@
 .occ3{grid-template-columns:repeat(3,1fr)!important}@media(max-width:560px){.occ3{grid-template-columns:1fr!important}}
 .btn-line{background:transparent!important;color:#fff!important;border:1.5px solid var(--azul,#009ee7)!important}
 .fld input[type=number]{width:100%;padding:14px 16px;border-radius:14px;border:1.5px solid rgba(255,255,255,.16);background:rgba(4,10,20,.7);color:#fff;font:500 1rem 'Outfit',sans-serif}
+.qt h3{font:600 .9rem 'Outfit',sans-serif;color:var(--soft);text-align:center;margin-bottom:8px;letter-spacing:.04em}
+.qt{display:block}
+@media(min-width:900px){.qt{position:sticky;top:16px;align-self:start}}
