@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="../assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/landing.css?v=14">
+<link rel="stylesheet" href="../css/landing.css?v=15">
 </head>
 <body class="sub">
 <canvas id="fx" aria-hidden="true"></canvas>
@@ -32,6 +32,25 @@
     <h1>Tu evento de empresa, <em>con distinción</em></h1>
     <p class="lead">Invitación con el logo y los colores de tu empresa, más el amigo secreto de tus colaboradores. Cena navideña, fin de año y otras ocasiones especiales. Tú nos envías la lista y nosotros nos encargamos de todo.</p>
   </section>
+  <section class="block flow" id="flow">
+    <h2 class="h2c">Así lo vive <em>tu equipo</em></h2>
+    <p class="sub-l">Tú nos pasas la lista. Esto es lo que recibe y ve cada colaborador, y lo que ves tú.</p>
+    <div class="flow-wrap">
+      <div class="flow-steps" role="tablist">
+        <button type="button" class="fs on" role="tab" data-i="0"><i>1</i><span><b>Les llega por correo</b><small>Con el logo de tu empresa: un botón para su invitación y otro, solo suyo, para su amigo secreto.</small></span></button>
+        <button type="button" class="fs" role="tab" data-i="1"><i>2</i><span><b>Abren su invitación</b><small>Un sobre que se abre con luces, cuenta regresiva, itinerario y confirmación de asistencia.</small></span></button>
+        <button type="button" class="fs" role="tab" data-i="2"><i>3</i><span><b>Descubren su amigo secreto</b><small>Cada quien ve a quién le regala. Nadie más lo sabe, ni tú.</small></span></button>
+        <button type="button" class="fs" role="tab" data-i="3"><i>4</i><span><b>Tú sigues quién ya entró</b><small>Ves quién abrió su regalo y quién falta, sin ver los cruces.</small></span></button>
+      </div>
+      <div class="flow-phone" aria-live="polite">
+        <img class="on" src="../assets/show/mail.webp" alt="Correo que recibe cada colaborador" width="324" height="639">
+        <img src="../assets/show/invitacion.webp" alt="Invitación corporativa abierta" width="360" height="740" loading="lazy">
+        <img src="../assets/show/amigo.webp" alt="Pantalla del amigo secreto" width="360" height="740" loading="lazy">
+        <img src="../assets/show/panel.webp" alt="Panel de seguimiento" width="360" height="740" loading="lazy">
+      </div>
+    </div>
+    <div class="flow-cta"><a class="btn-l" href="../invitacion/?t=navidad&corp=1">✉ Abrir la invitación en vivo</a><a class="btn-l btn-l2" href="../amigo-secreto/?demo=1">🎁 Probar el amigo secreto (demo)</a></div>
+  </section>
   <section class="block">
     <h2 class="h2c">Míralas en vivo</h2>
     <p class="sub-l">Toca una para abrirla. Así la recibirá cada colaborador.</p>
@@ -41,7 +60,7 @@
     <details class="mail-open"><summary class="mail-btn">✉ Ver cómo le llega a cada colaborador</summary>
     <div class="mail mail-d" role="img" aria-label="Ejemplo del correo que recibe cada colaborador">
       <div class="m-bar"><span></span><span></span><span></span></div>
-      <div class="m-meta"><div><small>De</small> Empresa Ejemplo · Poseidón <b>&lt;no-reply@poseidonmk.com&gt;</b></div><div><small>Asunto</small> <b>Laura, te invitamos a la cena de fin de año</b></div></div>
+      <div class="m-meta"><div><small>De</small> Empresa Ejemplo · Poseidón <b>&lt;no-reply@poseidonmk.com&gt;</b></div><div><small>Asunto</small> <b>Laura, te invitamos a la cena navideña</b></div></div>
       <div class="m-body">
         <img class="m-ban" src="../assets/mail/navidad.jpg" alt="" loading="lazy">
         <div class="m-pad">
@@ -76,5 +95,6 @@
 </main>
 <footer><a href="https://poseidonmk.com" target="_blank" rel="noopener">poseidonmk.com</a> · <a href="mailto:soporte@poseidonmk.com">soporte@poseidonmk.com</a><p class="slogan">El futuro no espera. Nosotros tampoco. Activa el poder.</p></footer>
 <script src="../js/landing.js?v=2"></script>
+<script src="../js/flow.js?v=1"></script>
 </body>
 </html>

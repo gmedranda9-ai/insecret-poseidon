@@ -276,3 +276,18 @@ body{background:radial-gradient(110% 70% at 50% -5%,#06223d 0%,#040f1d 40%,#040a
 .mail-d .m-sign{width:100%}
 
 .ex .oi img{width:34px;height:34px;object-fit:contain;display:block;filter:drop-shadow(0 2px 3px rgba(0,0,0,.4))}
+
+/* v15 flujo empresa */
+.flow-wrap{max-width:980px;margin:22px auto 0;display:grid;grid-template-columns:1fr 330px;gap:34px;align-items:center;padding:0 16px}
+.flow-steps{display:grid;gap:12px}
+.fs{display:flex;gap:14px;text-align:left;align-items:flex-start;padding:16px 18px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:#cfe2f7;font:inherit;cursor:pointer;transition:.25s}
+.fs i{flex:0 0 36px;height:36px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:700;background:rgba(255,255,255,.1);color:#fff}
+.fs b{display:block;font-size:1.05rem;color:#fff}.fs small{display:block;margin-top:4px;font-size:.88rem;line-height:1.4;color:#9fb8d6}
+.fs.on{background:rgba(254,212,5,.1);border-color:#fed405}.fs.on i{background:#fed405;color:#040a14}
+.flow-phone{position:relative;width:330px;height:660px;margin:0 auto;border-radius:48px;background:#0b0f18;box-shadow:0 0 0 3px #2a3346,0 30px 70px rgba(0,0,0,.5);padding:14px;overflow:hidden}
+.flow-phone img{position:absolute;inset:14px;width:calc(100% - 28px);height:calc(100% - 28px);object-fit:cover;object-position:top;border-radius:36px;opacity:0;transform:scale(.97);transition:.45s}
+.flow-phone img.on{opacity:1;transform:none}
+.flow-cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:26px;padding:0 16px}
+.btn-l{display:inline-block;padding:15px 26px;border-radius:999px;background:#fed405;color:#040a14;font-weight:700;text-decoration:none}
+.btn-l2{background:transparent;color:#fed405;border:2px solid #fed405}
+@media(max-width:820px){.flow-wrap{grid-template-columns:1fr;gap:22px}.flow-phone{order:-1;width:290px;height:580px}}
