@@ -2,7 +2,7 @@
 (function () {
   'use strict';
   var $ = function (id) { return document.getElementById(id); };
-  var WA = '593968520688', KIND = 'combo';
+  var ADV = 'https://link.poseidonmk.com/Asesor-Poseidon-13', KIND = 'combo';
   var P = { inv: 49, ami: 39, combo: 79, extra: 1.5, base: 25, cotizar: 100 };
   var NAMES = { inv: 'Invitación interactiva empresarial', ami: 'Amigo secreto por correo', combo: 'Combo: invitación + amigo secreto' };
   function money(v) { return '$' + v.toFixed(2).replace('.', ','); }
@@ -19,7 +19,7 @@
     $('q-tot').textContent = c.quote ? 'A medida' : money(c.tot);
     $('q-note').textContent = c.quote ? 'Desde 100 personas armamos una cotización a tu medida. Habla con un asesor.' : 'Valores más IVA (15%). Incluye hasta 5 ediciones, panel de confirmaciones y enlace individual por invitado.';
     $('make').hidden = c.quote; $('n-help').textContent = KIND === 'ami' ? 'El amigo secreto tiene un valor fijo hasta 99 personas.' : 'Hasta ' + P.base + ' personas el valor base ya está incluido; cada persona adicional suma ' + money(P.extra) + '.';
-    $('wa').href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent('Hola Afrodita 👋 quiero ' + (c.quote ? 'cotizar a medida' : 'contratar') + ': ' + NAMES[KIND] + ' para ' + c.n + ' personas' + (c.quote ? '.' : ' (' + money(c.tot) + ').'));
+    $('wa').href = ADV;
     return c;
   }
   $('kind').addEventListener('click', function (e) { var b = e.target.closest('button[data-k]'); if (!b) return; KIND = b.dataset.k; [].forEach.call($('kind').children, function (x) { x.setAttribute('aria-pressed', String(x === b)); }); render(); });
@@ -53,7 +53,7 @@
     };
     ok();
   }
-  var C = window.INSECRET_CONFIG || {}, FN = (C.supabaseUrl || '') + '/functions/v1/compra', ERR = { BAD_PHONE: 'Revisa el WhatsApp: 10 dígitos, empieza con 09 u 08.', BAD_DOC: 'El RUC debe tener 13 dígitos (o cédula de 10).', BAD_EMAIL: 'Revisa el correo.', RATE: 'Hiciste varias proformas seguidas. Espera un rato o habla con Afrodita.', LINK: 'No pudimos preparar el pago. Intenta de nuevo o habla con Afrodita.', NETWORK: 'Sin conexión. Intenta de nuevo.' };
+  var C = window.INSECRET_CONFIG || {}, FN = (C.supabaseUrl || '') + '/functions/v1/compra', ERR = { BAD_PHONE: 'Revisa el WhatsApp: 10 dígitos, empieza con 09 u 08.', BAD_DOC: 'El RUC debe tener 13 dígitos (o cédula de 10).', BAD_EMAIL: 'Revisa el correo.', RATE: 'Hiciste varias proformas seguidas. Espera un rato o habla con un asesor.', LINK: 'No pudimos preparar el pago. Intenta de nuevo o habla con un asesor.', NETWORK: 'Sin conexión. Intenta de nuevo.' };
   function call(body) { return fetch(FN, { method: 'POST', headers: { 'Content-Type': 'application/json', apikey: C.supabaseKey, Authorization: 'Bearer ' + C.supabaseKey }, body: JSON.stringify(body) }).then(function (r) { return r.json().catch(function () { return {}; }); }, function () { return { error: 'NETWORK' }; }); }
   var poll = null;
   function watch(code, co, total) {
@@ -73,7 +73,7 @@
     var btn = $('make'); btn.disabled = true; btn.textContent = 'Preparando tu proforma…';
     call({ action: 'proforma_crear', kind: KIND, people: c.n, company: co, contact: name, phone: tel, ruc: ruc, email: mail, note: note, web: $('c-web').value }).then(function (r) {
       btn.disabled = false; btn.textContent = 'Generar proforma (imagen)';
-      if (!r.ok || !r.code) return err(ERR[r.error] || 'No se pudo generar la proforma. Intenta de nuevo o habla con Afrodita.');
+      if (!r.ok || !r.code) return err(ERR[r.error] || 'No se pudo generar la proforma. Intenta de nuevo o habla con un asesor.');
       var z = new Date(Date.now() - 5 * 3600e3), p2 = function (v) { return ('0' + v).slice(-2); };
       var date = p2(z.getUTCDate()) + '/' + p2(z.getUTCMonth() + 1) + '/' + z.getUTCFullYear();
       var cc = { n: c.n, rows: c.rows, sub: r.base_cents / 100, iva: r.iva_cents / 100, tot: r.total_cents / 100 };
