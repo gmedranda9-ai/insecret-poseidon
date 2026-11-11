@@ -550,6 +550,27 @@
     setTheme(k);
     if (GUEST) { $('to-line').textContent = 'Para ' + GUEST; $('who').value = GUEST; }
   }
+  /* ---------- vista previa en vivo (la usa la pantalla de compra y la de edición, misma página) ---------- */
+  if (QS.get('preview') === '1' && window.parent !== window) {
+    document.body.classList.add('preview');
+    var pm = document.createElement('meta'); pm.name = 'robots'; pm.content = 'noindex,nofollow'; document.head.appendChild(pm);
+    var ORIG = {}, FIRST = true;
+    Object.keys(T).forEach(function (k) { ORIG[k] = JSON.parse(JSON.stringify(T[k])); });
+    window.addEventListener('message', function (e) {
+      if (e.origin !== location.origin) return;
+      var m = e.data; if (m && m.type === 'ins-close') { closeEnvelope(); window.scrollTo(0, 0); FIRST = false; return; }
+      if (!m || m.type !== 'ins-preview' || !ORIG[m.theme] || !m.cfg || typeof m.cfg !== 'object') return;
+      var y = window.scrollY, wasOpen = FIRST || !$('card').hidden, steps = ['sg2', 'sg3', 'sg4'].filter(function (g) { return SG[g] && SG[g].classList.contains('show'); }).length;
+      T[m.theme] = JSON.parse(JSON.stringify(ORIG[m.theme])); applyReal(m.theme, m.cfg); setTheme(m.theme); FIRST = false;
+      if (wasOpen) {
+        $('seal').classList.add('broken'); $('hint').hidden = true; $('env').classList.add('open'); $('scene-env').classList.add('gone'); $('card').hidden = false;
+        for (var n = 1; n <= steps; n++) { SG['sg' + (n + 1)].classList.add('show'); $('sn' + n).hidden = true; if (n < 3) $('sn' + (n + 1)).hidden = false; }
+        if (steps === 3) document.body.classList.add('story-end');
+        window.scrollTo(0, y);
+      }
+    });
+    try { window.parent.postMessage({ type: 'ins-ready' }, location.origin); } catch (x) {}
+  }
   if (SLUG) {
     document.body.classList.add('real', 'loading');
     var meta = document.createElement('meta'); meta.name = 'robots'; meta.content = 'noindex,nofollow'; document.head.appendChild(meta);

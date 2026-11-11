@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Editar mi invitación · Poseidón</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#040a14">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; frame-src 'self'; connect-src 'self' https://qhzswvfdnjnftjuyxcnn.supabase.co; base-uri 'none'; form-action 'none'">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="apple-touch-icon" href="../assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/landing.css?v=17">
+<link rel="stylesheet" href="../css/crear.css?v=3">
+</head>
+<body class="sub" data-mode="edit">
+<div class="aurora" aria-hidden="true"><i></i><i></i></div>
+<header class="top"><a class="pill pill-back" href="../invitaciones/"><span aria-hidden="true">‹</span> Invitaciones</a><a class="by" href="https://poseidonmk.com" target="_blank" rel="noopener"><img src="../assets/logo.png" alt="" width="28" height="28"> Poseidón</a></header>
+<main class="cr-wrap">
+  <section class="hero hero-s">
+    <p class="eyebrow">✦ Editar ✦</p>
+    <h1>Ajusta <em>tu invitación</em></h1>
+    <p class="lead">Corrige lo que necesites. El enlace que ya compartiste sigue siendo el mismo.</p>
+  </section>
+  <p class="occ-note" id="edit-title"></p>
+  <div class="cr">
+    <div>
+      <ol class="stepper" id="stepper" aria-hidden="true"><li></li><li></li><li></li><li></li></ol>
+
+      <section class="panel" id="p1" data-step="1">
+        <h2>1 · La idea</h2>
+        <p class="why">Lo que verán tus invitados en grande al abrir el sobre. Mira cómo cambia en el celular.</p>
+        <label class="fld"><span>Título de la invitación</span><input type="text" id="f-title" maxlength="60" autocomplete="off"><small>Es lo más grande de la tarjeta. Ejemplo: «Cena de Navidad».</small></label>
+        <label class="fld"><span>Quién invita</span><input type="text" id="f-host" maxlength="80" autocomplete="off"><small>La frase que va justo arriba del título. Ejemplo: «La familia Andrade te invita a la».</small></label>
+        <label class="fld"><span>Para quién es <i>(opcional)</i></span><input type="text" id="f-to" maxlength="60" autocomplete="off"><small>Aparece al inicio. Si compartes el enlace con el nombre de cada invitado, saldrá su nombre.</small></label>
+        <label class="fld"><span>Primera frase <i>(opcional)</i></span><input type="text" id="f-lead" maxlength="50" autocomplete="off"><small>Es lo primero que se lee en el sobre. Ejemplo: «Tienes una invitación».</small></label>
+        <label class="fld"><span>Mensaje para tus invitados</span><textarea id="f-msg" maxlength="260"></textarea><small>Dos o tres líneas con cariño. Máximo 260 letras.</small></label>
+        <p class="err" id="e1" hidden></p>
+        <div class="nav"><button type="button" class="btn btn-gold" data-go="2">Siguiente: cuándo y dónde</button></div>
+      </section>
+
+      <section class="panel" id="p2" data-step="2" hidden>
+        <h2>2 · Cuándo y dónde</h2>
+        <p class="why">Con esto se arman la cuenta regresiva, el botón «Agregar al calendario» y el mapa.</p>
+        <label class="fld"><span>Fecha y hora de inicio</span><input type="datetime-local" id="f-date"><small>La cuenta regresiva termina aquí. Hora de Ecuador.</small></label>
+        <label class="fld"><span>Nombre del lugar</span><input type="text" id="f-place" maxlength="90" autocomplete="off"><small>Ejemplo: «Casa de los Andrade, Pedernales».</small></label>
+        <label class="fld"><span>Ciudad o zona para el mapa <i>(opcional)</i></span><input type="text" id="f-mapq" maxlength="120" autocomplete="off"><small>Ayuda a que «Cómo llegar» abra Google Maps en el sitio correcto.</small></label>
+        <label class="fld"><span>Enlace de Google Maps <i>(opcional)</i></span><input type="url" id="f-maplink" maxlength="300" placeholder="https://maps.app.goo.gl/…" autocomplete="off"><small>Si lo pegas, «Cómo llegar» abre exactamente ese punto. Empieza con https://</small></label>
+        <p class="err" id="e2" hidden></p>
+        <div class="nav"><button type="button" class="btn btn-line" data-go="1">Atrás</button><button type="button" class="btn btn-gold" data-go="3">Siguiente: programa y detalles</button></div>
+      </section>
+
+      <section class="panel" id="p3" data-step="3" hidden>
+        <h2>3 · Programa y detalles <span class="sample">ejemplo, cámbialo</span></h2>
+        <p class="why">Todo esto se abre con un toque en la tarjeta. Ya trae un ejemplo: edítalo, borra lo que no uses o agrega más.</p>
+        <div class="fld"><span>Programa de la noche</span><div id="it-rows"></div><button type="button" class="add" id="it-add">+ Agregar momento</button><small>Cada momento aparece en un reloj animado. Hasta 10.</small></div>
+        <div class="fld"><span>Vestimenta</span><input type="text" id="f-dress" maxlength="140" autocomplete="off"><div class="colors"><input type="color" id="c1" aria-label="Color 1"><input type="color" id="c2" aria-label="Color 2"><input type="color" id="c3" aria-label="Color 3"><small style="margin:0">Paleta sugerida</small></div></div>
+        <div class="fld"><span>Menú <i>(opcional, déjalo vacío si no aplica)</i></span><div id="me-rows"></div><button type="button" class="add" id="me-add">+ Agregar plato</button><small>Tus invitados pueden marcar alergias y dietas.</small></div>
+        <label class="fld"><span>Título de la sorpresa</span><input type="text" id="f-xt" maxlength="40" autocomplete="off"></label>
+        <label class="fld"><span>Texto de la sorpresa</span><textarea id="f-xx" maxlength="240"></textarea><small>Es el regalo que se abre al final. Ejemplo: reglas de un intercambio, qué traer, una indicación.</small></label>
+        <div class="fld"><span>Confirmación de asistencia</span><div class="row2"><input type="text" id="f-rq" maxlength="50" aria-label="Pregunta"><span></span></div><div class="row2" style="margin-top:8px"><input type="text" id="f-ry" maxlength="24" aria-label="Botón sí"><input type="text" id="f-rn" maxlength="24" aria-label="Botón no"></div><label class="chk"><input type="checkbox" id="f-guests" checked><span>Dejar que cada invitado indique con cuántas personas va</span></label></div>
+        <p class="err" id="e3" hidden></p>
+        <div class="nav"><button type="button" class="btn btn-line" data-go="2">Atrás</button><button type="button" class="btn btn-gold" data-go="4">Siguiente: guardar</button></div>
+      </section>
+
+      <section class="panel" id="p4" data-step="4" hidden>
+        <h2>4 · Guardar cambios</h2>
+        <p class="why">Revisa la vista previa. El enlace de tu invitación no cambia: tus invitados verán la versión nueva.</p>
+        <div class="sum"><div class="tot"><span>Ediciones disponibles</span><b id="edits-left">–</b></div><ul><li>Cada vez que guardas se descuenta una</li><li>Se puede editar hasta el día del evento</li></ul></div>
+        <p class="err" id="e4" hidden></p>
+        <div class="nav"><button type="button" class="btn btn-line" data-go="3">Atrás</button><button type="button" class="btn btn-gold btn-l" id="save">Guardar cambios</button></div>
+        <p class="safe" id="saved" hidden></p>
+      </section>
+    </div>
+
+    <aside class="pv" id="pv">
+      <h3>Así la verán tus invitados</h3>
+      <div class="phone"><iframe id="pv-frame" title="Vista previa de tu invitación" src="../invitacion/?preview=1&amp;t=navidad" loading="eager"></iframe></div>
+      <button type="button" class="add pv-env" id="pv-env">↻ Ver cómo llega (sobre cerrado)</button>
+      <p class="pv-hint">Se actualiza sola mientras escribes. Toca el celular para probarla.</p>
+      <button type="button" class="pv-close" id="pv-close">Seguir editando</button>
+    </aside>
+  </div>
+  <button type="button" class="pv-open" id="pv-open">👁 Ver cómo va quedando</button>
+</main>
+<footer><a href="https://poseidonmk.com" target="_blank" rel="noopener">poseidonmk.com</a> · <a href="mailto:soporte@poseidonmk.com">soporte@poseidonmk.com</a></footer>
+<div class="toast" id="toast" hidden></div>
+<script src="../config.js?v=1"></script>
+<script src="../invitacion/defaults.js?v=1"></script>
+<script src="../js/crear.js?v=3"></script>
+</body>
+</html>

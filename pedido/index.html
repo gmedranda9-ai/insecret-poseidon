@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tu pedido · Poseidón</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#040a14">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; frame-src 'self'; connect-src 'self' https://qhzswvfdnjnftjuyxcnn.supabase.co; base-uri 'none'; form-action 'none'">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="apple-touch-icon" href="../assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/landing.css?v=17">
+<link rel="stylesheet" href="../css/crear.css?v=1">
+</head>
+<body class="sub" data-mode="order">
+<div class="aurora" aria-hidden="true"><i></i><i></i></div>
+<header class="top"><a class="pill pill-back" href="../invitaciones/"><span aria-hidden="true">‹</span> Invitaciones</a><a class="by" href="https://poseidonmk.com" target="_blank" rel="noopener"><img src="../assets/logo.png" alt="" width="28" height="28"> Poseidón</a></header>
+<main class="cr-wrap">
+  <section class="panel ok-card" id="st-wait">
+    <div class="spin" aria-hidden="true"></div>
+    <h2>Revisando tu pedido…</h2>
+  </section>
+
+  <section class="panel ok-card" id="st-pay" hidden>
+    <p class="eyebrow">Último paso</p>
+    <h2 class="big">Paga y recibe tu invitación</h2>
+    <p class="why" id="pay-title"></p>
+    <div class="sum"><div class="tot"><span>Total a pagar</span><b id="pay-amt">–</b></div></div>
+    <a class="btn btn-gold btn-l" id="pay-go" target="_blank" rel="noopener noreferrer" href="#">Pagar con PayPhone</a>
+    <p class="safe">Se abre PayPhone en otra pestaña. Cuando termines de pagar, <b>vuelve a esta pantalla</b>: se actualiza sola y aparecen tus enlaces. También te los enviamos al correo.</p>
+    <div class="spin" aria-hidden="true" style="margin-top:18px;width:30px;height:30px;border-width:3px"></div>
+    <p class="safe" id="pay-wait">Esperando tu pago…</p>
+    <p class="safe" id="pay-late" hidden>¿Ya pagaste y no cambia? Puede tardar un par de minutos. Revisa tu correo o escríbenos a <a href="mailto:soporte@poseidonmk.com" style="color:var(--oro)">soporte@poseidonmk.com</a> con tu código <b id="pay-code"></b>.</p>
+  </section>
+
+  <section class="panel ok-card" id="st-ok" hidden>
+    <p class="eyebrow">¡Pago recibido!</p>
+    <h2 class="big">Tu invitación está lista 🎉</h2>
+    <p class="why" id="ok-title"></p>
+    <div class="lnk"><b>💌 Para tus invitados</b><small>Compártela por WhatsApp o donde quieras.</small><div class="in"><input id="l-inv" readonly><button type="button" data-cp="l-inv">Copiar</button></div></div>
+    <div class="lnk"><b>📋 Tu panel privado</b><small>Aquí ves quién confirmó, con cuántas personas y sus mensajes. No lo compartas.</small><div class="in"><input id="l-host" readonly><button type="button" data-cp="l-host">Copiar</button></div></div>
+    <div class="lnk"><b>✏️ Editar</b><small>Hasta 5 cambios, hasta el día del evento.</small><div class="in"><input id="l-edit" readonly><button type="button" data-cp="l-edit">Copiar</button></div></div>
+    <div class="nav"><a class="btn btn-line" id="ok-view" target="_blank" rel="noopener" href="#">Ver mi invitación</a><a class="btn btn-gold" id="ok-wa" target="_blank" rel="noopener noreferrer" href="#">Compartir por WhatsApp</a></div>
+    <p class="safe">Te enviamos estos mismos enlaces a tu correo. Guárdalo.</p>
+  </section>
+
+  <section class="panel ok-card" id="st-bad" hidden>
+    <h2>No encontramos este pedido</h2>
+    <p class="why">Revisa el enlace o escríbenos a <a href="mailto:soporte@poseidonmk.com" style="color:var(--oro)">soporte@poseidonmk.com</a>.</p>
+    <div class="nav"><a class="btn btn-gold" href="../crear/">Crear una invitación</a></div>
+  </section>
+</main>
+<footer><a href="https://poseidonmk.com" target="_blank" rel="noopener">poseidonmk.com</a> · <a href="mailto:soporte@poseidonmk.com">soporte@poseidonmk.com</a></footer>
+<div class="toast" id="toast" hidden></div>
+<script src="../config.js?v=1"></script>
+<script src="../js/pedido.js?v=1"></script>
+</body>
+</html>
