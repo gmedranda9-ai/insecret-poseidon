@@ -367,13 +367,13 @@
     SG.sg4.appendChild($('foot-art'));
   }
   function revealStep(n) {
-    $('sn' + n).hidden = true; var g = SG['sg' + (n + 1)]; g.classList.add('show');
+    $('sn' + n).hidden = true; var g = SG['sg' + (n + 1)]; g.classList.add('show'); if (n === 3) document.body.classList.add('story-end');
     if (n === 1) { lights(true); chime([72, 76, 79, 84]); var r = $('cdeco').getBoundingClientRect(); burstAt(innerWidth / 2, r.top + 40, T[cur].fx === 'nieve' ? 'chispas' : T[cur].fx, 26); } else chime([76, 83]);
     if (n < 3) $('sn' + (n + 1)).hidden = false;
     if (!document.body.classList.contains('corp')) setTimeout(function () { g.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); }, 80);
   }
   function resetStory() {
-    if (!SG.sg2) return; lights(false);
+    if (!SG.sg2) return; lights(false); document.body.classList.remove('story-end');
     ['sg2', 'sg3', 'sg4'].forEach(function (k) { SG[k].classList.remove('show'); }); [2, 3].forEach(function (n) { $('sn' + n).hidden = true; }); $('sn1').hidden = false;
     var lb = LAB[cur] || LAB.navidad; [1, 2, 3].forEach(function (n) { $('sn' + n).querySelector('.story-btn').textContent = lb[n - 1]; });
   }

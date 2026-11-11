@@ -494,3 +494,5 @@ body .card:has(.ha-fin){padding-top:290px!important}
 
 body.corp .sell{display:none}
 body.corp #again{display:none}
+
+body:not(.story-end) .sell{display:none}
